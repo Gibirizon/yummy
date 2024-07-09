@@ -1,0 +1,5 @@
+[workspace]
+members = [
+    "src/yummy_backend"
+]
+resolver = "2"
