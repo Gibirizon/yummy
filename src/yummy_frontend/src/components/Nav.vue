@@ -17,6 +17,8 @@ function handleWidthChange(e) {
     widthGreaterThanMobile.value = e.matches;
     if (widthGreaterThanMobile.value) {
         topNavBarIsPrimary.value = false;
+    } else {
+        topNavBarIsPrimary.value = true;
     }
 }
 
@@ -42,14 +44,14 @@ onUnmounted(() => {
     ></div>
     <div
         :class="[topNavBarIsPrimary ? '-translate-x-full' : 'translate-x-0']"
-        class="duration-400 fixed left-0 top-0 z-50 h-screen w-60 bg-white shadow-lg transition-transform"
+        class="duration-400 fixed left-0 top-0 z-50 flex h-screen w-60 flex-col items-center gap-4 bg-white p-4 shadow-lg transition-transform"
     >
         <h2 class="p-2 text-2xl">Yummy</h2>
-        <ul class="p-4">
-            <li class="py-2"><a href="#">Option 1</a></li>
-            <li class="py-2"><a href="#">Option 2</a></li>
-            <li class="py-2"><a href="#">Option 3</a></li>
-        </ul>
+        <button
+            class="rounded bg-blue-700 px-10 py-3 text-lg font-bold text-white hover:bg-blue-600"
+        >
+            Sign in
+        </button>
     </div>
     <nav
         class="fixed h-20 w-screen items-center justify-between bg-gray-300 p-8"
