@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.login-button {
+    @apply rounded bg-blue-700 px-10 py-3 text-lg font-bold text-white hover:bg-blue-600;
+}
+
