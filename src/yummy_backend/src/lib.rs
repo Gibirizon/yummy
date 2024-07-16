@@ -48,6 +48,21 @@ fn delete_user() -> Result<String, Error> {
     })
 }
 
+#[update]
+fn delete_user_by_id(id: Principal) -> Result<String, Error> {
+    USERS.with(|users| {
+        let mut users = users.borrow_mut();
+        if let Some(index) = users.iter().position(|user| user.id == id) {
+            users.remove(index);
+            Ok("User successfully deleted".to_string())
+        } else {
+            Err(Error::UserNotFound {
+                msg: "User not found".to_string(),
+            })
+        }
+    })
+}
+
 #[query]
 fn get_user(id: Principal) -> Result<User, Error> {
     USERS.with(

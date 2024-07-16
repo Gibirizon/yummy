@@ -15,14 +15,15 @@ function changeSignMethod() {
         signMethod.value = "Sign in";
     }
 }
-function SignIn() {
+async function SignIn() {
+    await authStore.login();
+    console.log("in sign in");
     emit("finish-logging-in");
-    authStore.login();
 }
 </script>
 <template>
     <div class="absolute z-30 h-full w-full bg-transparent backdrop-blur-sm"></div>
-    <div class="signInBox fixed bottom-0 z-40 w-full rounded-t-3xl bg-[#1b1c21]">
+    <div class="sing-in-box fixed bottom-0 z-40 w-full rounded-t-3xl bg-[#1b1c21]">
         <button
             type="button"
             class="absolute right-4 top-2 h-[30px] w-[30px] rounded-full text-white hover:bg-[#2f313a]"
@@ -63,7 +64,7 @@ function SignIn() {
 
 <style scoped>
 @media only screen and (min-width: 768px) {
-    .signInBox {
+    .sing-in-box {
         @apply bottom-1/2 left-1/2 w-1/2 max-w-[500px] -translate-x-1/2 translate-y-1/2 rounded-b-3xl;
     }
 }

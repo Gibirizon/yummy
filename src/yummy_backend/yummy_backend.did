@@ -13,6 +13,7 @@ service : {
     "whoami": () -> (principal) query;
     "create_user": (text) -> (Result);
     "delete_user": () -> (Result);
+    "delete_user_by_id": (principal) -> (Result);
     "get_user": (principal) -> (Result2);
     "get_all_users": () -> (vec User);
 }

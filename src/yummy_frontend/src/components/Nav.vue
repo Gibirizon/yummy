@@ -1,17 +1,11 @@
 <script setup>
 import LoggedOut from "./login/LoggedOut.vue";
+import UsernameBox from "./login/Username.vue";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "./../store/auth";
 import { ref, onMounted, onUnmounted } from "vue";
 
 const whoami = ref("");
-function whoamiCall() {
-    if (authStore.whoamiActor) {
-        authStore.whoamiActor?.whoami().then((res) => (whoami.value = res));
-    } else {
-        whoami.value = "You are not logged in";
-    }
-}
 
 const authStore = useAuthStore();
 const { isReady, isAuthenticated } = storeToRefs(authStore);
@@ -19,17 +13,49 @@ if (isReady.value === false) {
     authStore.init();
 }
 const loggingProcess = ref(false);
+const usernameBoxIsVisible = ref(false);
 
 const topNavBarIsPrimary = ref(true);
 const widthGreaterThanMobile = ref(false);
 let mql;
 
+function whoamiCall() {
+    console.log(authStore.whoamiActor);
+    if (authStore.whoamiActor) {
+        authStore.whoamiActor?.whoami().then((res) => (whoami.value = res));
+    } else {
+        whoami.value = "You are not logged in";
+    }
+    // finishSignUp();
+}
 function toggleSideNavBar() {
     topNavBarIsPrimary.value = false;
 }
 
 function hideSideNavBar() {
     topNavBarIsPrimary.value = true;
+}
+
+// sleep time expects milliseconds
+function sleep(time) {
+    return new Promise((resolve) => setTimeout(resolve, time));
+}
+async function finishSignUp() {
+    while (!authStore.isAuthenticated) {
+        await sleep(1000);
+    }
+    console.log(authStore.whoamiActor);
+
+    loggingProcess.value = false;
+    let id;
+    await authStore.whoamiActor?.whoami().then((res) => (id = res));
+    console.log(id);
+    await authStore.whoamiActor?.get_user(id).then((e) => {
+        if (Object.keys(e)[0] === "Err") {
+            console.log(e.Err);
+            usernameBoxIsVisible.value = true;
+        }
+    });
 }
 
 function handleWidthChange(e) {
@@ -53,6 +79,7 @@ onUnmounted(() => {
 </script>
 
 <template>
+    <UsernameBox @new-user-created="usernameBoxIsVisible = false" v-if="usernameBoxIsVisible" />
     <div
         :class="[
             topNavBarIsPrimary || widthGreaterThanMobile
@@ -94,5 +121,5 @@ onUnmounted(() => {
             <font-awesome-icon :icon="['fas', 'magnifying-glass']" class="text-2xl" />
         </div>
     </nav>
-    <LoggedOut @finish-logging-in="loggingProcess = false" v-if="loggingProcess && !isAuthenticated" />
+    <LoggedOut @finish-logging-in="finishSignUp" v-if="loggingProcess && !isAuthenticated" />
 </template>
