@@ -1,16 +1,61 @@
 <script setup>
+import LoggedOut from "./login/LoggedOut.vue";
+import UsernameBox from "./login/Username.vue";
+import { storeToRefs } from "pinia";
+import { useAuthStore } from "./../store/auth";
 import { ref, onMounted, onUnmounted } from "vue";
+
+const whoami = ref("");
+
+const authStore = useAuthStore();
+const { isReady, isAuthenticated } = storeToRefs(authStore);
+if (isReady.value === false) {
+    authStore.init();
+}
+const loggingProcess = ref(false);
+const usernameBoxIsVisible = ref(false);
 
 const topNavBarIsPrimary = ref(true);
 const widthGreaterThanMobile = ref(false);
 let mql;
 
+function whoamiCall() {
+    console.log(authStore.whoamiActor);
+    if (authStore.whoamiActor) {
+        authStore.whoamiActor?.whoami().then((res) => (whoami.value = res));
+    } else {
+        whoami.value = "You are not logged in";
+    }
+    // finishSignUp();
+}
 function toggleSideNavBar() {
     topNavBarIsPrimary.value = false;
 }
 
 function hideSideNavBar() {
     topNavBarIsPrimary.value = true;
+}
+
+// sleep time expects milliseconds
+function sleep(time) {
+    return new Promise((resolve) => setTimeout(resolve, time));
+}
+async function finishSignUp() {
+    while (!authStore.isAuthenticated) {
+        await sleep(1000);
+    }
+    console.log(authStore.whoamiActor);
+
+    loggingProcess.value = false;
+    let id;
+    await authStore.whoamiActor?.whoami().then((res) => (id = res));
+    console.log(id);
+    await authStore.whoamiActor?.get_user(id).then((e) => {
+        if (Object.keys(e)[0] === "Err") {
+            console.log(e.Err);
+            usernameBoxIsVisible.value = true;
+        }
+    });
 }
 
 function handleWidthChange(e) {
@@ -34,24 +79,33 @@ onUnmounted(() => {
 </script>
 
 <template>
+    <UsernameBox @new-user-created="usernameBoxIsVisible = false" v-if="usernameBoxIsVisible" />
     <div
         :class="[
             topNavBarIsPrimary || widthGreaterThanMobile
                 ? 'h-0 w-0'
-                : 'fixed z-40 h-full w-full bg-black/40 opacity-100',
+                : 'fixed z-10 h-full w-full bg-black/40 opacity-100',
         ]"
         @click="hideSideNavBar"
     ></div>
     <div
         :class="[topNavBarIsPrimary ? '-translate-x-full' : 'translate-x-0']"
-        class="duration-400 fixed left-0 top-0 z-50 flex h-screen w-60 flex-col items-center gap-4 bg-white p-4 shadow-lg transition-transform"
+        class="duration-400 fixed left-0 top-0 z-20 flex h-screen w-60 flex-col items-center gap-4 bg-white p-4 shadow-lg transition-transform"
     >
         <h2 class="p-2 text-2xl">Yummy</h2>
-        <button
-            class="rounded bg-blue-700 px-10 py-3 text-lg font-bold text-white hover:bg-blue-600"
-        >
-            Sign in
-        </button>
+        <div v-if="isReady">
+            <button
+                v-if="isAuthenticated"
+                @click="async () => await authStore.logout()"
+                type="button"
+                class="login-button"
+            >
+                Sign out
+            </button>
+            <button v-else @click="loggingProcess = true" type="button" class="login-button">Sign in</button>
+        </div>
+        <button @click="whoamiCall" type="button" class="login-button">Who am I?</button>
+        <p>{{ whoami }}</p>
     </div>
     <nav
         class="fixed h-20 w-screen items-center justify-between bg-gray-300 p-8"
@@ -67,4 +121,5 @@ onUnmounted(() => {
             <font-awesome-icon :icon="['fas', 'magnifying-glass']" class="text-2xl" />
         </div>
     </nav>
+    <LoggedOut @finish-logging-in="finishSignUp" v-if="loggingProcess && !isAuthenticated" />
 </template>
