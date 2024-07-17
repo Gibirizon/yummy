@@ -1,3 +1,4 @@
+<!-- test -->
 <script setup>
 import { useAuthStore } from "./../../store/auth";
 import { ref } from "vue";
