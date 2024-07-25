@@ -5,6 +5,9 @@ use ic_cdk::{query, update};
 use std::cell::RefCell;
 use std::vec::Vec;
 
+use crate::http_get::get_recipes;
+pub mod http_get;
+
 #[derive(CandidType, Clone, Deserialize)]
 struct User {
     id: Principal,
@@ -85,6 +88,24 @@ fn whoami() -> Principal {
     ic_cdk::caller()
 }
 
+#[update]
+async fn popular_recipes() -> String {
+    let query = r#"
+    query {
+        popularRecipes {
+            edges {
+                node {
+                    id
+                    name
+                    mainImage
+                }
+            }
+        }
+    }
+    "#;
+    get_recipes(query).await
+}
+
 // Error types
 #[derive(CandidType)]
 enum Error {
@@ -92,5 +113,5 @@ enum Error {
     UserAlreadyExists { msg: String },
 }
 
-// Required by Candid
+// enable the export of the candid file
 ic_cdk::export_candid!();

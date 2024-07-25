@@ -17,8 +17,8 @@ async function createNewUser() {
 </script>
 
 <template>
-    <div class="absolute z-30 h-full w-full bg-transparent backdrop-blur-sm"></div>
-    <div class="enter-your-name-box fixed bottom-0 z-40 w-full rounded-t-3xl bg-[#1b1c21]">
+    <div class="absolute z-[200] h-full w-full bg-transparent backdrop-blur-sm"></div>
+    <div class="enter-your-name-box fixed bottom-0 z-[210] w-full rounded-t-3xl bg-[#1b1c21]">
         <div class="flex flex-col items-center justify-around gap-4 p-4 text-white">
             <h4 class="text-2xl font-semibold">Finish signing up</h4>
             <form

@@ -23,3 +23,6 @@ dist/
 
 # environment variables
 .env
+
+# api key
+src/yummy_backend/src/http_get/api_key.rs
