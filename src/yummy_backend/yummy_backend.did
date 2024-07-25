@@ -1,3 +1,17 @@
+type Error = variant {
+  UserAlreadyExists : record { msg : text };
+  UserNotFound : record { msg : text };
+};
+type Result = variant { Ok : text; Err : Error };
+type Result_1 = variant { Ok : User; Err : Error };
+type User = record { id : principal; name : text };
 service : {
-    "greet": (text) -> (text) query;
+  create_user : (text) -> (Result);
+  delete_user : () -> (Result);
+  delete_user_by_id : (principal) -> (Result);
+  get_all_users : () -> (vec User) query;
+  get_user : (principal) -> (Result_1) query;
+  popular_recipes : () -> (text);
+  whoami : () -> (principal) query;
+  get_env_variable : () -> (text) query;
 }
