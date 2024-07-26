@@ -1,12 +1,17 @@
 extern crate serde;
 use candid::Principal;
-use candid::{CandidType, Deserialize};
+use candid::{CandidType, Decode, Deserialize, Encode};
 use ic_cdk::{query, update};
+use ic_stable_structures::memory_manager::{MemoryId, MemoryManager, VirtualMemory};
+use ic_stable_structures::{storable::Bound, Cell, DefaultMemoryImpl, StableBTreeMap, Storable};
+use std::borrow::Cow;
 use std::cell::RefCell;
-use std::vec::Vec;
 
 use crate::http_get::get_recipes;
-pub mod http_get;
+mod http_get;
+
+type Memory = VirtualMemory<DefaultMemoryImpl>;
+type IdCell = Cell<u64, Memory>;
 
 #[derive(CandidType, Clone, Deserialize)]
 struct User {
@@ -15,48 +20,66 @@ struct User {
 }
 
 thread_local! {
-    static USERS: RefCell<Vec<User>> = RefCell::new(Vec::new());
+    static MEMORY_MANAGER: RefCell<MemoryManager<DefaultMemoryImpl>> = RefCell::new(
+        MemoryManager::init(DefaultMemoryImpl::default())
+    );
+    static INDEX_COUNTER: RefCell<IdCell> = RefCell::new(
+        IdCell::init(MEMORY_MANAGER.with(|m| m.borrow().get(MemoryId::new(0))), 0)
+            .expect("Cannot create a counter")
+    );
+
+    static USERS: RefCell<StableBTreeMap<u64, User, Memory>> = RefCell::new(
+        StableBTreeMap::init(MEMORY_MANAGER.with(|m| m.borrow().get(MemoryId::new(1))))
+    );
+}
+
+impl Storable for User {
+    fn to_bytes(&self) -> Cow<[u8]> {
+        Cow::Owned(Encode!(self).unwrap())
+    }
+
+    fn from_bytes(bytes: Cow<[u8]>) -> Self {
+        Decode!(bytes.as_ref(), Self).unwrap()
+    }
+
+    const BOUND: Bound = Bound::Bounded {
+        max_size: 1024,
+        is_fixed_size: false,
+    };
 }
 
 #[update]
-fn create_user(name: String) -> Result<String, Error> {
+fn create_user(name: String) -> Result<User, Error> {
     let id = ic_cdk::caller();
+    let index = INDEX_COUNTER
+        .with(|counter| {
+            let current_value = *counter.borrow().get();
+            counter.borrow_mut().set(current_value + 1)
+        })
+        .expect("Cannot increment ID counter");
 
     USERS.with(|users| {
-        if users.borrow().iter().any(|user| user.id == id) {
+        if users.borrow().iter().any(|(_, user)| user.id == id) {
             Err(Error::UserAlreadyExists {
                 msg: "User already exists".to_string(),
             })
         } else {
             let user = User { id, name };
-            users.borrow_mut().push(user);
-            Ok("User succesfully created".to_string())
+            users.borrow_mut().insert(index, user.clone());
+            Ok(user)
         }
     })
 }
 
 #[update]
-fn delete_user() -> Result<String, Error> {
-    let id = ic_cdk::caller();
+fn delete_user_by_index(index: u64) -> Result<String, Error> {
     USERS.with(|users| {
         let mut users = users.borrow_mut();
-        if let Some(index) = users.iter().position(|user| user.id == id) {
-            users.remove(index);
-            Ok("User successfully deleted".to_string())
-        } else {
-            Err(Error::UserNotFound {
-                msg: "User not found".to_string(),
-            })
-        }
-    })
-}
-
-#[update]
-fn delete_user_by_id(id: Principal) -> Result<String, Error> {
-    USERS.with(|users| {
-        let mut users = users.borrow_mut();
-        if let Some(index) = users.iter().position(|user| user.id == id) {
-            users.remove(index);
+        if let Some(_) = users
+            .iter()
+            .position(|(storage_index, _)| storage_index == index)
+        {
+            users.remove(&index);
             Ok("User successfully deleted".to_string())
         } else {
             Err(Error::UserNotFound {
@@ -67,20 +90,34 @@ fn delete_user_by_id(id: Principal) -> Result<String, Error> {
 }
 
 #[query]
-fn get_user(id: Principal) -> Result<User, Error> {
-    USERS.with(
-        |users| match users.borrow().iter().find(|user| user.id == id) {
-            Some(user) => Ok(user.clone()),
-            None => Err(Error::UserNotFound {
-                msg: "User not found".to_string(),
-            }),
-        },
-    )
+fn get_user(index: u64) -> Result<User, Error> {
+    let user = USERS.with(|users| users.borrow().get(&index));
+    match user {
+        Some(user) => Ok(user.clone()),
+        None => Err(Error::UserNotFound {
+            msg: "User not found".to_string(),
+        }),
+    }
 }
 
 #[query]
-fn get_all_users() -> Vec<User> {
-    USERS.with(|users| users.borrow().clone())
+fn get_all_users() -> Result<Vec<User>, Error> {
+    USERS.with(|storage| {
+        let stable_btree_map = &*storage.borrow();
+
+        let records: Vec<User> = stable_btree_map
+            .iter()
+            .map(|(_, user)| user.clone())
+            .collect();
+
+        if records.is_empty() {
+            return Err(Error::UserNotFound {
+                msg: "No users found".to_string(),
+            });
+        } else {
+            Ok(records)
+        }
+    })
 }
 
 #[query]

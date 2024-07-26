@@ -2,16 +2,15 @@ type Error = variant {
   UserAlreadyExists : record { msg : text };
   UserNotFound : record { msg : text };
 };
-type Result = variant { Ok : text; Err : Error };
-type Result_1 = variant { Ok : User; Err : Error };
+type Result = variant { Ok : User; Err : Error };
+type Result_1 = variant { Ok : text; Err : Error };
+type Result_2 = variant { Ok : vec User; Err : Error };
 type User = record { id : principal; name : text };
 service : {
   create_user : (text) -> (Result);
-  delete_user : () -> (Result);
-  delete_user_by_id : (principal) -> (Result);
-  get_all_users : () -> (vec User) query;
-  get_user : (principal) -> (Result_1) query;
+  delete_user_by_index : (nat64) -> (Result_1);
+  get_all_users : () -> (Result_2) query;
+  get_user : (nat64) -> (Result) query;
   popular_recipes : () -> (text);
   whoami : () -> (principal) query;
-  get_env_variable : () -> (text) query;
 }
