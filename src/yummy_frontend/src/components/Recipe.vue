@@ -1,82 +1,38 @@
-<template>
-    <div class="relative w-full overflow-hidden">
-        <div
-            ref="carouselRef"
-            class="flex transition-transform duration-300 ease-in-out"
-            :style="{ transform: `translateX(${-currentOffset}px)` }"
-            @touchstart="onTouchStart"
-            @touchmove="onTouchMove"
-            @touchend="onTouchEnd"
-        >
-            <div
-                v-for="(item, index) in items"
-                :key="index"
-                class="cursor-pointer] w-[300px] flex-shrink-0 p-4"
-                @click="onItemClick(item)"
-            >
-                <div class="flex h-[200px] flex-col items-start justify-start gap-4 overflow-hidden rounded-[20px]">
-                    <div
-                        class="h-3/5 w-full grow bg-cover"
-                        :style="{ backgroundImage: `url(${item.node.mainImage})` }"
-                    ></div>
-                    <p class="align-center my-auto text-lg text-white">{{ item.node.name }}</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Navigation arrows for screens wider than 992px -->
-        <template v-if="showArrows">
-            <button
-                @click="moveCarousel(-1)"
-                class="duration-400 absolute left-4 top-1/2 -translate-y-1/2 transform rounded-full bg-white bg-opacity-50 p-2 shadow-md transition-all hover:bg-opacity-75"
-                :class="{ invisible: currentOffset === 0 }"
-                aria-label="Previous item"
-            >
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                >
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                </svg>
-            </button>
-            <button
-                @click="moveCarousel(1)"
-                class="duration-400 absolute right-4 top-1/2 -translate-y-1/2 transform rounded-full bg-white bg-opacity-50 p-2 shadow-md transition-all hover:bg-opacity-75"
-                :class="{ invisible: isLastItemVisible }"
-                aria-label="Next item"
-            >
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                >
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                </svg>
-            </button>
-        </template>
-    </div>
-</template>
-
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from "vue";
+import { yummy_backend } from "declarations/yummy_backend/index";
 
-const props = defineProps({
-    items: {
-        type: Array,
-        required: true,
-    },
-});
+const items = ref([]);
+async function getRecipesNames() {
+    await yummy_backend.get_images_names().then((res) => {
+        if (res.Ok) {
+            console.log(res.Ok);
+            getRecipesInfo(res.Ok);
+        }
+    });
+}
+async function getRecipesInfo(res) {
+    for (const recipe_name of res) {
+        console.log(recipe_name);
+        const imageData = await yummy_backend.get_image(recipe_name);
+
+        // Convert Uint8Array to string in chunks
+        const chunkSize = 8192;
+        let binary = "";
+        for (let i = 0; i < imageData.length; i += chunkSize) {
+            binary += String.fromCharCode.apply(null, imageData.subarray(i, i + chunkSize));
+        }
+
+        const imageBlob = btoa(binary);
+        let imageInfo = `data:image/jpeg;base64,${imageBlob}`;
+        items.value.push({ name: recipe_name, image: imageInfo });
+    }
+}
 
 const emit = defineEmits(["itemClick"]);
 
 const carouselRef = ref(null);
 const currentOffset = ref(0);
-const showArrows = ref(false);
 let containerWidth = ref(0);
 
 let startX = 0;
@@ -86,7 +42,7 @@ let startOffset = 0;
 
 const itemWidth = 300;
 
-const totalWidth = computed(() => props.items.length * itemWidth);
+const totalWidth = computed(() => items.value.length * itemWidth);
 const maxOffset = computed(() => Math.max(0, totalWidth.value - containerWidth.value));
 
 const isLastItemVisible = computed(() => {
@@ -142,20 +98,74 @@ const onItemClick = (item) => {
     emit("itemClick", item);
 };
 
-function updateArrowVisibility(e) {
-    showArrows.value = e.matches;
+function getContainerWidth() {
+    containerWidth.value = carouselRef.value.offsetWidth;
 }
-let mql;
 
 onMounted(() => {
-    mql = window.matchMedia("(min-width: 992px)");
-    showArrows.value = mql.matches;
-    mql.addEventListener("change", updateArrowVisibility);
-    window.addEventListener("resize", () => (containerWidth.value = carouselRef.value.offsetWidth));
+    getRecipesNames();
+    window.addEventListener("resize", getContainerWidth);
+    getContainerWidth();
 });
 
 onUnmounted(() => {
-    mql.removeEventListener("change", updateArrowVisibility);
-    window.removeEventListener("resize", () => (containerWidth.value = carouselRef.value.offsetWidth));
+    window.removeEventListener("resize", getContainerWidth);
 });
 </script>
+
+<template>
+    <div class="relative w-full overflow-hidden">
+        <div
+            ref="carouselRef"
+            class="flex transition-transform duration-300 ease-in-out"
+            :style="{ transform: `translateX(${-currentOffset}px)` }"
+            @touchstart="onTouchStart"
+            @touchmove="onTouchMove"
+            @touchend="onTouchEnd"
+        >
+            <div
+                v-for="(item, index) in items"
+                v-if="items"
+                :key="index"
+                class="cursor-pointer] w-[300px] flex-shrink-0 p-4"
+                @click="onItemClick(item)"
+            >
+                <div class="flex h-[200px] flex-col items-start justify-start gap-4 overflow-hidden rounded-[20px]">
+                    <div class="h-3/5 w-full bg-cover" :style="{ backgroundImage: `url(${item.image})` }"></div>
+                    <p class="align-center my-auto text-lg text-white">{{ item.name }}</p>
+                </div>
+            </div>
+        </div>
+
+        <button
+            @click="moveCarousel(-1)"
+            class="duration-400 absolute left-4 top-1/2 -translate-y-1/2 transform rounded-full bg-white bg-opacity-50 p-2 shadow-md transition-all hover:bg-opacity-75"
+            :class="{ invisible: currentOffset === 0 }"
+        >
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+            >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+        </button>
+        <button
+            @click="moveCarousel(1)"
+            class="duration-400 absolute right-4 top-1/2 -translate-y-1/2 transform rounded-full bg-white bg-opacity-50 p-2 shadow-md transition-all hover:bg-opacity-75"
+            :class="{ invisible: isLastItemVisible }"
+        >
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+            >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+        </button>
+    </div>
+</template>

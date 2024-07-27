@@ -25,4 +25,4 @@ dist/
 .env
 
 # api key
-src/yummy_backend/src/http_get/api_key.rs
+src/yummy_backend/src/https/api_key.rs

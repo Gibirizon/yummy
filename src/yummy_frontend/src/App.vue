@@ -1,32 +1,13 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import Navigation from "./components/Nav.vue";
-import { yummy_backend } from "declarations/yummy_backend/index";
 import LeftMenu from "./components/LeftMenu.vue";
 import Recipes from "./components/Recipe.vue";
 
-const popular_recipes = ref([]);
-async function getRecipes() {
-    await yummy_backend
-        .popular_recipes()
-        .then((response) => {
-            const res = JSON.parse(response);
-            popular_recipes.value = res.data.popularRecipes.edges;
-            console.log(popular_recipes.value);
-        })
-        .catch((error) => {
-            console.error("Error:", error);
-        });
-}
-
 const leftMenuIsVisible = ref(false);
-
 function handleItemClick(item) {
     console.log("Clicked item:", item);
 }
-onMounted(() => {
-    getRecipes();
-});
 </script>
 
 <template>
@@ -42,7 +23,8 @@ onMounted(() => {
         >
             <Navigation class="mobile-view" @show-menu="leftMenuIsVisible = true" />
             <main class="relative w-full bg-[#282828]">
-                <Recipes :items="popular_recipes" v-if="popular_recipes" @item-click="handleItemClick" />
+                <Recipes @item-click="handleItemClick" />
+                <!-- <img v-if="imageInfo" :src="imageInfo" alt="Fetched Image" /> -->
             </main>
         </div>
     </div>

@@ -7,11 +7,10 @@ use ic_stable_structures::{storable::Bound, Cell, DefaultMemoryImpl, StableBTree
 use std::borrow::Cow;
 use std::cell::RefCell;
 
-use crate::http_get::get_recipes;
-mod http_get;
+pub mod https;
 
-type Memory = VirtualMemory<DefaultMemoryImpl>;
-type IdCell = Cell<u64, Memory>;
+pub type Memory = VirtualMemory<DefaultMemoryImpl>;
+pub type IdCell = Cell<u64, Memory>;
 
 #[derive(CandidType, Clone, Deserialize)]
 struct User {
@@ -20,9 +19,10 @@ struct User {
 }
 
 thread_local! {
-    static MEMORY_MANAGER: RefCell<MemoryManager<DefaultMemoryImpl>> = RefCell::new(
+    pub static MEMORY_MANAGER: RefCell<MemoryManager<DefaultMemoryImpl>> = RefCell::new(
         MemoryManager::init(DefaultMemoryImpl::default())
     );
+
     static INDEX_COUNTER: RefCell<IdCell> = RefCell::new(
         IdCell::init(MEMORY_MANAGER.with(|m| m.borrow().get(MemoryId::new(0))), 0)
             .expect("Cannot create a counter")
@@ -31,6 +31,7 @@ thread_local! {
     static USERS: RefCell<StableBTreeMap<u64, User, Memory>> = RefCell::new(
         StableBTreeMap::init(MEMORY_MANAGER.with(|m| m.borrow().get(MemoryId::new(1))))
     );
+
 }
 
 impl Storable for User {
@@ -125,29 +126,12 @@ fn whoami() -> Principal {
     ic_cdk::caller()
 }
 
-#[update]
-async fn popular_recipes() -> String {
-    let query = r#"
-    query {
-        popularRecipes {
-            edges {
-                node {
-                    id
-                    name
-                    mainImage
-                }
-            }
-        }
-    }
-    "#;
-    get_recipes(query).await
-}
-
 // Error types
 #[derive(CandidType)]
-enum Error {
+pub enum Error {
     UserNotFound { msg: String },
     UserAlreadyExists { msg: String },
+    ImagesNotFound { msg: String },
 }
 
 // enable the export of the candid file
