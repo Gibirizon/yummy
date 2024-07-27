@@ -3,6 +3,7 @@ import { onMounted, ref } from "vue";
 import Navigation from "./components/Nav.vue";
 import LeftMenu from "./components/LeftMenu.vue";
 import Recipes from "./components/Recipe.vue";
+import MainHeader from "./components/MainHeader.vue";
 
 const leftMenuIsVisible = ref(false);
 function handleItemClick(item) {
@@ -19,10 +20,14 @@ function handleItemClick(item) {
         ></div>
         <LeftMenu :isVisible="leftMenuIsVisible" />
         <div
-            class="realative app-content flex w-full flex-1 flex-col items-center overflow-y-auto overflow-x-hidden pt-[70px]"
+            class="realative app-content flex w-full flex-1 flex-col items-center overflow-y-auto overflow-x-hidden pt-[80px]"
         >
             <Navigation class="mobile-view" @show-menu="leftMenuIsVisible = true" />
-            <main class="relative w-full bg-[#282828]">
+            <MainHeader />
+            <main class="relative w-full bg-[#545454]">
+                <h2>
+                    <h2 class="p-4 text-center text-4xl text-white">Popular Recipes</h2>
+                </h2>
                 <Recipes @item-click="handleItemClick" />
                 <!-- <img v-if="imageInfo" :src="imageInfo" alt="Fetched Image" /> -->
             </main>

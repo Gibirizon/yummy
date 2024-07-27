@@ -80,7 +80,7 @@ onUnmounted(() => {
 <template>
     <UsernameBox @new-user-created="usernameBoxIsVisible = false" v-if="usernameBoxIsVisible" />
     <div
-        class="duration-400 left-menu fixed left-0 top-0 z-[130] flex h-screen w-60 flex-col items-center gap-4 bg-[#343434] p-4 shadow-lg transition-transform"
+        class="duration-400 left-menu fixed left-0 top-0 z-[130] flex h-screen w-60 flex-col items-center gap-4 bg-[#3e3e3e] p-4 shadow-lg transition-transform"
         :class="leftMenuIsVisible ? 'translate-x-0' : '-translate-x-full'"
     >
         <h2 class="p-2 text-2xl text-white">Yummy</h2>

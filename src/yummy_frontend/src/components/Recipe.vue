@@ -114,7 +114,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <div class="relative w-full overflow-hidden">
+    <div class="relative mx-auto mb-[80px] mt-[30px] overflow-hidden">
         <div
             ref="carouselRef"
             class="flex transition-transform duration-300 ease-in-out"
@@ -130,9 +130,9 @@ onUnmounted(() => {
                 class="cursor-pointer] w-[300px] flex-shrink-0 p-4"
                 @click="onItemClick(item)"
             >
-                <div class="flex h-[200px] flex-col items-start justify-start gap-4 overflow-hidden rounded-[20px]">
+                <div class="flex h-[250px] flex-col items-center justify-start gap-4 overflow-hidden rounded-[20px]">
                     <div class="h-3/5 w-full bg-cover" :style="{ backgroundImage: `url(${item.image})` }"></div>
-                    <p class="align-center my-auto text-lg text-white">{{ item.name }}</p>
+                    <p class="mt-[20px] px-2 text-lg text-white">{{ item.name }}</p>
                 </div>
             </div>
         </div>

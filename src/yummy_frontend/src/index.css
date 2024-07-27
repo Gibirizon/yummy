@@ -1,6 +1,13 @@
+@import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    html {
+        font-family: "Montserrat", sans-serif;
+    }
+}
 
 .login-button {
     @apply rounded-full bg-blue-700 px-10 py-3 text-lg font-bold text-white hover:bg-blue-600;

@@ -6,7 +6,7 @@ function showMenu() {
 </script>
 
 <template>
-    <nav class="fixed left-0 top-0 z-[110] w-full bg-gray-300">
+    <nav class="fixed left-0 top-0 z-[110] w-full bg-[#3e3e3e] text-[#ddd]">
         <div class="relative z-[100] flex h-20 w-full items-center justify-between p-4">
             <div class="flex items-center gap-4">
                 <a href="#" class="flex items-center" @click="showMenu">
