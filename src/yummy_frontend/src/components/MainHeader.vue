@@ -1,6 +1,9 @@
+<script setup>
+let url = "/images/header_salad.png";
+</script>
 <template>
     <header class="relative w-full">
-        <div class="h-[400px] w-full bg-[url('./../public/images/header_salad.jpg')] bg-cover bg-center">
+        <div class="h-[400px] w-full bg-cover bg-center" :style="{ backgroundImage: `url(${url})` }">
             <div class="h-full w-full bg-black/70"></div>
             <div class="absolute left-[50%] top-[50%] w-full translate-x-[-50%] translate-y-[-50%] text-center">
                 <h1

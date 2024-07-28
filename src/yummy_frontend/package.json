@@ -38,6 +38,7 @@
         "@vueuse/components": "^10.11.0",
         "@vueuse/core": "^10.11.0",
         "pinia": "^2.1.6",
-        "vue": "^3.3.4"
+        "vue": "^3.3.4",
+        "vue-router": "^4.4.0"
     }
 }

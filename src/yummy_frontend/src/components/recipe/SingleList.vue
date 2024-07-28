@@ -1,35 +1,13 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from "vue";
-import { yummy_backend } from "declarations/yummy_backend/index";
-
-const items = ref([]);
-async function getRecipesNames() {
-    await yummy_backend.get_images_names().then((res) => {
-        if (res.Ok) {
-            console.log(res.Ok);
-            getRecipesInfo(res.Ok);
-        }
-    });
-}
-async function getRecipesInfo(res) {
-    for (const recipe_name of res) {
-        console.log(recipe_name);
-        const imageData = await yummy_backend.get_image(recipe_name);
-
-        // Convert Uint8Array to string in chunks
-        const chunkSize = 8192;
-        let binary = "";
-        for (let i = 0; i < imageData.length; i += chunkSize) {
-            binary += String.fromCharCode.apply(null, imageData.subarray(i, i + chunkSize));
-        }
-
-        const imageBlob = btoa(binary);
-        let imageInfo = `data:image/jpeg;base64,${imageBlob}`;
-        items.value.push({ name: recipe_name, image: imageInfo });
-    }
-}
-
 const emit = defineEmits(["itemClick"]);
+
+const props = defineProps({
+    recipes: {
+        type: Array,
+        required: true,
+    },
+});
 
 const carouselRef = ref(null);
 const currentOffset = ref(0);
@@ -42,7 +20,7 @@ let startOffset = 0;
 
 const itemWidth = 300;
 
-const totalWidth = computed(() => items.value.length * itemWidth);
+const totalWidth = computed(() => props.recipes.length * itemWidth);
 const maxOffset = computed(() => Math.max(0, totalWidth.value - containerWidth.value));
 
 const isLastItemVisible = computed(() => {
@@ -103,7 +81,6 @@ function getContainerWidth() {
 }
 
 onMounted(() => {
-    getRecipesNames();
     window.addEventListener("resize", getContainerWidth);
     getContainerWidth();
 });
@@ -124,15 +101,36 @@ onUnmounted(() => {
             @touchend="onTouchEnd"
         >
             <div
-                v-for="(item, index) in items"
-                v-if="items"
+                v-for="(item, index) in recipes"
+                v-if="recipes"
                 :key="index"
-                class="cursor-pointer] w-[300px] flex-shrink-0 p-4"
+                class="w-[300px] flex-shrink-0 cursor-pointer p-4"
                 @click="onItemClick(item)"
             >
-                <div class="flex h-[250px] flex-col items-center justify-start gap-4 overflow-hidden rounded-[20px]">
-                    <div class="h-3/5 w-full bg-cover" :style="{ backgroundImage: `url(${item.image})` }"></div>
-                    <p class="mt-[20px] px-2 text-lg text-white">{{ item.name }}</p>
+                <div
+                    class="flex h-[300px] flex-col items-center justify-start overflow-hidden rounded-[20px] bg-[#7f7f7f]"
+                >
+                    <div class="h-3/5 w-full bg-cover" :style="{ backgroundImage: `url(${item.mainImage})` }"></div>
+                    <p class="p-2 text-lg text-white">
+                        {{ item.name }}
+                    </p>
+                    <div class="mt-auto flex items-center self-end p-4">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            class="h-5 w-5"
+                            fill="none"
+                            stroke="#ddd"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+
+                        <p class="px-2 text-[14px] text-white">{{ item.totalTime }} mins</p>
+                    </div>
                 </div>
             </div>
         </div>

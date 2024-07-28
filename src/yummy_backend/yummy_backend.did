@@ -1,7 +1,14 @@
 type Error = variant {
   UserAlreadyExists : record { msg : text };
-  ImagesNotFound : record { msg : text };
+  RecipesNotFound : record { msg : text };
   UserNotFound : record { msg : text };
+};
+type RecipeStorage = record {
+  total_time_in_seconds : opt nat64;
+  name : text;
+  tags : opt vec text;
+  cuisines : opt vec text;
+  main_image : blob;
 };
 type Result = variant { Ok : User; Err : Error };
 type Result_1 = variant { Ok : text; Err : Error };
@@ -9,12 +16,17 @@ type Result_2 = variant { Ok : vec User; Err : Error };
 type Result_3 = variant { Ok : vec text; Err : Error };
 type User = record { id : principal; name : text };
 service : {
+  breakfast_recipes : () -> ();
   create_user : (text) -> (Result);
   delete_user_by_index : (nat64) -> (Result_1);
   get_all_users : () -> (Result_2) query;
-  get_image : (text) -> (blob) query;
-  get_images_names : () -> (Result_3) query;
+  get_popular_recipe : (nat64) -> (RecipeStorage) query;
+  get_popular_recipes_len : () -> (nat64) query;
+  get_popular_recipes_names : () -> (Result_3) query;
+  get_tag_recipe : (nat64) -> (RecipeStorage) query;
+  get_tag_recipes_len : () -> (nat64) query;
+  get_tag_recipes_names : () -> (Result_3) query;
   get_user : (nat64) -> (Result) query;
-  popular_recipes : () -> (text);
+  popular_recipes : () -> ();
   whoami : () -> (principal) query;
 }

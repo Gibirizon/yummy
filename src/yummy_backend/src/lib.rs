@@ -1,6 +1,7 @@
 extern crate serde;
 use candid::Principal;
 use candid::{CandidType, Decode, Deserialize, Encode};
+use https::RecipeStorage;
 use ic_cdk::{query, update};
 use ic_stable_structures::memory_manager::{MemoryId, MemoryManager, VirtualMemory};
 use ic_stable_structures::{storable::Bound, Cell, DefaultMemoryImpl, StableBTreeMap, Storable};
@@ -131,7 +132,7 @@ fn whoami() -> Principal {
 pub enum Error {
     UserNotFound { msg: String },
     UserAlreadyExists { msg: String },
-    ImagesNotFound { msg: String },
+    RecipesNotFound { msg: String },
 }
 
 // enable the export of the candid file

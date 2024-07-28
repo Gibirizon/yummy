@@ -1,5 +1,6 @@
 import { createPinia } from "pinia";
 import { createApp } from "vue";
+import router from "./router";
 import "./index.css";
 import App from "./App.vue";
 /* import the fontawesome core */
@@ -19,6 +20,6 @@ library.add(faBars, faMagnifyingGlass, faXmark);
 const app = createApp(App);
 
 app.component("font-awesome-icon", FontAwesomeIcon);
+app.use(router);
 app.use(createPinia());
-
 app.mount("#app");

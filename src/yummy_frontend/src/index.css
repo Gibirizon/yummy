@@ -10,5 +10,5 @@
 }
 
 .login-button {
-    @apply rounded-full bg-blue-700 px-10 py-3 text-lg font-bold text-white hover:bg-blue-600;
+    @apply w-[160px] rounded-md bg-[#085d8c] px-[6px] py-[10px] text-[18px] font-[500] text-white transition-colors duration-[400] hover:bg-[#06486c];
 }
