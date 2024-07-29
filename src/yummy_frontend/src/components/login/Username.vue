@@ -4,13 +4,18 @@ import { useAuthStore } from "./../../store/auth";
 
 const authStore = useAuthStore();
 const username = ref("");
-const emit = defineEmits(["new-user-created"]);
+const emit = defineEmits(["new-user-created", "user-index"]);
 
 async function createNewUser() {
     emit("new-user-created");
     if (authStore.whoamiActor) {
-        await authStore.whoamiActor?.create_user(username.value).then((e) => {
-            console.log(e);
+        await authStore.whoamiActor?.create_user(username.value);
+        console.log("Created new user:", username.value);
+        await authStore.whoamiActor?.get_user_index_by_principal().then((e) => {
+            console.log("User index after signing up:", e);
+            if (e.Ok) {
+                emit("user-index", e.Ok);
+            }
         });
     }
 }

@@ -1,5 +1,7 @@
 type Error = variant {
   UserAlreadyExists : record { msg : text };
+  CallerNotAuthorized : record { msg : text };
+  InvalidName : record { msg : text };
   RecipesNotFound : record { msg : text };
   UserNotFound : record { msg : text };
 };
@@ -14,6 +16,7 @@ type Result = variant { Ok : User; Err : Error };
 type Result_1 = variant { Ok : text; Err : Error };
 type Result_2 = variant { Ok : vec User; Err : Error };
 type Result_3 = variant { Ok : vec text; Err : Error };
+type Result_4 = variant { Ok : nat64; Err : Error };
 type User = record { id : principal; name : text };
 service : {
   breakfast_recipes : () -> ();
@@ -27,6 +30,8 @@ service : {
   get_tag_recipes_len : () -> (nat64) query;
   get_tag_recipes_names : () -> (Result_3) query;
   get_user : (nat64) -> (Result) query;
+  get_user_index_by_principal : () -> (Result_4) query;
   popular_recipes : () -> ();
+  update_user_by_index : (nat64, text) -> (Result);
   whoami : () -> (principal) query;
 }

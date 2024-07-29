@@ -1,11 +1,19 @@
 <script setup>
 import UsernameBox from "./login/Username.vue";
+import { yummy_backend } from "declarations/yummy_backend/index";
 import LoggedOut from "./login/LoggedOut.vue";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "./../store/auth";
-import { ref, onMounted, onUnmounted } from "vue";
-import { watch } from "vue";
+import { ref, watch, onMounted, onUnmounted } from "vue";
 import { RouterLink } from "vue-router";
+import { faL } from "@fortawesome/free-solid-svg-icons";
+import { computed } from "vue";
+import { useRouter, useRoute } from "vue-router";
+
+const route = useRoute();
+
+const canisterId = computed(() => route.query.canisterId);
+
 const openDropdowns = ref([]);
 
 function toggleDropdown(dropdown) {
@@ -27,14 +35,22 @@ const props = defineProps({
     },
 });
 
-const whoami = ref("");
+// const whoami = ref("");
+const user_index = ref(0);
 const leftMenuIsVisible = ref(false);
 const usernameBoxIsVisible = ref(false);
 
 const authStore = useAuthStore();
-const { isReady, isAuthenticated } = storeToRefs(authStore);
-if (isReady.value === false) {
-    authStore.init();
+const { isReady, isAuthenticated, whoamiActor } = storeToRefs(authStore);
+console.log(isAuthenticated, isReady);
+init();
+async function init() {
+    console.log("isReady: ", isReady.value);
+    if (isReady.value === false) {
+        await authStore.init();
+        console.log("isAuthenticated: ", isAuthenticated.value);
+        await updateLoginStatus();
+    }
 }
 const loggingProcess = ref(false);
 
@@ -45,40 +61,66 @@ watch(
     }
 );
 
-function whoamiCall() {
-    console.log(authStore.whoamiActor);
-    if (authStore.whoamiActor) {
-        authStore.whoamiActor?.whoami().then((res) => (whoami.value = res));
-    } else {
-        whoami.value = "You are not logged in";
-    }
-}
-
 function sleep(time) {
     return new Promise((resolve) => setTimeout(resolve, time));
 }
 async function finishSignUp() {
-    while (!authStore.isAuthenticated) {
+    console.log("!!!!!");
+    console.log("finish sign up");
+    console.log("finish sign up");
+    console.log("isauthenticated", isAuthenticated.value);
+    while (!isAuthenticated.value) {
         await sleep(100);
+        console.log("isauthenticated", isAuthenticated.value);
     }
-    console.log(authStore.whoamiActor);
+    console.log("whoami actor: ", whoamiActor.value);
 
     loggingProcess.value = false;
-    let id;
-    await authStore.whoamiActor?.whoami().then((res) => (id = res));
-    console.log(id);
-    await authStore.whoamiActor?.get_user(id).then((e) => {
-        if (Object.keys(e)[0] === "Err") {
+    // let id;
+    // await whoamiActor.value.whoami().then((res) => (id = res));
+    // whoami.value = id;
+    await whoamiActor.value.get_user_index_by_principal().then((e) => {
+        console.log("User index after signing up:", e);
+        if (e.Err) {
             console.log(e.Err);
             usernameBoxIsVisible.value = true;
+        } else {
+            user_index.value = e.Ok;
+            console.log("User index after signing up:", user_index.value);
         }
     });
 }
+async function signUserOut() {
+    user_index.value = 0;
+    await authStore.logout();
+    // whoami.value = "";
+}
 
+async function changeUserId(id) {
+    user_index.value = id;
+    console.log(user_index.value);
+}
+
+async function updateLoginStatus() {
+    // while (!isAuthenticated.value) {
+    //     sleep(100);
+    // }
+    if (isAuthenticated.value) {
+        console.log("updating login status");
+        // await whoamiActor.value.whoami().then((res) => (whoami.value = res));
+        await whoamiActor.value.get_user_index_by_principal().then((res) => {
+            console.log("User index: ", res);
+            user_index.value = res.Ok ? res.Ok : 0;
+            console.log(user_index.value);
+        });
+    }
+}
 onMounted(() => {
-    window.addEventListener("message", (event) => {
+    console.log(isAuthenticated);
+    window.addEventListener("message", async (event) => {
         if (event.data.kind === "authorize-client-success") {
-            finishSignUp();
+            console.log("finish sign up listener");
+            await finishSignUp();
         }
     });
 });
@@ -92,31 +134,29 @@ onUnmounted(() => {
 });
 </script>
 <template>
-    <UsernameBox @new-user-created="usernameBoxIsVisible = false" v-if="usernameBoxIsVisible" />
+    <div v-show="usernameBoxIsVisible">
+        <UsernameBox @user-index="changeUserId" @new-user-created="usernameBoxIsVisible = false" />
+    </div>
     <div
         class="duration-400 left-menu fixed left-0 top-0 z-[130] flex h-screen w-[240px] flex-col items-center gap-4 bg-[#3e3e3e] p-4 shadow-lg transition-transform"
         :class="leftMenuIsVisible ? 'translate-x-0' : '-translate-x-full'"
     >
         <h2 class="p-2 text-2xl text-white">Yummy</h2>
         <div v-if="isReady">
-            <button
-                v-if="isAuthenticated"
-                @click="async () => await authStore.logout()"
-                type="button"
-                class="login-button"
-            >
+            <button v-if="isAuthenticated" @click="signUserOut" type="button" class="login-button">
                 <span class="py-[10px]">Sign out</span>
             </button>
             <button v-else @click="loggingProcess = true" type="button" class="login-button">
                 <span>Sign in</span>
             </button>
         </div>
-        <button @click="whoamiCall" type="button" class="login-button"><span>Who am I</span></button>
-        <p>{{ whoami }}</p>
         <div>
             <ul class="space-y-6 text-[18px]">
                 <li>
-                    <RouterLink to="/" class="flex items-center gap-3 text-gray-300 hover:text-white">
+                    <RouterLink
+                        :to="{ name: 'home', query: { canisterId: canisterId } }"
+                        class="flex items-center gap-3 text-gray-300 hover:text-white"
+                    >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             class="h-6 w-6"
@@ -178,7 +218,7 @@ onUnmounted(() => {
                         <li><a href="#" class="text-gray-400 hover:text-white">Favorites</a></li>
                     </ul>
                 </li>
-                <li>
+                <li v-show="isAuthenticated && user_index !== 0">
                     <div
                         @click="toggleDropdown('profile')"
                         class="flex cursor-pointer items-center justify-between text-gray-300 hover:text-white"
@@ -212,12 +252,35 @@ onUnmounted(() => {
                         </svg>
                     </div>
                     <ul v-if="isDropdownOpen('profile')" class="ml-6 mt-2 space-y-2">
-                        <li><a href="#" class="text-gray-400 hover:text-white">View Profile</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white">Edit Profile</a></li>
+                        <li>
+                            <RouterLink
+                                :to="{
+                                    name: 'profile-info',
+                                    query: { canisterId: canisterId },
+                                    params: { id: user_index },
+                                }"
+                                class="text-gray-400 hover:text-white"
+                                >View Profile</RouterLink
+                            >
+                        </li>
+                        <li>
+                            <RouterLink
+                                :to="{
+                                    name: 'profile-edit',
+                                    query: { canisterId: canisterId },
+                                    params: { id: user_index },
+                                }"
+                                class="text-gray-400 hover:text-white"
+                                >Edit Profile</RouterLink
+                            >
+                        </li>
                     </ul>
                 </li>
                 <li>
-                    <RouterLink to="/about" class="flex items-center gap-3 text-gray-300 hover:text-white">
+                    <RouterLink
+                        :to="{ name: 'about', query: { canisterId: canisterId } }"
+                        class="flex items-center gap-3 text-gray-300 hover:text-white"
+                    >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             class="h-6 w-6"
@@ -238,7 +301,9 @@ onUnmounted(() => {
             </ul>
         </div>
     </div>
-    <LoggedOut @finish-logging-in="loggingProcess = false" v-if="loggingProcess && !isAuthenticated" />
+    <div v-show="loggingProcess && !isAuthenticated">
+        <LoggedOut @finish-logging-in="loggingProcess = false" />
+    </div>
 </template>
 
 <style scoped>

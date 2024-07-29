@@ -3,13 +3,14 @@ import { onMounted, ref } from "vue";
 import Navigation from "./components/Nav.vue";
 import LeftMenu from "./components/LeftMenu.vue";
 
+console.log("rendering app")
 const leftMenuIsVisible = ref(false);
 </script>
 
 <template>
     <div class="main-container flex w-full flex-row">
         <div
-            v-if="leftMenuIsVisible"
+            v-show="leftMenuIsVisible"
             class="mobile-view fixed z-[120] h-full w-full bg-black/40 opacity-100"
             @click="leftMenuIsVisible = false"
         ></div>

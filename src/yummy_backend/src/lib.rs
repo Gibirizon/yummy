@@ -1,6 +1,5 @@
 extern crate serde;
-use candid::Principal;
-use candid::{CandidType, Decode, Deserialize, Encode};
+use candid::{CandidType, Decode, Deserialize, Encode, Principal};
 use https::RecipeStorage;
 use ic_cdk::{query, update};
 use ic_stable_structures::memory_manager::{MemoryId, MemoryManager, VirtualMemory};
@@ -25,7 +24,7 @@ thread_local! {
     );
 
     static INDEX_COUNTER: RefCell<IdCell> = RefCell::new(
-        IdCell::init(MEMORY_MANAGER.with(|m| m.borrow().get(MemoryId::new(0))), 0)
+        IdCell::init(MEMORY_MANAGER.with(|m| m.borrow().get(MemoryId::new(0))), 1)
             .expect("Cannot create a counter")
     );
 
@@ -72,6 +71,33 @@ fn create_user(name: String) -> Result<User, Error> {
         }
     })
 }
+#[update]
+fn update_user_by_index(index: u64, name: String) -> Result<User, Error> {
+    let user = USERS.with(|users| users.borrow().get(&index));
+    match user {
+        Some(user) => {
+            if name.is_empty() {
+                return Err(Error::InvalidName {
+                    msg: "Name cannot be empty".to_string(),
+                });
+            }
+            ic_cdk::api::print(format!("caller: {}", ic_cdk::api::caller()));
+            if ic_cdk::caller() == Principal::anonymous() || user.id != ic_cdk::caller() {
+                return Err(Error::CallerNotAuthorized {
+                    msg: "The caller is not authorized".to_string(),
+                });
+            }
+            let updated_user = User { id: user.id, name };
+            USERS.with(|users| {
+                users.borrow_mut().insert(index, updated_user.clone());
+            });
+            Ok(updated_user)
+        }
+        None => Err(Error::UserNotFound {
+            msg: "User not found".to_string(),
+        }),
+    }
+}
 
 #[update]
 fn delete_user_by_index(index: u64) -> Result<String, Error> {
@@ -100,6 +126,20 @@ fn get_user(index: u64) -> Result<User, Error> {
             msg: "User not found".to_string(),
         }),
     }
+}
+#[query]
+fn get_user_index_by_principal() -> Result<u64, Error> {
+    USERS.with(|users| {
+        let users = &*users.borrow();
+        ic_cdk::api::print(format!("caller: {}", ic_cdk::api::caller()));
+        let index = match users.iter().find(|(_, user)| user.id == ic_cdk::caller()) {
+            Some((index, _)) => Ok(index),
+            None => Err(Error::UserNotFound {
+                msg: "User not found".to_string(),
+            }),
+        };
+        index
+    })
 }
 
 #[query]
@@ -133,6 +173,8 @@ pub enum Error {
     UserNotFound { msg: String },
     UserAlreadyExists { msg: String },
     RecipesNotFound { msg: String },
+    InvalidName { msg: String },
+    CallerNotAuthorized { msg: String },
 }
 
 // enable the export of the candid file

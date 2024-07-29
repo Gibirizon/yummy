@@ -15,7 +15,6 @@ const tagRecipes = ref([]);
 
 async function getPopularRecipes() {
     if (popularRecipes.value.length > 0) return;
-    console.log("Hi");
     await yummy_backend.get_popular_recipes_len().then(async (length) => {
         console.log(length);
         for (let i = 0; i < length; i++) {

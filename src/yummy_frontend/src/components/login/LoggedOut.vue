@@ -36,7 +36,7 @@ async function SignIn() {
             <p class="font-thin">Where you can look for thousands of recipes</p>
             <div class="m-4 flex items-center">
                 <div class="flex min-h-[45px] w-[60px] min-w-[60px] items-center justify-center bg-[#242834] p-2">
-                    <img src="./../../../public/images/ic_logo.svg" alt="Internet Computer logo" />
+                    <img src="/images/ic_logo.svg" alt="Internet Computer logo" />
                 </div>
                 <button type="button" class="min-h-[45px] bg-[#085d8c] p-2 hover:bg-[#053854]" @click="SignIn">
                     <span> {{ signMethod }} with Internet Identity </span>

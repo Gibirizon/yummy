@@ -1,9 +1,16 @@
 {
 	"canisters": {
 		"internet_identity": {
-			"id": "rdmx6-jaaaa-aaaaa-aaadq-cai",
-			"type": "pull"
+			"type": "custom",
+			"candid": "https://github.com/dfinity/internet-identity/releases/latest/download/internet_identity.did",
+			"wasm": "https://github.com/dfinity/internet-identity/releases/latest/download/internet_identity_dev.wasm.gz",
+			"remote": {
+				"id": {
+					"ic": "rdmx6-jaaaa-aaaaa-aaadq-cai"
+				}
+			}
 		},
+
 		"yummy_backend": {
 			"candid": "src/yummy_backend/yummy_backend.did",
 			"package": "yummy_backend",
