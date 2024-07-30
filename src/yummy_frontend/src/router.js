@@ -5,10 +5,12 @@ import Home from "./views/HomeView.vue";
 import Profile from "./views/ProfileView.vue";
 import ProfileInfo from "./components/profile/ProfileInfo.vue";
 import ProfileEdit from "./components/profile/ProfileEdit.vue";
+import NewRecipeView from "./views/NewRecipeView.vue";
 
 const routes = [
     { path: "/", component: Home, name: "home" },
     { path: "/about", component: About, name: "about" },
+    { path: "/new-recipe", component: NewRecipeView, name: "new-recipe" },
     {
         path: "/profile/:id",
         name: "profile",

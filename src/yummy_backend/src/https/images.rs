@@ -1,14 +1,14 @@
+use crate::Error;
 use ic_cdk::api::management_canister::http_request::{
     http_request, CanisterHttpRequestArgument, HttpHeader, HttpMethod,
 };
 
 const MAX_RESPONSE_BYTES: u64 = 2 * 1024 * 1024; // 2 MB
 
-pub async fn fetch_image(url: &str) -> Vec<u8> {
+pub async fn fetch_image(url: &str) -> Result<Vec<u8>, Error> {
     let mut offset = 0;
     let mut total_size = 0;
     let mut image = Vec::new();
-    ic_cdk::api::print(format!("URL: {}", url));
 
     while offset < total_size || total_size == 0 {
         let request_headers = vec![
@@ -48,10 +48,6 @@ pub async fn fetch_image(url: &str) -> Vec<u8> {
                     if total_size == 0 {
                         for header in &response.headers {
                             if header.name.to_lowercase() == "content-range" {
-                                ic_cdk::api::print(format!(
-                                    "Headers content-range: {:?}",
-                                    header.value
-                                ));
                                 if let Some(size) = parse_content_range(&header.value) {
                                     total_size = size;
                                 }
@@ -64,11 +60,13 @@ pub async fn fetch_image(url: &str) -> Vec<u8> {
             }
             Err(e) => {
                 ic_cdk::api::print(format!("Failed to fetch chunk: {:?}", e));
-                break;
+                return Err(Error::ImageNotDownloaded {
+                    msg: "Cannot download image".to_string(),
+                });
             }
         }
     }
-    image
+    Ok(image)
 }
 
 fn parse_content_range(header: &str) -> Option<u64> {

@@ -3,7 +3,7 @@ import { onMounted, ref } from "vue";
 import Navigation from "./components/Nav.vue";
 import LeftMenu from "./components/LeftMenu.vue";
 
-console.log("rendering app")
+console.log("rendering app");
 const leftMenuIsVisible = ref(false);
 </script>
 
@@ -19,7 +19,7 @@ const leftMenuIsVisible = ref(false);
             class="realative app-content flex w-full flex-1 flex-col items-center overflow-y-auto overflow-x-hidden pt-[80px]"
         >
             <Navigation class="mobile-view" @show-menu="leftMenuIsVisible = true" />
-            <main class="relative w-full bg-[#545454]">
+            <main class="relative w-full bg-gray-800">
                 <RouterView />
             </main>
         </div>

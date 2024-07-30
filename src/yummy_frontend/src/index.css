@@ -9,6 +9,6 @@
     }
 }
 
-.login-button {
+.primary-button {
     @apply w-[160px] rounded-md bg-[#085d8c] px-[6px] py-[10px] text-[18px] font-[500] text-white transition-colors duration-[400] hover:bg-[#06486c];
 }

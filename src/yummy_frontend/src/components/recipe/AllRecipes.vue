@@ -11,34 +11,34 @@ class RecipeBrief {
 }
 
 const popularRecipes = ref([]);
-const tagRecipes = ref([]);
+const breakfastRecipes = ref([]);
+const dinnerRecipes = ref([]);
 
-async function getPopularRecipes() {
+async function getRecipes() {
     if (popularRecipes.value.length > 0) return;
-    await yummy_backend.get_popular_recipes_len().then(async (length) => {
+    await yummy_backend.get_recipes_len().then(async (length) => {
         console.log(length);
         for (let i = 0; i < length; i++) {
-            const RecipeData = await yummy_backend.get_popular_recipe(i);
-            let new_recipe = await createRecipe(RecipeData);
-            popularRecipes.value.push(new_recipe);
-        }
-    });
-}
-
-async function getTagRecipes() {
-    if (tagRecipes.value.length > 0) return;
-    await yummy_backend.get_tag_recipes_len().then(async (length) => {
-        console.log(length);
-        for (let i = 0; i < length; i++) {
-            const RecipeData = await yummy_backend.get_tag_recipe(i);
-            let new_recipe = await createRecipe(RecipeData);
-            tagRecipes.value.push(new_recipe);
+            let RecipeData = await yummy_backend.get_recipe(i);
+            if (RecipeData.Ok) {
+                RecipeData = RecipeData.Ok;
+                let new_recipe = await createRecipe(RecipeData);
+                if (RecipeData.popular) {
+                    popularRecipes.value.push(new_recipe);
+                } else {
+                    if (RecipeData.meal_tags[0].includes("Breakfast")) {
+                        breakfastRecipes.value.push(new_recipe);
+                    } else {
+                        dinnerRecipes.value.push(new_recipe);
+                    }
+                }
+            }
         }
     });
 }
 
 async function createRecipe(data) {
-    const imageData = data.main_image;
+    const imageData = data.image_bytes[0];
 
     // Convert Uint8Array to string in chunks
     const chunkSize = 8192;
@@ -56,22 +56,80 @@ function handleItemClick(item) {
     console.log("Clicked item:", item);
 }
 
-onMounted(() => {
-    getPopularRecipes();
-    getTagRecipes();
-});
-
-onUnmounted(() => {
-    // popularRecipes.value = [];
-    // tagRecipes.value = [];
-});
+getRecipes();
 </script>
 
 <template>
-    <h2 class="p-4 text-center text-4xl text-white">Popular Recipes</h2>
-    <SingleList v-if="popularRecipes" :recipes="popularRecipes" @item-click="handleItemClick" />
-    <h2 class="p-4 text-center text-4xl text-white">Breakfast</h2>
-    <SingleList v-if="tagRecipes" :recipes="tagRecipes" @item-click="handleItemClick" />
-    <h2 class="p-4 text-center text-4xl text-white">Breakfast</h2>
-    <SingleList v-if="tagRecipes" :recipes="tagRecipes" @item-click="handleItemClick" />
+    <div class="min-h-screen bg-gradient-to-r from-gray-900 via-gray-800 to-gray-700 py-8">
+        <h1 class="mb-12 text-center text-5xl font-bold text-white">Our Recipes</h1>
+
+        <section class="mb-16">
+            <div class="mb-6 flex items-center justify-center">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="mr-2 h-8 w-8 text-yellow-400"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
+                    />
+                </svg>
+                <h2 class="shadow-text text-3xl font-semibold text-white">Popular Recipes</h2>
+            </div>
+            <SingleList v-if="popularRecipes" :recipes="popularRecipes" @item-click="handleItemClick" />
+        </section>
+
+        <section class="mb-16">
+            <div class="mb-6 flex items-center justify-center">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="mr-2 h-8 w-8 text-orange-400"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+                    />
+                </svg>
+                <h2 class="shadow-text text-3xl font-semibold text-white">Breakfast</h2>
+            </div>
+            <SingleList v-if="breakfastRecipes" :recipes="breakfastRecipes" @item-click="handleItemClick" />
+        </section>
+
+        <section class="mb-16">
+            <div class="mb-6 flex items-center justify-center">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="mr-2 h-8 w-8 text-indigo-400"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                    />
+                </svg>
+                <h2 class="shadow-text text-3xl font-semibold text-white">Dinner</h2>
+            </div>
+            <SingleList v-if="dinnerRecipes" :recipes="dinnerRecipes" @item-click="handleItemClick" />
+        </section>
+    </div>
 </template>
+
+<style scoped>
+.shadow-text {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+</style>

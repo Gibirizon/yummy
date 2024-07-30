@@ -1,6 +1,6 @@
 extern crate serde;
 use candid::{CandidType, Decode, Deserialize, Encode, Principal};
-use https::RecipeStorage;
+use https::RecipeInfo;
 use ic_cdk::{query, update};
 use ic_stable_structures::memory_manager::{MemoryId, MemoryManager, VirtualMemory};
 use ic_stable_structures::{storable::Bound, Cell, DefaultMemoryImpl, StableBTreeMap, Storable};
@@ -175,6 +175,8 @@ pub enum Error {
     RecipesNotFound { msg: String },
     InvalidName { msg: String },
     CallerNotAuthorized { msg: String },
+    RecipeNotFound { msg: String },
+    ImageNotDownloaded { msg: String },
 }
 
 // enable the export of the candid file

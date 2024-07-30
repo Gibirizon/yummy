@@ -11,8 +11,9 @@ import { computed } from "vue";
 import { useRouter, useRoute } from "vue-router";
 
 const route = useRoute();
+const router = useRouter();
 
-const canisterId = computed(() => route.query.canisterId);
+const canisterId = route.query.canisterId;
 
 const openDropdowns = ref([]);
 
@@ -115,6 +116,9 @@ async function updateLoginStatus() {
         });
     }
 }
+function goToNewRecipe() {
+    router.push({ name: "new-recipe", query: { canisterId: canisterId } });
+}
 onMounted(() => {
     console.log(isAuthenticated);
     window.addEventListener("message", async (event) => {
@@ -143,10 +147,10 @@ onUnmounted(() => {
     >
         <h2 class="p-2 text-2xl text-white">Yummy</h2>
         <div v-if="isReady">
-            <button v-if="isAuthenticated" @click="signUserOut" type="button" class="login-button">
+            <button v-if="isAuthenticated" @click="signUserOut" type="button" class="primary-button">
                 <span class="py-[10px]">Sign out</span>
             </button>
-            <button v-else @click="loggingProcess = true" type="button" class="login-button">
+            <button v-else @click="loggingProcess = true" type="button" class="primary-button">
                 <span>Sign in</span>
             </button>
         </div>
@@ -300,6 +304,23 @@ onUnmounted(() => {
                 </li>
             </ul>
         </div>
+        <!-- <div v-show="isAuthenticated"> -->
+        <div class="flex justify-center">
+            <button
+                @click="goToNewRecipe"
+                class="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-lg font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" class="mr-2 h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                    <path
+                        fill-rule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
+                        clip-rule="evenodd"
+                    />
+                </svg>
+                Add Recipe
+            </button>
+        </div>
+        <!-- </div> -->
     </div>
     <div v-show="loggingProcess && !isAuthenticated">
         <LoggedOut @finish-logging-in="loggingProcess = false" />

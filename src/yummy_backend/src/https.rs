@@ -17,45 +17,50 @@ use urlencoding::encode;
 mod api_key;
 pub mod images;
 #[derive(CandidType, Deserialize, Clone, Debug)]
-pub struct RecipeStorage {
-    name: String,
-    main_image: Vec<u8>,
-    cuisines: Option<Vec<String>>,
-    tags: Option<Vec<String>>,
-    total_time_in_seconds: Option<u64>,
-}
-
-#[derive(CandidType, Deserialize, Clone, Debug)]
-pub struct RecipeInfo {
-    node: RecipeInsideInfo,
-}
-
-#[derive(CandidType, Deserialize, Clone, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct RecipeInsideInfo {
+pub struct RecipeInside {
     name: String,
     main_image: String,
     cuisines: Option<Vec<String>>,
     tags: Option<Vec<String>>,
+    meal_tags: Option<Vec<String>>,
     total_time_in_seconds: Option<u64>,
+    ingredients: Option<Vec<Ingredient>>,
+}
+
+#[derive(CandidType, Deserialize, Clone, Debug)]
+pub struct RecipeInfo {
+    name: String,
+    main_image: Option<String>,
+    cuisines: Option<Vec<String>>,
+    tags: Option<Vec<String>>,
+    meal_tags: Option<Vec<String>>,
+    total_time_in_seconds: Option<u64>,
+    ingredients: Option<Vec<Ingredient>>,
+    image_bytes: Option<Vec<u8>>,
+    popular: bool,
+    owner: Option<u64>,
+}
+#[derive(CandidType, Deserialize, Clone, Debug)]
+pub struct Ingredient {
+    name: String,
+}
+
+#[derive(CandidType, Deserialize, Clone, Debug)]
+pub struct RecipeSingleItem {
+    node: RecipeInside,
 }
 
 thread_local! {
-    pub static POPULAR_RECIPES: RefCell<StableBTreeMap<u64, RecipeStorage , Memory>> = RefCell::new(
+    pub static RECIPES: RefCell<StableBTreeMap<u64, RecipeInfo , Memory>> = RefCell::new(
         StableBTreeMap::init(
             MEMORY_MANAGER.with(|m| m.borrow().get(MemoryId::new(2)))
         )
     );
-    pub static TAG_RECIPES: RefCell<StableBTreeMap<u64, RecipeStorage , Memory>> = RefCell::new(
-        StableBTreeMap::init(
-            MEMORY_MANAGER.with(|m| m.borrow().get(MemoryId::new(3)))
-        )
-    );
-
 
 }
 
-impl Storable for RecipeStorage {
+impl Storable for RecipeInfo {
     fn to_bytes(&self) -> Cow<[u8]> {
         Cow::Owned(Encode!(self).unwrap())
     }
@@ -65,7 +70,7 @@ impl Storable for RecipeStorage {
     }
 
     const BOUND: Bound = Bound::Bounded {
-        max_size: 100 * 1024 * 1024,
+        max_size: 2 * 1024 * 1024 * 1024,
         is_fixed_size: false,
     };
 }
@@ -79,51 +84,71 @@ pub async fn transform_and_store_response(http_response: String, recipes_type: &
         .unwrap()
         .get("edges")
         .unwrap();
-    let recipes_list: Vec<RecipeInfo> = serde_json::from_value(data.clone()).unwrap();
-
-    ic_cdk::api::print(format!("JSON: {:#?}", recipes_list));
+    let recipes_list: Vec<RecipeSingleItem> = serde_json::from_value(data.clone()).unwrap();
 
     for recipe in recipes_list {
         let image_url = recipe.node.main_image;
         let image_base = fetch_image(&image_url).await;
-        let new_recipe = RecipeStorage {
-            name: recipe.node.name,
-            main_image: image_base,
-            cuisines: recipe.node.cuisines,
-            tags: recipe.node.tags,
-            total_time_in_seconds: recipe.node.total_time_in_seconds,
-        };
+        match image_base {
+            Ok(image_bytes) => {
+                let new_recipe = RecipeInfo {
+                    name: recipe.node.name,
+                    main_image: Some(image_url),
+                    cuisines: recipe.node.cuisines,
+                    tags: recipe.node.tags,
+                    meal_tags: recipe.node.meal_tags,
+                    total_time_in_seconds: recipe.node.total_time_in_seconds,
+                    ingredients: recipe.node.ingredients,
+                    image_bytes: Some(image_bytes),
+                    popular: if recipes_type == "popularRecipes" {
+                        true
+                    } else {
+                        false
+                    },
+                    owner: None,
+                };
 
-        // store recipe in correct storage
-        if recipes_type == "popularRecipes" {
-            //get the len of the map
-            let storage_length = POPULAR_RECIPES.with(|m| m.borrow().len());
-            POPULAR_RECIPES.with(|m| m.borrow_mut().insert(storage_length, new_recipe));
-        } else if recipes_type == "recipesByTag" {
-            let storage_length = TAG_RECIPES.with(|m| m.borrow().len());
-            TAG_RECIPES.with(|m| m.borrow_mut().insert(storage_length, new_recipe));
+                //get the len of the map
+                let storage_length = RECIPES.with(|m| m.borrow().len());
+                RECIPES.with(|m| m.borrow_mut().insert(storage_length, new_recipe));
+            }
+            Err(_) => {
+                continue;
+            }
         }
     }
 }
 
 #[update]
 pub async fn breakfast_recipes() {
-    let query = r#"
-    query {
-        recipesByTag (tag: "Breakfast") {
-            edges {
-                node {
+    let tags = vec!["Breakfast".to_string(), "Dinner".to_string()];
+    for tag in tags {
+        let query = format!(
+            r#"
+    query {{
+        recipesByTag (tag: "{}") {{
+            edges {{
+                node {{
                     cuisines
-                    mainImage
                     tags
-                    name
                     totalTimeInSeconds
-                }
-            }
-        }
-  }"#;
-    let res = get_recipes(query).await;
-    transform_and_store_response(res, "recipesByTag").await;
+                    ingredients {{
+                        name
+                    }}
+                    mainImage
+                    mealTags
+                    name
+                }}
+            }}
+        }}
+    }}
+"#,
+            tag
+        );
+
+        let res = get_recipes(query).await;
+        transform_and_store_response(res, "recipesByTag").await;
+    }
 }
 
 #[update]
@@ -133,22 +158,27 @@ pub async fn popular_recipes() {
         popularRecipes {
             edges {
                 node {
-                    name
-                    mainImage
                     cuisines
                     tags
                     totalTimeInSeconds
+                    ingredients {
+                        name
+                    }
+                    mainImage
+                    mealTags
+                    name
                 }
             }
-        }
     }
-    "#;
+  }
+    "#
+    .to_string();
     let res = get_recipes(query).await;
     transform_and_store_response(res, "popularRecipes").await;
 }
 
-pub async fn get_recipes(query: &str) -> String {
-    let encoded_query = encode(query);
+pub async fn get_recipes(query: String) -> String {
+    let encoded_query = encode(&query);
 
     let url = format!(
         "https://production.suggestic.com/graphql?query={}",
@@ -185,52 +215,36 @@ pub async fn get_recipes(query: &str) -> String {
     }
 }
 
-pub fn get_names(
-    btree_map: &StableBTreeMap<u64, RecipeStorage, Memory>,
-) -> Result<Vec<String>, Error> {
-    let records: Vec<String> = btree_map
-        .iter()
-        .map(|(_, recipe)| recipe.name.clone())
-        .collect();
-
-    if records.is_empty() {
-        return Err(Error::RecipesNotFound {
-            msg: "No recipes".to_string(),
-        });
-    } else {
-        Ok(records)
+#[query]
+pub async fn get_recipe(id: u64) -> Result<RecipeInfo, Error> {
+    let recipe = RECIPES.with(|images| images.borrow().get(&id));
+    match recipe {
+        Some(recipe) => Ok(recipe),
+        None => Err(Error::RecipeNotFound {
+            msg: "Recipe not found".to_string(),
+        }),
     }
 }
 #[query]
-pub async fn get_popular_recipe(id: u64) -> RecipeStorage {
-    POPULAR_RECIPES.with(|images| images.borrow().get(&id).clone().unwrap())
-}
-#[query]
-pub async fn get_popular_recipes_len() -> u64 {
-    POPULAR_RECIPES.with(|recipes| recipes.borrow().len() as u64)
+pub async fn get_recipes_len() -> u64 {
+    RECIPES.with(|recipes| recipes.borrow().len() as u64)
 }
 
 #[query]
-pub async fn get_popular_recipes_names() -> Result<Vec<String>, Error> {
-    POPULAR_RECIPES.with(|recipes| {
+pub async fn get_recipes_names() -> Result<Vec<String>, Error> {
+    RECIPES.with(|recipes| {
         let stable_btree_map = &*recipes.borrow();
-        get_names(stable_btree_map)
-    })
-}
+        let records: Vec<String> = stable_btree_map
+            .iter()
+            .map(|(_, recipe)| recipe.name.clone())
+            .collect();
 
-#[query]
-pub async fn get_tag_recipe(id: u64) -> RecipeStorage {
-    TAG_RECIPES.with(|images| images.borrow().get(&id).clone().unwrap())
-}
-#[query]
-pub async fn get_tag_recipes_len() -> u64 {
-    TAG_RECIPES.with(|recipes| recipes.borrow().len() as u64)
-}
-
-#[query]
-pub async fn get_tag_recipes_names() -> Result<Vec<String>, Error> {
-    TAG_RECIPES.with(|recipes| {
-        let stable_btree_map = &*recipes.borrow();
-        get_names(stable_btree_map)
+        if records.is_empty() {
+            return Err(Error::RecipesNotFound {
+                msg: "No recipes".to_string(),
+            });
+        } else {
+            Ok(records)
+        }
     })
 }
