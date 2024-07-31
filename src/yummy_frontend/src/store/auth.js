@@ -64,18 +64,28 @@ export const useAuthStore = defineStore("auth", {
         },
         async login() {
             const authClient = toRaw(this.authClient);
-            authClient.login({
-                ...defaultOptions.loginOptions,
-                identityProvider: getIdentityProvider(),
-                maxTimeToLive: BigInt(7) * BigInt(24) * BigInt(3_600_000_000_000),
-                onSuccess: async () => {
-                    this.isAuthenticated = await authClient.isAuthenticated();
-                    this.identity = this.isAuthenticated ? authClient.getIdentity() : null;
-                    this.whoamiActor = this.identity ? actorFromIdentity(this.identity) : null;
-                },
-                onError: (error) => {
-                    console.error("Login Failed: ", error);
-                },
+            return new Promise((resolve, reject) => {
+                authClient.login({
+                    ...defaultOptions.loginOptions,
+                    identityProvider: getIdentityProvider(),
+                    maxTimeToLive: BigInt(7) * BigInt(24) * BigInt(3_600_000_000_000),
+                    onSuccess: async () => {
+                        try {
+                            this.isAuthenticated = await authClient.isAuthenticated();
+                            this.identity = this.isAuthenticated ? authClient.getIdentity() : null;
+                            this.whoamiActor = this.identity ? actorFromIdentity(this.identity) : null;
+                            console.log("Login Success");
+                            resolve();
+                        } catch (error) {
+                            console.error("Error during post-login process:", error);
+                            reject(error);
+                        }
+                    },
+                    onError: (error) => {
+                        console.error("Login Failed: ", error);
+                        reject(error);
+                    },
+                });
             });
         },
         async logout() {

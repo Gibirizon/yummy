@@ -1,35 +1,94 @@
 <script setup>
+import Username from "./Username.vue";
 import { useAuthStore } from "./../../store/auth";
 import { ref } from "vue";
-const emit = defineEmits(["finish-logging-in"]);
+import Message from "../Message.vue";
+const emit = defineEmits(["close", "logged-in"]);
 
 const signMethod = ref("Sign in");
 
 const authStore = useAuthStore();
+const showMessage = ref(false);
+const messageText = ref("");
+const messageType = ref("");
+const signProcess = ref(true);
 
 function changeSignMethod() {
-    console.log(signMethod);
     if (signMethod.value === "Sign in") {
         signMethod.value = "Sign up";
     } else {
         signMethod.value = "Sign in";
     }
 }
+
 async function SignIn() {
-    await authStore.login();
-    console.log("in sign in");
-    emit("finish-logging-in");
+    try {
+        await authStore.login();
+
+        // Login successful, perform next actions
+        if (!authStore.whoamiActor) {
+            console.log("Author undefined");
+            createMessage("Login failed - please try again", "warning");
+            return;
+        }
+        let user_index = await authStore.whoamiActor?.get_user_index_by_principal();
+        if (user_index.Err) {
+            console.log("First time login");
+            createMessage("You have signed up - set your username", "info");
+            signProcess.value = false;
+            return;
+        }
+        console.log("Login successful");
+        emit("logged-in", user_index.Ok);
+    } catch (err) {
+        // Handle login error
+        console.error("Login error:", err);
+        createMessage("Login failed - please try again", "error");
+    }
 }
+
+async function creatingNewUser(username) {
+    if (!authStore.whoamiActor) {
+        console.log("Author undefined");
+        signProcess.value = true;
+        createMessage("Login failed - please try again", "warning");
+        return;
+    }
+    createMessage("Creating new user...", "info");
+    let new_user_index = await authStore.whoamiActor?.create_user(username);
+    signProcess.value = true;
+    console.log("new_user_index", new_user_index);
+    if (new_user_index.Err) {
+        console.log("Failed to create new user");
+        createMessage("You already have an account - logging in...", "info");
+        let user_index = await authStore.whoamiActor?.get_user_index_by_principal();
+        emit("logged-in", user_index.Ok);
+        return;
+    }
+    console.log("Login successful");
+    emit("logged-in", new_user_index.Ok);
+}
+function createMessage(text, type) {
+    messageText.value = text;
+    messageType.value = type;
+    showMessage.value = true;
+}
+const closeMessage = () => {
+    showMessage.value = false;
+};
 </script>
 <template>
     <div class="absolute z-[200] h-full w-full bg-transparent backdrop-blur-sm"></div>
-    <div class="sing-in-box fixed bottom-0 z-[210] w-full rounded-t-3xl bg-[#1b1c21]">
+    <Transition name="slide">
+        <Message v-if="showMessage" :text="messageText" :type="messageType" @close="closeMessage" />
+    </Transition>
+    <div v-if="signProcess" class="sing-in-box fixed bottom-0 z-[210] w-full rounded-t-3xl bg-[#1b1c21]">
         <button
             type="button"
             class="absolute right-4 top-2 h-[30px] w-[30px] rounded-full text-white hover:bg-[#2f313a]"
             @click="emit('finish-logging-in')"
         >
-            <font-awesome-icon :icon="['fas', 'xmark']" />
+            <font-awesome-icon :icon="['fas', 'xmark']" @click="emit('close')" />
         </button>
         <div class="flex flex-col items-center justify-around gap-2 p-6 text-white">
             <h4 class="text-2xl font-semibold">{{ signMethod }} to Yummy</h4>
@@ -60,6 +119,7 @@ async function SignIn() {
             </div>
         </div>
     </div>
+    <Username v-else @new-user-created="creatingNewUser" />
 </template>
 
 <style scoped>

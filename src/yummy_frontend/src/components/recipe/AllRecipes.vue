@@ -16,30 +16,37 @@ const dinnerRecipes = ref([]);
 
 async function getRecipes() {
     if (popularRecipes.value.length > 0) return;
-    await yummy_backend.get_recipes_len().then(async (length) => {
-        console.log(length);
-        for (let i = 0; i < length; i++) {
-            let RecipeData = await yummy_backend.get_recipe(i);
-            if (RecipeData.Ok) {
-                RecipeData = RecipeData.Ok;
-                let new_recipe = await createRecipe(RecipeData);
-                if (RecipeData.popular) {
-                    popularRecipes.value.push(new_recipe);
-                } else {
-                    if (RecipeData.meal_tags[0].includes("Breakfast")) {
-                        breakfastRecipes.value.push(new_recipe);
-                    } else {
-                        dinnerRecipes.value.push(new_recipe);
-                    }
-                }
+    const names = await yummy_backend.get_recipes_names();
+    if (names.Err) {
+        console.log("Error: ", names.Err);
+        return;
+    }
+    for (const name of names.Ok) {
+        // get recipe information
+        let recipeData = await yummy_backend.get_recipe(name);
+        if (recipeData.Err) {
+            console.log("Error: ", recipeData.Err);
+            continue;
+        }
+        recipeData = recipeData.Ok;
+
+        // get recipe image
+        const imageData = await yummy_backend.get_image(name);
+
+        let new_recipe = await createRecipe(name, recipeData.total_time_in_seconds, imageData.Bytes);
+        if (recipeData.popular) {
+            popularRecipes.value.push(new_recipe);
+        } else {
+            if (recipeData.tags.includes("Breakfast")) {
+                breakfastRecipes.value.push(new_recipe);
+            } else {
+                dinnerRecipes.value.push(new_recipe);
             }
         }
-    });
+    }
 }
 
-async function createRecipe(data) {
-    const imageData = data.image_bytes[0];
-
+async function createRecipe(name, total_time_in_seconds, imageData) {
     // Convert Uint8Array to string in chunks
     const chunkSize = 8192;
     let binary = "";
@@ -49,7 +56,7 @@ async function createRecipe(data) {
 
     const imageBlob = btoa(binary);
     let imageInfo = `data:image/jpeg;base64,${imageBlob}`;
-    let new_recipe = new RecipeBrief(data.name, imageInfo, data.total_time_in_seconds / 60);
+    let new_recipe = new RecipeBrief(name, imageInfo, total_time_in_seconds / 60);
     return new_recipe;
 }
 function handleItemClick(item) {

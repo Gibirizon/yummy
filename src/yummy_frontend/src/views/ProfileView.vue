@@ -8,16 +8,14 @@ const authStore = useAuthStore();
 const id_route = BigInt(route.params.id);
 
 async function getUserIndex() {
-    console.log("get user index");
-    if (authStore.whoamiActor) {
-        await authStore.whoamiActor?.get_user_index_by_principal().then(async (index) => {
-            if (index.Ok && index.Ok === id_route) {
-                console.log("User index is correct: ", index.Ok);
-            } else {
-                goToHome();
-            }
-        });
+    if (!authStore.whoamiActor) {
+        goToHome();
     }
+    let user_index = await authStore.whoamiActor?.get_user_index_by_principal();
+    if (!user_index.Ok || user_index.Ok !== id_route) {
+        goToHome();
+    }
+    console.log("User index is correct: ", user_index.Ok);
 }
 getUserIndex();
 function goToHome() {

@@ -1,19 +1,62 @@
 <script setup>
+import { yummy_backend } from "declarations/yummy_backend/index";
 import { ref } from "vue";
-import { useRouter, useRoute } from "vue-router";
 import { useAuthStore } from "./../store/auth";
+import Message from "../components/Message.vue";
 
-const router = useRouter();
-const route = useRoute();
 const authStore = useAuthStore();
 
 const title = ref("");
-const description = ref("");
-const ingredients = ref("");
+const instructions = ref([]);
+const ingredients = ref([]);
 const prepTime = ref(0);
-const availableTags = ["Vegetarian", "Vegan", "Gluten-Free", "Low-Carb", "Keto", "Paleo"];
+const availableTags = [
+    "Vegetarian",
+    "Vegan",
+    "Gluten-Free",
+    "Low-Carb",
+    "Keto-Friendly",
+    "Low-Fat",
+    "Soup",
+    "Salad",
+    "Breakfast",
+    "Dinner",
+    "Dessert",
+    "High-Protein",
+];
 const selectedTags = ref([]);
-const uploadedImages = ref([]);
+const uploadedImage = ref("");
+
+const addingInstruction = ref(false);
+const newInstruction = ref("");
+const addingIngredient = ref(false);
+const newIngredient = ref("");
+
+function addInstruction() {
+    if (newInstruction.value.trim()) {
+        instructions.value.push(newInstruction.value.trim());
+        newInstruction.value = "";
+    }
+    addingInstruction.value = false;
+}
+
+function cancelAddingInstruction() {
+    newInstruction.value = "";
+    addingInstruction.value = false;
+}
+
+function addIngredient() {
+    if (newIngredient.value.trim()) {
+        ingredients.value.push(newIngredient.value.trim());
+        newIngredient.value = "";
+    }
+    addingIngredient.value = false;
+}
+
+function cancelAddingIngredient() {
+    newIngredient.value = "";
+    addingIngredient.value = false;
+}
 
 function toggleTag(tag) {
     const index = selectedTags.value.indexOf(tag);
@@ -26,166 +69,325 @@ function toggleTag(tag) {
 
 function handleImageUpload(event) {
     const files = event.target.files;
-    uploadedImages.value = [];
+    uploadedImage.value = "";
 
     for (let i = 0; i < files.length; i++) {
-        console.log(files[i]);
         const reader = new FileReader();
         reader.onload = function (e) {
-            uploadedImages.value.push(e.target.result.split(",")[1]); // Store base64 encoded string without mime type
+            uploadedImage.value = e.target.result.split(",")[1]; // Store base64 encoded string without mime type
         };
         reader.readAsDataURL(files[i]);
     }
 }
+const showMessage = ref(false);
+const messageText = ref("");
+const messageType = ref("");
 
-function submitRecipe() {
-    // Here you would typically send the data to your backend
-    const recipeData = {
-        title: title.value,
-        description: description.value,
-        ingredients: ingredients.value,
-        tags: selectedTags.value,
-        prepTime: prepTime.value,
-        images: uploadedImages.value,
-    };
+function createErrorFromObject(response) {
+    let error_key = Object.keys(response)[0];
+    let msg = response[error_key].msg;
+    createMessage(msg, "error");
+}
+function createMessage(msg, type) {
+    messageText.value = msg;
+    messageType.value = type;
+    showMessage.value = true;
+}
+async function submitRecipe() {
+    createMessage("Creating recipe...", "info");
+    // check is user authorized to create recipe
+    if (!authStore.whoamiActor) {
+        createMessage("You are not logged in. Please log in first.", "warning");
+        return;
+    }
+    // validate for empty fields
+    if (!instructions.value.length || !ingredients.value.length || !selectedTags.value.length) {
+        createMessage("Recipe should have at least one instruction, one ingredient, and one tag", "warning");
+        return;
+    }
+    let user_index = await authStore.whoamiActor?.get_user_index_by_principal();
+    if (user_index.Err) {
+        createMessage(user_index.Err);
+        return;
+    } else {
+        user_index = user_index.Ok;
+    }
 
-    console.log("Submitting recipe:", recipeData);
+    let response = await yummy_backend.add_new_recipe(
+        title.value,
+        instructions.value,
+        ingredients.value,
+        selectedTags.value,
+        prepTime.value,
+        uploadedImage.value,
+        user_index
+    );
+    if (response.Ok) {
+        messageText.value = response.Ok;
+        messageType.value = "success";
+        showMessage.value = true;
+    } else {
+        createErrorFromObject(response.Err);
+    }
 
-    // Reset form after submission
+    // // Reset title of form after submission
     title.value = "";
-    description.value = "";
-    ingredients.value = "";
-    selectedTags.value = [];
-    prepTime.value = 0;
-    uploadedImages.value = [];
-
-    // Navigate to a different route (e.g., recipe list) after submission
-    router.push("/recipes");
 }
-function goToHome() {
-    router.push({ name: "home", query: { canisterId: route.query.canisterId } });
-}
+const closeMessage = () => {
+    showMessage.value = false;
+};
 </script>
 
 <template>
-    <div class="flex min-h-screen w-full items-center justify-center bg-gray-800 p-4 text-gray-100">
-        <div class="w-full max-w-3xl rounded-lg bg-gray-700 p-8 shadow-xl">
-            <h1 class="mb-8 text-center text-3xl font-bold text-indigo-300">Add New Recipe</h1>
-            <form @submit.prevent="submitRecipe" class="space-y-6">
-                <div>
-                    <label for="title" class="mb-2 block text-lg font-medium text-gray-300">Title</label>
-                    <input
-                        v-model="title"
-                        type="text"
-                        id="title"
-                        required
-                        class="w-full rounded-md border-gray-500 bg-gray-600 px-4 py-3 text-lg text-white focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50"
-                    />
-                </div>
+    <div class="relative contain-content">
+        <Transition name="slide">
+            <Message v-if="showMessage" :text="messageText" :type="messageType" @close="closeMessage" />
+        </Transition>
+        <div class="flex min-h-screen w-full items-center justify-center bg-gray-800 p-4 text-gray-100">
+            <div class="w-full max-w-3xl rounded-lg bg-gray-700 p-8 shadow-xl">
+                <h1 class="mb-8 text-center text-3xl font-bold text-indigo-300">Add New Recipe</h1>
+                <form @keydown.enter.prevent @submit.prevent="submitRecipe" class="space-y-6">
+                    <div>
+                        <label for="title" class="mb-2 block text-lg font-medium text-gray-300">Title</label>
+                        <input
+                            v-model="title"
+                            type="text"
+                            id="title"
+                            required
+                            class="w-full rounded-md border-gray-500 bg-gray-600 px-4 py-3 text-lg text-white focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50"
+                        />
+                    </div>
 
-                <div>
-                    <label for="description" class="mb-2 block text-lg font-medium text-gray-300">Description</label>
-                    <textarea
-                        v-model="description"
-                        id="description"
-                        rows="4"
-                        required
-                        class="w-full rounded-md border-gray-500 bg-gray-600 px-4 py-3 text-lg text-white focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50"
-                    ></textarea>
-                </div>
-
-                <div>
-                    <label for="ingredients" class="mb-2 block text-lg font-medium text-gray-300">Ingredients</label>
-                    <textarea
-                        v-model="ingredients"
-                        id="ingredients"
-                        rows="6"
-                        class="w-full rounded-md border-gray-500 bg-gray-600 px-4 py-3 text-lg text-white focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50"
-                    ></textarea>
-                </div>
-
-                <div>
-                    <label class="mb-2 block text-lg font-medium text-gray-300">Tags</label>
-                    <div class="flex flex-wrap justify-center gap-3">
+                    <div>
+                        <label class="mb-2 block text-lg font-medium text-gray-300">Instructions</label>
+                        <ul class="mb-2 space-y-2">
+                            <li v-for="(instruction, index) in instructions" :key="index" class="flex items-center">
+                                <span class="flex-grow">{{ instruction }}</span>
+                                <button
+                                    @click="instructions.splice(index, 1)"
+                                    class="ml-2 p-1 text-gray-400 hover:text-red-500"
+                                >
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        class="h-5 w-5"
+                                        viewBox="0 0 20 20"
+                                        fill="currentColor"
+                                    >
+                                        <path
+                                            fill-rule="evenodd"
+                                            d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                                            clip-rule="evenodd"
+                                        />
+                                    </svg>
+                                </button>
+                            </li>
+                        </ul>
+                        <div v-if="addingInstruction" class="flex items-center">
+                            <input
+                                v-model="newInstruction"
+                                type="text"
+                                @keydown.enter="addInstruction"
+                                maxlength="100"
+                                class="flex-grow rounded-md border-gray-500 bg-gray-600 px-4 py-2 text-lg text-white focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50"
+                            />
+                            <button @click="addInstruction" class="ml-2 p-1 text-green-500 hover:text-green-400">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="h-6 w-6"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M5 13l4 4L19 7"
+                                    />
+                                </svg>
+                            </button>
+                            <button @click="cancelAddingInstruction" class="ml-2 p-1 text-red-500 hover:text-red-400">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="h-6 w-6"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M6 18L18 6M6 6l12 12"
+                                    />
+                                </svg>
+                            </button>
+                        </div>
                         <button
-                            v-for="tag in availableTags"
-                            :key="tag"
-                            @click.prevent="toggleTag(tag)"
-                            :class="[
-                                'rounded-full px-4 py-2 text-lg font-medium',
-                                selectedTags.includes(tag)
-                                    ? 'bg-indigo-600 text-white'
-                                    : 'bg-gray-600 text-gray-300 hover:bg-gray-500',
-                            ]"
+                            v-else
+                            @click="addingInstruction = true"
+                            class="mt-2 rounded-md bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50"
                         >
-                            {{ tag }}
+                            Add Instruction
                         </button>
                     </div>
-                </div>
 
-                <div>
-                    <label for="prepTime" class="mb-2 block text-lg font-medium text-gray-300"
-                        >Preparation Time (minutes)</label
-                    >
-                    <input
-                        v-model.number="prepTime"
-                        type="number"
-                        id="prepTime"
-                        min="3"
-                        required
-                        class="w-full rounded-md border-gray-500 bg-gray-600 px-4 py-3 text-lg text-white focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50"
-                    />
-                </div>
+                    <div>
+                        <label class="mb-2 block text-lg font-medium text-gray-300">Ingredients</label>
+                        <ul class="mb-2 space-y-2">
+                            <li v-for="(ingredient, index) in ingredients" :key="index" class="flex items-center">
+                                <span class="flex-grow">{{ ingredient }}</span>
+                                <button
+                                    @click="ingredients.splice(index, 1)"
+                                    class="ml-2 p-1 text-gray-400 hover:text-red-500"
+                                >
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        class="h-5 w-5"
+                                        viewBox="0 0 20 20"
+                                        fill="currentColor"
+                                    >
+                                        <path
+                                            fill-rule="evenodd"
+                                            d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                                            clip-rule="evenodd"
+                                        />
+                                    </svg>
+                                </button>
+                            </li>
+                        </ul>
+                        <div v-if="addingIngredient" class="flex items-center">
+                            <input
+                                v-model="newIngredient"
+                                @keydown.enter="addIngredient"
+                                type="text"
+                                maxlength="100"
+                                class="flex-grow rounded-md border-gray-500 bg-gray-600 px-4 py-2 text-lg text-white focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50"
+                            />
+                            <button @click="addIngredient" class="ml-2 p-1 text-green-500 hover:text-green-400">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="h-6 w-6"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M5 13l4 4L19 7"
+                                    />
+                                </svg>
+                            </button>
+                            <button @click="cancelAddingIngredient" class="ml-2 p-1 text-red-500 hover:text-red-400">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="h-6 w-6"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M6 18L18 6M6 6l12 12"
+                                    />
+                                </svg>
+                            </button>
+                        </div>
+                        <button
+                            v-else
+                            @click="addingIngredient = true"
+                            class="mt-2 rounded-md bg-indigo-600 px-4 py-2 text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50"
+                        >
+                            Add Ingredient
+                        </button>
+                    </div>
 
-                <div>
-                    <label for="images" class="mb-2 block text-lg font-medium text-gray-300">Upload Images</label>
-                    <input
-                        type="file"
-                        id="images"
-                        @change="handleImageUpload"
-                        multiple
-                        accept="image/*"
-                        class="w-full text-lg text-gray-400 file:mr-4 file:rounded-full file:border-0 file:bg-gray-600 file:px-4 file:py-3 file:text-lg file:font-semibold file:text-gray-200 hover:file:bg-gray-500"
-                    />
-                </div>
+                    <div>
+                        <label class="mb-2 block text-lg font-medium text-gray-300">Tags</label>
+                        <div class="flex flex-wrap justify-center gap-3">
+                            <button
+                                v-for="tag in availableTags"
+                                :key="tag"
+                                @click.prevent="toggleTag(tag)"
+                                :class="[
+                                    'rounded-full px-4 py-2 text-lg font-medium',
+                                    selectedTags.includes(tag)
+                                        ? 'bg-indigo-600 text-white'
+                                        : 'bg-gray-600 text-gray-300 hover:bg-gray-500',
+                                ]"
+                            >
+                                {{ tag }}
+                            </button>
+                        </div>
+                    </div>
 
-                <div class="flex items-center justify-center space-x-2">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="h-6 w-6 text-gray-400"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                    >
-                        <path
-                            fill-rule="evenodd"
-                            d="M4 5a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V7a2 2 0 00-2-2h-1.586a1 1 0 01-.707-.293l-1.121-1.121A2 2 0 0011.172 3H8.828a2 2 0 00-1.414.586L6.293 4.707A1 1 0 015.586 5H4zm6 9a3 3 0 100-6 3 3 0 000 6z"
-                            clip-rule="evenodd"
+                    <div>
+                        <label for="prepTime" class="mb-2 block text-lg font-medium text-gray-300"
+                            >Preparation Time (minutes)</label
+                        >
+                        <input
+                            v-model.number="prepTime"
+                            type="number"
+                            id="prepTime"
+                            min="3"
+                            required
+                            class="w-full rounded-md border-gray-500 bg-gray-600 px-4 py-3 text-lg text-white focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50"
                         />
-                    </svg>
-                    <span class="text-lg text-gray-400">{{ uploadedImages.length }} image(s) selected</span>
-                </div>
+                    </div>
 
-                <div class="flex justify-center">
-                    <button
-                        type="submit"
-                        class="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-lg font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800"
-                    >
+                    <div>
+                        <label for="images" class="mb-2 block text-lg font-medium text-gray-300">Upload Images</label>
+                        <input
+                            type="file"
+                            id="images"
+                            @change="handleImageUpload"
+                            accept="image/*"
+                            class="w-full text-lg text-gray-400 file:mr-4 file:rounded-full file:border-0 file:bg-gray-600 file:px-4 file:py-3 file:text-lg file:font-semibold file:text-gray-200 hover:file:bg-gray-500"
+                        />
+                    </div>
+
+                    <div class="flex items-center justify-center space-x-2">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            class="mr-2 h-6 w-6"
+                            class="h-6 w-6 text-gray-400"
                             viewBox="0 0 20 20"
                             fill="currentColor"
                         >
                             <path
                                 fill-rule="evenodd"
-                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
+                                d="M4 5a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V7a2 2 0 00-2-2h-1.586a1 1 0 01-.707-.293l-1.121-1.121A2 2 0 0011.172 3H8.828a2 2 0 00-1.414.586L6.293 4.707A1 1 0 015.586 5H4zm6 9a3 3 0 100-6 3 3 0 000 6z"
                                 clip-rule="evenodd"
                             />
                         </svg>
-                        Add Recipe
-                    </button>
-                </div>
-            </form>
+                        <span class="text-lg text-gray-400">{{ uploadedImage ? 1 : 0 }} image(s) selected</span>
+                    </div>
+
+                    <div class="flex justify-center">
+                        <button
+                            type="submit"
+                            class="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-lg font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800"
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="mr-2 h-6 w-6"
+                                viewBox="0 0 20 20"
+                                fill="currentColor"
+                            >
+                                <path
+                                    fill-rule="evenodd"
+                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
+                                    clip-rule="evenodd"
+                                />
+                            </svg>
+                            Add Recipe
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </template>

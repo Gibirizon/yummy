@@ -1,19 +1,16 @@
 <script setup>
-import UsernameBox from "./login/Username.vue";
-import { yummy_backend } from "declarations/yummy_backend/index";
 import LoggedOut from "./login/LoggedOut.vue";
+import Message from "./Message.vue";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "./../store/auth";
-import { ref, watch, onMounted, onUnmounted } from "vue";
+import { ref, watch, computed } from "vue";
 import { RouterLink } from "vue-router";
-import { faL } from "@fortawesome/free-solid-svg-icons";
-import { computed } from "vue";
 import { useRouter, useRoute } from "vue-router";
 
 const route = useRoute();
 const router = useRouter();
 
-const canisterId = route.query.canisterId;
+const canisterId = computed(() => route.query.canisterId);
 
 const openDropdowns = ref([]);
 
@@ -36,22 +33,19 @@ const props = defineProps({
     },
 });
 
-// const whoami = ref("");
 const user_index = ref(0);
 const leftMenuIsVisible = ref(false);
-const usernameBoxIsVisible = ref(false);
 
 const authStore = useAuthStore();
-const { isReady, isAuthenticated, whoamiActor } = storeToRefs(authStore);
-console.log(isAuthenticated, isReady);
+const { isReady, isAuthenticated } = storeToRefs(authStore);
 init();
 async function init() {
     console.log("isReady: ", isReady.value);
     if (isReady.value === false) {
         await authStore.init();
         console.log("isAuthenticated: ", isAuthenticated.value);
-        await updateLoginStatus();
     }
+    await updateLoginStatus();
 }
 const loggingProcess = ref(false);
 
@@ -62,87 +56,66 @@ watch(
     }
 );
 
-function sleep(time) {
-    return new Promise((resolve) => setTimeout(resolve, time));
-}
-async function finishSignUp() {
-    console.log("!!!!!");
-    console.log("finish sign up");
-    console.log("finish sign up");
-    console.log("isauthenticated", isAuthenticated.value);
-    while (!isAuthenticated.value) {
-        await sleep(100);
-        console.log("isauthenticated", isAuthenticated.value);
-    }
-    console.log("whoami actor: ", whoamiActor.value);
-
-    loggingProcess.value = false;
-    // let id;
-    // await whoamiActor.value.whoami().then((res) => (id = res));
-    // whoami.value = id;
-    await whoamiActor.value.get_user_index_by_principal().then((e) => {
-        console.log("User index after signing up:", e);
-        if (e.Err) {
-            console.log(e.Err);
-            usernameBoxIsVisible.value = true;
-        } else {
-            user_index.value = e.Ok;
-            console.log("User index after signing up:", user_index.value);
-        }
-    });
-}
 async function signUserOut() {
     user_index.value = 0;
     await authStore.logout();
-    // whoami.value = "";
 }
 
-async function changeUserId(id) {
-    user_index.value = id;
-    console.log(user_index.value);
+const showMessage = ref(false);
+const messageText = ref("");
+const messageType = ref("");
+function createMessage(msg, type) {
+    messageText.value = msg;
+    messageType.value = type;
+    showMessage.value = true;
+}
+function LoggedIn(index) {
+    console.log("Logged in: ", index);
+    loggingProcess.value = false;
+    user_index.value = index;
+    createMessage("Logged in successfuly", "success");
 }
 
 async function updateLoginStatus() {
-    // while (!isAuthenticated.value) {
-    //     sleep(100);
-    // }
-    if (isAuthenticated.value) {
-        console.log("updating login status");
-        // await whoamiActor.value.whoami().then((res) => (whoami.value = res));
-        await whoamiActor.value.get_user_index_by_principal().then((res) => {
+    if (!isAuthenticated.value) {
+        console.log("not authenticated");
+        return;
+    }
+    console.log("updating login status");
+    if (!authStore.whoamiActor) {
+        console.log("no actor");
+    }
+    try {
+        await authStore.whoamiActor?.get_user_index_by_principal().then((res) => {
             console.log("User index: ", res);
+            if (res.Err) {
+                console.log("Error: ", res.Err);
+                createMessage("You don't have account", "warning");
+                signUserOut();
+                return;
+            }
             user_index.value = res.Ok ? res.Ok : 0;
             console.log(user_index.value);
         });
+    } catch (error) {
+        console.log("Error: ", error);
+        await signUserOut();
+        createMessage("Problems with identifying - login one more time", "error");
     }
 }
 function goToNewRecipe() {
     router.push({ name: "new-recipe", query: { canisterId: canisterId } });
 }
-onMounted(() => {
-    console.log(isAuthenticated);
-    window.addEventListener("message", async (event) => {
-        if (event.data.kind === "authorize-client-success") {
-            console.log("finish sign up listener");
-            await finishSignUp();
-        }
-    });
-});
-
-onUnmounted(() => {
-    window.removeEventListener("message", (event) => {
-        if (event.data.kind === "authorize-client-success") {
-            finishSignUp();
-        }
-    });
-});
+function closeMessage() {
+    showMessage.value = false;
+}
 </script>
 <template>
-    <div v-show="usernameBoxIsVisible">
-        <UsernameBox @user-index="changeUserId" @new-user-created="usernameBoxIsVisible = false" />
-    </div>
+    <Transition name="slide">
+        <Message v-if="showMessage" :text="messageText" :type="messageType" @close="closeMessage" />
+    </Transition>
     <div
-        class="duration-400 left-menu fixed left-0 top-0 z-[130] flex h-screen w-[240px] flex-col items-center gap-4 bg-[#3e3e3e] p-4 shadow-lg transition-transform"
+        class="duration-400 left-menu fixed left-0 top-0 z-[130] flex h-screen w-[240px] flex-col items-center gap-4 bg-[#2C2F33] p-4 shadow-lg transition-transform"
         :class="leftMenuIsVisible ? 'translate-x-0' : '-translate-x-full'"
     >
         <h2 class="p-2 text-2xl text-white">Yummy</h2>
@@ -304,26 +277,31 @@ onUnmounted(() => {
                 </li>
             </ul>
         </div>
-        <!-- <div v-show="isAuthenticated"> -->
-        <div class="flex justify-center">
-            <button
-                @click="goToNewRecipe"
-                class="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-lg font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800"
-            >
-                <svg xmlns="http://www.w3.org/2000/svg" class="mr-2 h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
-                    <path
-                        fill-rule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
-                        clip-rule="evenodd"
-                    />
-                </svg>
-                Add Recipe
-            </button>
+        <div v-show="isAuthenticated" class="mt-4">
+            <div class="flex justify-center">
+                <button
+                    @click="goToNewRecipe"
+                    class="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-lg font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="mr-2 h-6 w-6"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                    >
+                        <path
+                            fill-rule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
+                            clip-rule="evenodd"
+                        />
+                    </svg>
+                    Add Recipe
+                </button>
+            </div>
         </div>
-        <!-- </div> -->
     </div>
-    <div v-show="loggingProcess && !isAuthenticated">
-        <LoggedOut @finish-logging-in="loggingProcess = false" />
+    <div v-show="loggingProcess">
+        <LoggedOut @logged-in="LoggedIn" @close="loggingProcess = false" />
     </div>
 </template>
 

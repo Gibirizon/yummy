@@ -2,10 +2,12 @@
 import { ref } from "vue";
 import { yummy_backend } from "declarations/yummy_backend/index";
 import { useRouter, useRoute } from "vue-router";
+import { useAuthStore } from "../../store/auth";
 
 const emit = defineEmits(["go-to-home"]);
 const router = useRouter();
 const route = useRoute();
+const authStore = useAuthStore();
 
 // user
 const username = ref(null);
@@ -14,19 +16,19 @@ const id = ref(null);
 // id
 const id_from_route = BigInt(route.params.id);
 
-async function getUser(index) {
-    console.log("user id from route get user: ", index);
-    await yummy_backend.get_user(index).then((user) => {
-        if (user.Ok) {
-            let user_from_backend = user.Ok;
-            username.value = user_from_backend.name;
-            id.value = user_from_backend.id;
-        } else {
-            emit("go-to-home");
-        }
-    });
+async function getUser() {
+    console.log("user id from route get user: ", id_from_route);
+    if (!authStore.whoamiActor) {
+        emit("go-to-home");
+    }
+    const user = await authStore.whoamiActor?.get_user_by_index(id_from_route);
+    if (!user.Ok) {
+        emit("go-to-home");
+    }
+    username.value = user.Ok.name;
+    id.value = user.Ok.id;
 }
-getUser(id_from_route);
+getUser();
 function goToEdit() {
     router.push({
         name: "profile-edit",

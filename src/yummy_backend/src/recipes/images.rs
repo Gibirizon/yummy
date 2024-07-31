@@ -1,11 +1,48 @@
 use crate::Error;
+use crate::{Memory, MEMORY_MANAGER};
+use candid::{CandidType, Decode, Deserialize, Encode};
 use ic_cdk::api::management_canister::http_request::{
     http_request, CanisterHttpRequestArgument, HttpHeader, HttpMethod,
 };
+use ic_cdk::{query, update};
+use ic_stable_structures::memory_manager::MemoryId;
+use ic_stable_structures::{storable::Bound, StableBTreeMap, Storable};
+use std::borrow::Cow;
+use std::cell::RefCell;
 
 const MAX_RESPONSE_BYTES: u64 = 2 * 1024 * 1024; // 2 MB
 
-pub async fn fetch_image(url: &str) -> Result<Vec<u8>, Error> {
+#[derive(CandidType, Deserialize, Clone, Debug)]
+pub enum ImageData {
+    Bytes(Vec<u8>),
+    Url(String),
+}
+
+thread_local! {
+    pub static IMAGES: RefCell<StableBTreeMap<String, ImageData , Memory>> = RefCell::new(
+        StableBTreeMap::init(
+            MEMORY_MANAGER.with(|m| m.borrow().get(MemoryId::new(3)))
+        )
+    );
+
+}
+
+impl Storable for ImageData {
+    fn to_bytes(&self) -> Cow<[u8]> {
+        Cow::Owned(Encode!(self).unwrap())
+    }
+
+    fn from_bytes(bytes: Cow<[u8]>) -> Self {
+        Decode!(bytes.as_ref(), Self).unwrap()
+    }
+
+    const BOUND: Bound = Bound::Bounded {
+        max_size: 3 * 1024 * 1024,
+        is_fixed_size: false,
+    };
+}
+
+pub async fn fetch_image(url: &str, name: &str) -> Result<String, Error> {
     let mut offset = 0;
     let mut total_size = 0;
     let mut image = Vec::new();
@@ -58,15 +95,15 @@ pub async fn fetch_image(url: &str) -> Result<Vec<u8>, Error> {
                     offset += MAX_RESPONSE_BYTES;
                 }
             }
-            Err(e) => {
-                ic_cdk::api::print(format!("Failed to fetch chunk: {:?}", e));
+            Err(_) => {
                 return Err(Error::ImageNotDownloaded {
                     msg: "Cannot download image".to_string(),
                 });
             }
         }
     }
-    Ok(image)
+    add_image(name.to_string(), ImageData::Bytes(image));
+    Ok("Fetched and stored image".to_string())
 }
 
 fn parse_content_range(header: &str) -> Option<u64> {
@@ -78,27 +115,12 @@ fn parse_content_range(header: &str) -> Option<u64> {
     }
 }
 
-// #[query]
-// pub async fn get_image(name: String) -> Vec<u8> {
-//     IMAGES.with(|images| images.borrow().get(&name).clone().unwrap())
-// }
+#[update]
+pub fn add_image(name: String, image: ImageData) {
+    IMAGES.with(|images| images.borrow_mut().insert(name, image));
+}
 
-// #[query]
-// pub async fn get_images_names() -> Result<Vec<String>, Error> {
-//     IMAGES.with(|images| {
-//         let stable_btree_map = &*images.borrow();
-
-//         let records: Vec<String> = stable_btree_map
-//             .iter()
-//             .map(|(name, _)| name.clone())
-//             .collect();
-
-//         if records.is_empty() {
-//             return Err(Error::ImagesNotFound {
-//                 msg: "No images found".to_string(),
-//             });
-//         } else {
-//             Ok(records)
-//         }
-//     })
-// }
+#[query]
+pub fn get_image(name: String) -> ImageData {
+    IMAGES.with(|images| images.borrow().get(&name).clone().unwrap())
+}

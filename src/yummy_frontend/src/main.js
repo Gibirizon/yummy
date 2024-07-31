@@ -20,6 +20,6 @@ library.add(faBars, faMagnifyingGlass, faXmark);
 const app = createApp(App);
 
 app.component("font-awesome-icon", FontAwesomeIcon);
-app.use(router);
 app.use(createPinia());
+app.use(router);
 app.mount("#app");

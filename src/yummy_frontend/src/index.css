@@ -12,3 +12,26 @@
 .primary-button {
     @apply w-[160px] rounded-md bg-[#085d8c] px-[6px] py-[10px] text-[18px] font-[500] text-white transition-colors duration-[400] hover:bg-[#06486c];
 }
+
+.slide-enter-active {
+    @apply transform transition duration-300 ease-out;
+}
+.slide-enter-from {
+    @apply translate-x-[-50%] opacity-0;
+}
+.slide-enter-to {
+    @apply translate-x-0 opacity-100;
+}
+.slide-leave-active {
+    @apply transform transition duration-300 ease-in;
+}
+.slide-leave-from {
+    @apply translate-x-0 opacity-100;
+}
+.slide-leave-to {
+    @apply translate-x-[50%] opacity-0;
+}
+
+.contain {
+    contain: content;
+}

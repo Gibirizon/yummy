@@ -37,6 +37,7 @@
         "@fortawesome/vue-fontawesome": "^3.0.8",
         "@vueuse/components": "^10.11.0",
         "@vueuse/core": "^10.11.0",
+        "lucide-vue-next": "^0.418.0",
         "pinia": "^2.1.6",
         "vue": "^3.3.4",
         "vue-router": "^4.4.0"
