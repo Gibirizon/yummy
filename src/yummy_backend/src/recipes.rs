@@ -44,8 +44,8 @@ pub struct RecipeInfo {
     instructions: Vec<String>,
     ingredients: Vec<String>,
     cuisines: Option<Vec<String>>,
-    tags: Vec<String>,
-    total_time_in_seconds: u16,
+    pub tags: Vec<String>,
+    pub total_time_in_seconds: u16,
     popular: bool,
 }
 impl RecipeInfo {
@@ -71,6 +71,17 @@ pub struct RecipeBrief {
     name: String,
     tags: Vec<String>,
     total_time: u16,
+    author: Option<String>,
+}
+impl RecipeBrief {
+    pub fn new(name: String, tags: Vec<String>, total_time: u16, author: Option<String>) -> Self {
+        Self {
+            name,
+            tags,
+            total_time,
+            author,
+        }
+    }
 }
 
 thread_local! {
@@ -238,7 +249,7 @@ pub fn get_recipes_names() -> Result<Vec<String>, Error> {
 }
 
 #[query]
-pub fn take_recipes_of_specific_type(recipes_type: String) -> Result<Vec<RecipeBrief>, Error> {
+pub fn take_recipes_of_specific_type(recipes_type: String) -> Vec<RecipeBrief> {
     RECIPES.with(|recipes| {
         let stable_btree_map = &*recipes.borrow();
         let filtered_recipes: Vec<RecipeBrief>;
@@ -254,20 +265,14 @@ pub fn take_recipes_of_specific_type(recipes_type: String) -> Result<Vec<RecipeB
             })
             .map(|(name, recipe)| {
                 let first_tags = &recipe.tags[..TAGS_MAX_LENGTH.min(recipe.tags.len())];
-                let recipe_brief = RecipeBrief {
-                    name: name.to_string(),
-                    tags: first_tags.to_vec(),
-                    total_time: recipe.total_time_in_seconds / 60,
-                };
-                recipe_brief
+                RecipeBrief::new(
+                    name.clone(),
+                    first_tags.to_vec(),
+                    recipe.total_time_in_seconds / 60,
+                    None,
+                )
             })
             .collect();
-        if filtered_recipes.is_empty() {
-            return Err(Error::RecipesNotFound {
-                msg: "No recipes".to_string(),
-            });
-        } else {
-            Ok(filtered_recipes)
-        }
+        filtered_recipes
     })
 }

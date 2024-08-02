@@ -11,7 +11,7 @@ async function getUserIndex() {
     if (!authStore.whoamiActor) {
         goToHome();
     }
-    let user_index = await authStore.whoamiActor?.get_user_index_by_principal();
+    let user_index = await authStore.whoamiActor?.get_user_index();
     if (!user_index.Ok || user_index.Ok !== id_route) {
         goToHome();
     }

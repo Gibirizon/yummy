@@ -13,7 +13,7 @@ const props = defineProps({
     },
     duration: {
         type: Number,
-        default: 5000,
+        default: 1000,
     },
 });
 
@@ -72,7 +72,7 @@ onUnmounted(() => {
             <div class="flex border-gray-700">
                 <button
                     @click="close"
-                    class="flex w-full items-center justify-center rounded-none rounded-r-lg border border-transparent p-4 text-sm font-medium hover:scale-125 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:scale-100 transition-transform"
+                    class="flex w-full items-center justify-center rounded-none rounded-r-lg border border-transparent p-4 text-sm font-medium transition-transform hover:scale-125 focus:scale-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 >
                     <svg
                         class="h-5 w-5"

@@ -1,5 +1,5 @@
 use crate::recipes::images::{add_image, ImageData};
-use crate::recipes::{recipe_exists, RecipeInfo};
+use crate::recipes::{recipe_exists, RecipeBrief, RecipeInfo};
 use crate::Error;
 use crate::{Memory, MEMORY_MANAGER};
 use candid::{CandidType, Decode, Deserialize, Encode, Principal};
@@ -137,7 +137,7 @@ fn get_user_by_index(index: u64) -> Result<User, Error> {
     }
 }
 #[query]
-fn get_user_index_by_principal() -> Result<u64, Error> {
+fn get_user_index() -> Result<u64, Error> {
     USERS.with(|users| {
         let users = &*users.borrow();
         ic_cdk::println!(
@@ -156,7 +156,7 @@ fn get_user_index_by_principal() -> Result<u64, Error> {
 }
 
 #[query]
-fn get_user_info_by_principal() -> Result<User, Error> {
+fn get_user_info() -> Result<User, Error> {
     USERS.with(|users| {
         let users = &*users.borrow();
         ic_cdk::api::print(format!(
@@ -223,6 +223,41 @@ pub fn add_new_recipe(
         ic_cdk::println!("Recipe added to user")
     });
 
-    add_image(name, ImageData::Url(image_data));
+    if !image_data.is_empty() {
+        add_image(name, ImageData::Url(image_data));
+    }
     Ok("Recipe added successfully".to_string())
+}
+
+#[query]
+pub fn take_user_recipes(user: User) -> Vec<RecipeBrief> {
+    const TAGS_MAX_LENGTH: usize = 5;
+    user.recipes
+        .iter()
+        .map(|(name, recipe)| {
+            let first_tags = &recipe.tags[..TAGS_MAX_LENGTH.min(recipe.tags.len())];
+            RecipeBrief::new(
+                name.to_string(),
+                first_tags.to_vec(),
+                recipe.total_time_in_seconds / 60,
+                Some(user.name.clone()),
+            )
+        })
+        .collect()
+}
+
+#[query]
+pub fn take_all_users_recipes() -> Vec<RecipeBrief> {
+    let users = get_all_users();
+    let mut recipes_to_return = Vec::new();
+    match users {
+        Ok(users) => {
+            for user in users {
+                let user_recipes = take_user_recipes(user);
+                recipes_to_return.extend(user_recipes)
+            }
+            recipes_to_return
+        }
+        Err(_) => recipes_to_return,
+    }
 }

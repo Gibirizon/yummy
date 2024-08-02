@@ -22,30 +22,26 @@ async function getRecipes() {
         let breakfast = await yummy_backend.take_recipes_of_specific_type("Breakfast");
         let dinner = await yummy_backend.take_recipes_of_specific_type("Dinner");
 
-        if (popular.Err || breakfast.Err || dinner.Err) {
-            console.log("Error: ", popular.Err, breakfast.Err, dinner.Err);
-            return;
-        }
-
         // display popular recipes
-        for (const recipe of popular.Ok) {
+        for (const recipe of popular) {
             const new_recipe = await createRecipe(recipe);
             popularRecipes.value.push(new_recipe);
         }
 
         // display breakfast recipes
-        for (const recipe of breakfast.Ok) {
+        for (const recipe of breakfast) {
             const new_recipe = await createRecipe(recipe);
             breakfastRecipes.value.push(new_recipe);
         }
 
         // display dinner recipes
-        for (const recipe of dinner.Ok) {
+        for (const recipe of dinner) {
             const new_recipe = await createRecipe(recipe);
             dinnerRecipes.value.push(new_recipe);
         }
     } catch (error) {
         console.log("Error: ", error);
+        getRecipes();
         return;
     }
 }

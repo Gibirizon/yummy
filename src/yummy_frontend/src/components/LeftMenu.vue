@@ -1,5 +1,6 @@
 <script setup>
 import LoggedOut from "./login/LoggedOut.vue";
+import { LogIn, LogOut } from "lucide-vue-next";
 import Message from "./Message.vue";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "./../store/auth";
@@ -86,7 +87,7 @@ async function updateLoginStatus() {
         console.log("no actor");
     }
     try {
-        await authStore.whoamiActor?.get_user_index_by_principal().then((res) => {
+        await authStore.whoamiActor?.get_user_index().then((res) => {
             console.log("User index: ", res);
             if (res.Err) {
                 console.log("Error: ", res.Err);
@@ -104,7 +105,7 @@ async function updateLoginStatus() {
     }
 }
 function goToNewRecipe() {
-    router.push({ name: "new-recipe", query: { canisterId: canisterId } });
+    router.push({ name: "new-recipe", query: { canisterId: canisterId.value } });
 }
 function closeMessage() {
     showMessage.value = false;
@@ -120,12 +121,16 @@ function closeMessage() {
     >
         <h2 class="p-2 text-2xl text-white">Yummy</h2>
         <div v-if="isReady">
-            <button v-if="isAuthenticated" @click="signUserOut" type="button" class="primary-button">
-                <span class="py-[10px]">Sign out</span>
-            </button>
-            <button v-else @click="loggingProcess = true" type="button" class="primary-button">
-                <span>Sign in</span>
-            </button>
+            <div class="flex justify-center">
+                <button v-if="isAuthenticated" @click="signUserOut" type="button" class="left-menu-button">
+                    <LogOut class="mr-2 h-6 w-6" />
+                    Sign out
+                </button>
+                <button v-else @click="loggingProcess = true" type="button" class="left-menu-button">
+                    <LogIn class="mr-2 h-6 w-6" />
+                    Sign in
+                </button>
+            </div>
         </div>
         <div>
             <ul class="space-y-6 text-[18px]">
@@ -189,7 +194,29 @@ function closeMessage() {
                             </svg>
                         </div>
                     </div>
-                    <ul v-if="isDropdownOpen('recipes')" class="ml-6 mt-2 space-y-2">
+                    <ul v-if="isDropdownOpen('recipes')" class="ml-6 mt-2 space-y-3">
+                        <li v-if="isAuthenticated">
+                            <RouterLink
+                                :to="{
+                                    name: 'recipes',
+                                    query: { canisterId: canisterId },
+                                    params: { type: 'Yours' },
+                                }"
+                                class="text-gray-400 hover:text-white"
+                                >Your recipes</RouterLink
+                            >
+                        </li>
+                        <li>
+                            <RouterLink
+                                :to="{
+                                    name: 'recipes',
+                                    query: { canisterId: canisterId },
+                                    params: { type: 'Users' },
+                                }"
+                                class="text-gray-400 hover:text-white"
+                                >Created by users</RouterLink
+                            >
+                        </li>
                         <li>
                             <RouterLink
                                 :to="{
@@ -225,7 +252,7 @@ function closeMessage() {
                                     </svg>
                                 </div>
                             </div>
-                            <ul v-if="isDropdownOpen('meals')" class="ml-6 mt-2 space-y-2">
+                            <ul v-if="isDropdownOpen('meals')" class="ml-6 mt-2 space-y-3">
                                 <li>
                                     <RouterLink
                                         :to="{
@@ -272,28 +299,6 @@ function closeMessage() {
                                 </li>
                             </ul>
                         </li>
-                        <li>
-                            <RouterLink
-                                :to="{
-                                    name: 'recipes',
-                                    query: { canisterId: canisterId },
-                                    params: { type: 'yours' },
-                                }"
-                                class="text-gray-400 hover:text-white"
-                                >Yours</RouterLink
-                            >
-                        </li>
-                        <li>
-                            <RouterLink
-                                :to="{
-                                    name: 'recipes',
-                                    query: { canisterId: canisterId },
-                                    params: { type: 'others' },
-                                }"
-                                class="text-gray-400 hover:text-white"
-                                >Other Users</RouterLink
-                            >
-                        </li>
                     </ul>
                 </li>
                 <li v-show="isAuthenticated && user_index !== 0">
@@ -329,7 +334,7 @@ function closeMessage() {
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                         </svg>
                     </div>
-                    <ul v-if="isDropdownOpen('profile')" class="ml-6 mt-2 space-y-2">
+                    <ul v-if="isDropdownOpen('profile')" class="ml-6 mt-2 space-y-3">
                         <li>
                             <RouterLink
                                 :to="{
@@ -380,10 +385,7 @@ function closeMessage() {
         </div>
         <div v-show="isAuthenticated" class="mt-4">
             <div class="flex justify-center">
-                <button
-                    @click="goToNewRecipe"
-                    class="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-lg font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800"
-                >
+                <button @click="goToNewRecipe" class="left-menu-button">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         class="mr-2 h-6 w-6"
@@ -396,7 +398,7 @@ function closeMessage() {
                             clip-rule="evenodd"
                         />
                     </svg>
-                    Add Recipe
+                    Create Recipe
                 </button>
             </div>
         </div>

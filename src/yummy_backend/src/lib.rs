@@ -59,7 +59,7 @@ fn setup_for_timer() {
 
     set_timer(query, "popularRecipes".to_string(), secs);
     secs += 1;
-    let tags = ["Breakfast".to_string(), "Dinner".to_string()];
+    let tags = ["Breakfast", "Dinner", "Dessert", "Snack"];
     for tag in tags {
         let query = format!(
             r#"

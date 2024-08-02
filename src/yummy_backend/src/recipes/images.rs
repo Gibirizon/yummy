@@ -129,5 +129,11 @@ pub fn add_image(name: String, image: ImageData) {
 
 #[query]
 pub fn get_image(name: String) -> ImageData {
-    IMAGES.with(|images| images.borrow().get(&name).clone().unwrap())
+    IMAGES.with(|images| {
+        let image = images.borrow().get(&name).clone();
+        match image {
+            Some(image) => image,
+            None => ImageData::Bytes(Vec::new()),
+        }
+    })
 }

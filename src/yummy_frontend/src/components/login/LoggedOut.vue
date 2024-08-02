@@ -31,7 +31,7 @@ async function SignIn() {
             createMessage("Login failed - please try again", "warning");
             return;
         }
-        let user_index = await authStore.whoamiActor?.get_user_index_by_principal();
+        let user_index = await authStore.whoamiActor?.get_user_index();
         if (user_index.Err) {
             console.log("First time login");
             createMessage("You have signed up - set your username", "info");
@@ -61,7 +61,7 @@ async function creatingNewUser(username) {
     if (new_user_index.Err) {
         console.log("Failed to create new user");
         createMessage("You already have an account - logging in...", "info");
-        let user_index = await authStore.whoamiActor?.get_user_index_by_principal();
+        let user_index = await authStore.whoamiActor?.get_user_index();
         emit("logged-in", user_index.Ok);
         return;
     }

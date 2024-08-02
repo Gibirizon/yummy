@@ -23,7 +23,7 @@ defineProps({
         <div class="relative mb-8 h-96">
             <img :src="heroImage" alt="Hero Image" class="h-full w-full object-cover" />
             <div
-                class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-60 font-['Dancing_Script']"
+                class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-60 font-['Courgette']"
             >
                 <h1 class="text-center text-6xl font-bold md:text-8xl">{{ pageTitle }}</h1>
             </div>

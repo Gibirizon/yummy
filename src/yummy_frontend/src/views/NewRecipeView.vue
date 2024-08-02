@@ -67,17 +67,24 @@ function toggleTag(tag) {
     }
 }
 
+const imageURL = ref("");
 function handleImageUpload(event) {
-    const files = event.target.files;
-    uploadedImage.value = "";
+    const file = event.target.files[0];
+    if (!file) return;
 
-    for (let i = 0; i < files.length; i++) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            uploadedImage.value = e.target.result.split(",")[1]; // Store base64 encoded string without mime type
-        };
-        reader.readAsDataURL(files[i]);
+    // check file size
+    if (file.size > 300 * 1024) {
+        console.log("File size exceeds limit (300kB)");
+        createMessage("File size exceeds limit (300kB)", "warning");
+        return;
     }
+
+    const reader = new FileReader();
+    reader.onload = function (e) {
+        console.log(e.target.result);
+        uploadedImage.value = e.target.result;
+    };
+    reader.readAsDataURL(file);
 }
 const showMessage = ref(false);
 const messageText = ref("");
@@ -105,7 +112,7 @@ async function submitRecipe() {
         createMessage("Recipe should have at least one instruction, one ingredient, and one tag", "warning");
         return;
     }
-    let user_index = await authStore.whoamiActor?.get_user_index_by_principal();
+    let user_index = await authStore.whoamiActor?.get_user_index();
     if (user_index.Err) {
         createMessage(user_index.Err);
         return;
@@ -132,6 +139,11 @@ async function submitRecipe() {
 
     // // Reset title of form after submission
     title.value = "";
+    selectedTags.value = [];
+    instructions.value = [];
+    ingredients.value = [];
+    prepTime.value = 0;
+    uploadedImage.value = "";
 }
 const closeMessage = () => {
     showMessage.value = false;
@@ -139,7 +151,7 @@ const closeMessage = () => {
 </script>
 
 <template>
-    <div class="relative contain-content">
+    <div class="relative">
         <Transition name="slide">
             <Message v-if="showMessage" :text="messageText" :type="messageType" @close="closeMessage" />
         </Transition>
@@ -188,7 +200,7 @@ const closeMessage = () => {
                                 type="text"
                                 @keydown.enter="addInstruction"
                                 maxlength="100"
-                                class="flex-grow rounded-md border-gray-500 bg-gray-600 px-4 py-2 text-lg text-white focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50"
+                                class="w-full rounded-md border-gray-500 bg-gray-600 px-4 py-3 text-lg text-white focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50"
                             />
                             <button @click="addInstruction" class="ml-2 p-1 text-green-500 hover:text-green-400">
                                 <svg
@@ -262,7 +274,7 @@ const closeMessage = () => {
                                 @keydown.enter="addIngredient"
                                 type="text"
                                 maxlength="100"
-                                class="flex-grow rounded-md border-gray-500 bg-gray-600 px-4 py-2 text-lg text-white focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50"
+                                class="w-full rounded-md border-gray-500 bg-gray-600 px-4 py-3 text-lg text-white focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50"
                             />
                             <button @click="addIngredient" class="ml-2 p-1 text-green-500 hover:text-green-400">
                                 <svg
