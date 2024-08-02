@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from "vue";
+import RecipeCard from "./RecipeCard.vue";
 const emit = defineEmits(["itemClick"]);
 
 const props = defineProps({
@@ -8,6 +9,7 @@ const props = defineProps({
         required: true,
     },
 });
+console.log(props.recipes);
 
 const carouselRef = ref(null);
 const currentOffset = ref(0);
@@ -101,36 +103,14 @@ onUnmounted(() => {
             @touchend="onTouchEnd"
         >
             <div
-                v-for="(item, index) in recipes"
+                v-for="(recipe, index) in recipes"
                 v-if="recipes"
                 :key="index"
-                class="w-[300px] flex-shrink-0 cursor-pointer p-4"
-                @click="onItemClick(item)"
+                class="w-[300px] flex-shrink-0 cursor-pointer p-4 md:w-[400px]"
+                @click="onItemClick(recipe)"
             >
-                <div
-                    class="flex h-[300px] flex-col items-center justify-start overflow-hidden rounded-[20px] bg-[#7f7f7f]"
-                >
-                    <div class="h-3/5 w-full bg-cover" :style="{ backgroundImage: `url(${item.mainImage})` }"></div>
-                    <p class="p-2 text-lg text-white">
-                        {{ item.name }}
-                    </p>
-                    <div class="mt-auto flex items-center self-end p-4">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24"
-                            class="h-5 w-5"
-                            fill="none"
-                            stroke="#ddd"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                        >
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <polyline points="12 6 12 12 16 14"></polyline>
-                        </svg>
-
-                        <p class="px-2 text-[14px] text-white">{{ item.totalTime }} mins</p>
-                    </div>
+                <div class="flex h-full flex-col">
+                    <RecipeCard :recipe="recipe" class="flex-grow" />
                 </div>
             </div>
         </div>

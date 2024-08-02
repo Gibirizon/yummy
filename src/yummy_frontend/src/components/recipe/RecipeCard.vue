@@ -1,13 +1,13 @@
 <template>
     <div class="overflow-hidden rounded-lg bg-gray-700 shadow-lg transition-shadow duration-300 hover:shadow-xl">
-        <img :src="recipe.image" :alt="recipe.title" class="h-60 w-full object-cover" />
+        <img :src="recipe.image" :alt="recipe.name" class="h-[60%] max-h-[300px] w-full object-cover" />
         <div class="p-4">
             <h3 class="mb-2 text-xl font-semibold text-white">{{ recipe.name }}</h3>
             <div class="mb-2 flex items-center text-gray-300">
                 <Clock class="mr-1 h-4 w-4" />
                 <span>{{ recipe.time }} mins</span>
             </div>
-            <div class="flex flex-wrap">
+            <div v-if="recipe.tags && recipe.tags.length > 0" class="mb-2 flex flex-wrap">
                 <span
                     v-for="tag in recipe.tags"
                     :key="tag"
@@ -16,17 +16,26 @@
                     #{{ tag }}
                 </span>
             </div>
+            <div v-if="recipe.author" class="text-sm text-gray-400">
+                <User class="mr-1 inline h-4 w-4" />
+                <span>{{ recipe.author }}</span>
+            </div>
         </div>
     </div>
 </template>
 
 <script setup>
-import { Clock } from "lucide-vue-next";
+import { Clock, User } from "lucide-vue-next";
 
 defineProps({
     recipe: {
         type: Object,
         required: true,
+        validator: (value) => {
+            if (value.author && typeof value.author !== "string") return false;
+            if (value.tags && !Array.isArray(value.tags)) return false;
+            return true;
+        },
     },
 });
 </script>

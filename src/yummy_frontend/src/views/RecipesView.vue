@@ -59,9 +59,8 @@ async function getRecipeData() {
         try {
             const responseImage = await yummy_backend.get_image(recipe.name);
             const imageData = new Uint8Array(responseImage.Bytes);
-            const blob = new Blob([imageData], { type: "image/jpg" }); // Adjust type if necessary
+            const blob = new Blob([imageData], { type: "image/jpeg" });
             imageUrl = URL.createObjectURL(blob);
-            console.log("imageUrl: ", imageUrl);
         } catch (error) {
             console.error("Error fetching image:", error);
         }
@@ -72,8 +71,6 @@ async function getRecipeData() {
             time: recipe.total_time,
             tags: recipe.tags,
         });
-
-        console.log("recipeData: ", recipeData.value);
     }
 }
 

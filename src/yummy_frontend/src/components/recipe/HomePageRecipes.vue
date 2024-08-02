@@ -1,13 +1,13 @@
 <script setup>
 import { ref, onMounted, onUnmounted, computed } from "vue";
 import { yummy_backend } from "declarations/yummy_backend/index";
-import SingleList from "./SingleSwipeableDiv.vue";
+import SingleSwipeableDiv from "./SingleSwipeableDiv.vue";
 
 class RecipeBrief {
-    constructor(name, mainImage, totalTime = null) {
+    constructor(name, image, time) {
         this.name = name;
-        this.mainImage = mainImage;
-        this.totalTime = totalTime;
+        this.image = image;
+        this.time = time;
     }
 }
 
@@ -17,48 +17,50 @@ const dinnerRecipes = ref([]);
 
 async function getRecipes() {
     if (popularRecipes.value.length > 0) return;
-    let names;
     try {
-        names = await yummy_backend.get_recipes_names();
+        let popular = await yummy_backend.take_recipes_of_specific_type("Popular");
+        let breakfast = await yummy_backend.take_recipes_of_specific_type("Breakfast");
+        let dinner = await yummy_backend.take_recipes_of_specific_type("Dinner");
+
+        if (popular.Err || breakfast.Err || dinner.Err) {
+            console.log("Error: ", popular.Err, breakfast.Err, dinner.Err);
+            return;
+        }
+
+        // display popular recipes
+        for (const recipe of popular.Ok) {
+            const new_recipe = await createRecipe(recipe);
+            popularRecipes.value.push(new_recipe);
+        }
+
+        // display breakfast recipes
+        for (const recipe of breakfast.Ok) {
+            const new_recipe = await createRecipe(recipe);
+            breakfastRecipes.value.push(new_recipe);
+        }
+
+        // display dinner recipes
+        for (const recipe of dinner.Ok) {
+            const new_recipe = await createRecipe(recipe);
+            dinnerRecipes.value.push(new_recipe);
+        }
     } catch (error) {
         console.log("Error: ", error);
-        await getRecipes();
         return;
-    }
-    if (names.Err) {
-        console.log("Error: ", names.Err);
-        return;
-    }
-    for (const name of names.Ok) {
-        // get recipe information
-        let recipeData = await yummy_backend.get_recipe(name);
-        if (recipeData.Err) {
-            console.log("Error: ", recipeData.Err);
-            continue;
-        }
-        recipeData = recipeData.Ok;
-
-        // get recipe image
-        const imageData = await yummy_backend.get_image(name);
-
-        let new_recipe = await createRecipe(name, recipeData.total_time_in_seconds, imageData.Bytes);
-        if (recipeData.popular) {
-            popularRecipes.value.push(new_recipe);
-        } else {
-            if (recipeData.tags.includes("Breakfast")) {
-                breakfastRecipes.value.push(new_recipe);
-            } else {
-                dinnerRecipes.value.push(new_recipe);
-            }
-        }
     }
 }
 
-async function createRecipe(name, total_time_in_seconds, imageResponse) {
-    const imageData = new Uint8Array(imageResponse);
-    const blob = new Blob([imageData], { type: "image/jpg" }); // Adjust type if necessary
-    const imageUrl = URL.createObjectURL(blob);
-    let new_recipe = new RecipeBrief(name, imageUrl, total_time_in_seconds / 60);
+async function createRecipe(recipe) {
+    let imageUrl;
+    try {
+        const responseImage = await yummy_backend.get_image(recipe.name);
+        const imageData = new Uint8Array(responseImage.Bytes);
+        const blob = new Blob([imageData], { type: "image/jpeg" }); // Adjust type if necessary
+        imageUrl = URL.createObjectURL(blob);
+    } catch (error) {
+        console.error("Error fetching image:", error);
+    }
+    let new_recipe = new RecipeBrief(recipe.name, imageUrl, recipe.total_time);
     return new_recipe;
 }
 function handleItemClick(item) {
@@ -92,7 +94,7 @@ onMounted(async () => {
                 </svg>
                 <h2 class="shadow-text text-3xl font-semibold text-white">Popular Recipes</h2>
             </div>
-            <SingleList v-if="popularRecipes" :recipes="popularRecipes" @item-click="handleItemClick" />
+            <SingleSwipeableDiv v-if="popularRecipes" :recipes="popularRecipes" @item-click="handleItemClick" />
         </section>
 
         <section class="mb-16">
@@ -113,7 +115,7 @@ onMounted(async () => {
                 </svg>
                 <h2 class="shadow-text text-3xl font-semibold text-white">Breakfast</h2>
             </div>
-            <SingleList v-if="breakfastRecipes" :recipes="breakfastRecipes" @item-click="handleItemClick" />
+            <SingleSwipeableDiv v-if="breakfastRecipes" :recipes="breakfastRecipes" @item-click="handleItemClick" />
         </section>
 
         <section class="mb-16">
@@ -134,7 +136,7 @@ onMounted(async () => {
                 </svg>
                 <h2 class="shadow-text text-3xl font-semibold text-white">Dinner</h2>
             </div>
-            <SingleList v-if="dinnerRecipes" :recipes="dinnerRecipes" @item-click="handleItemClick" />
+            <SingleSwipeableDiv v-if="dinnerRecipes" :recipes="dinnerRecipes" @item-click="handleItemClick" />
         </section>
     </div>
 </template>
