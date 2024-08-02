@@ -1,7 +1,8 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted, computed } from "vue";
 import { yummy_backend } from "declarations/yummy_backend/index";
-import SingleList from "./SingleList.vue";
+import SingleList from "./SingleSwipeableDiv.vue";
+
 class RecipeBrief {
     constructor(name, mainImage, totalTime = null) {
         this.name = name;
@@ -16,7 +17,14 @@ const dinnerRecipes = ref([]);
 
 async function getRecipes() {
     if (popularRecipes.value.length > 0) return;
-    const names = await yummy_backend.get_recipes_names();
+    let names;
+    try {
+        names = await yummy_backend.get_recipes_names();
+    } catch (error) {
+        console.log("Error: ", error);
+        await getRecipes();
+        return;
+    }
     if (names.Err) {
         console.log("Error: ", names.Err);
         return;
@@ -46,24 +54,20 @@ async function getRecipes() {
     }
 }
 
-async function createRecipe(name, total_time_in_seconds, imageData) {
-    // Convert Uint8Array to string in chunks
-    const chunkSize = 8192;
-    let binary = "";
-    for (let i = 0; i < imageData.length; i += chunkSize) {
-        binary += String.fromCharCode.apply(null, imageData.subarray(i, i + chunkSize));
-    }
-
-    const imageBlob = btoa(binary);
-    let imageInfo = `data:image/jpeg;base64,${imageBlob}`;
-    let new_recipe = new RecipeBrief(name, imageInfo, total_time_in_seconds / 60);
+async function createRecipe(name, total_time_in_seconds, imageResponse) {
+    const imageData = new Uint8Array(imageResponse);
+    const blob = new Blob([imageData], { type: "image/jpg" }); // Adjust type if necessary
+    const imageUrl = URL.createObjectURL(blob);
+    let new_recipe = new RecipeBrief(name, imageUrl, total_time_in_seconds / 60);
     return new_recipe;
 }
 function handleItemClick(item) {
     console.log("Clicked item:", item);
 }
 
-getRecipes();
+onMounted(async () => {
+    await getRecipes();
+});
 </script>
 
 <template>

@@ -1,13 +1,13 @@
-use crate::recipes::key::SUGGESTIC_API_KEY;
 use crate::recipes::images::fetch_image;
-use crate::Error;
+use crate::recipes::key::SUGGESTIC_API_KEY;
 use crate::user::USERS;
+use crate::Error;
 use crate::{Memory, MEMORY_MANAGER};
 use candid::{CandidType, Decode, Deserialize, Encode};
 use ic_cdk::api::management_canister::http_request::{
     http_request, CanisterHttpRequestArgument, HttpHeader, HttpMethod,
 };
-use ic_cdk::{ query, update};
+use ic_cdk::{query, update};
 use ic_stable_structures::memory_manager::MemoryId;
 use ic_stable_structures::{storable::Bound, StableBTreeMap, Storable};
 use serde_json::{from_str, Value};
@@ -15,8 +15,8 @@ use std::borrow::Cow;
 use std::cell::RefCell;
 use urlencoding::encode;
 
-mod key;
 pub mod images;
+mod key;
 
 #[derive(CandidType, Deserialize, Clone, Debug)]
 #[serde(rename_all = "camelCase")]
@@ -32,6 +32,11 @@ pub struct RecipeInside {
 #[derive(CandidType, Deserialize, Clone, Debug)]
 pub struct RecipeSingleItem {
     node: RecipeInside,
+}
+
+#[derive(CandidType, Deserialize, Clone, Debug)]
+pub struct Ingredient {
+    name: String,
 }
 
 #[derive(CandidType, Deserialize, Clone, Debug)]
@@ -60,9 +65,12 @@ impl RecipeInfo {
         }
     }
 }
+
 #[derive(CandidType, Deserialize, Clone, Debug)]
-pub struct Ingredient {
+pub struct RecipeBrief {
     name: String,
+    tags: Vec<String>,
+    total_time: u16,
 }
 
 thread_local! {
@@ -91,12 +99,12 @@ impl Storable for RecipeInfo {
 
 #[update]
 pub async fn recipes_initialization(query: String, recipes_type: String) {
-    ic_cdk::api::print(format!("New Query: {}", query));
-    let res = get_recipes(query).await;
+    // ic_cdk::api::print(format!("New Query: {}", query));
+    let res = fetch_recipes(query).await;
     transform_and_store_response(res, recipes_type.as_str()).await;
 }
 
-pub async fn get_recipes(query: String) -> String {
+pub async fn fetch_recipes(query: String) -> String {
     let encoded_query = encode(&query);
 
     let url = format!(
@@ -112,7 +120,7 @@ pub async fn get_recipes(query: String) -> String {
         url: url.to_string(),
         method: HttpMethod::GET,
         body: None,
-        max_response_bytes: None,
+        max_response_bytes: Some(30 * 1024),
         transform: None,
         headers: request_headers,
     };
@@ -129,6 +137,7 @@ pub async fn get_recipes(query: String) -> String {
             let message =
                 format!("The http_request resulted into error. RejectionCode: {r:?}, Error: {m}");
 
+            ic_cdk::api::print(message.clone());
             message
         }
     }
@@ -149,8 +158,7 @@ pub async fn transform_and_store_response(http_response: String, recipes_type: &
         let image_url = recipe.node.main_image;
         let image_fetching = fetch_image(&image_url, &recipe.node.name).await;
         match image_fetching {
-            Ok(info) => {
-                ic_cdk::println!("{:#?}", info);
+            Ok(_) => {
                 let indgredients = recipe
                     .node
                     .ingredients
@@ -211,7 +219,7 @@ pub fn get_recipes_len() -> u64 {
 }
 
 #[query]
-pub async fn get_recipes_names() -> Result<Vec<String>, Error> {
+pub fn get_recipes_names() -> Result<Vec<String>, Error> {
     RECIPES.with(|recipes| {
         let stable_btree_map = &*recipes.borrow();
         let names: Vec<String> = stable_btree_map
@@ -225,6 +233,41 @@ pub async fn get_recipes_names() -> Result<Vec<String>, Error> {
             });
         } else {
             Ok(names)
+        }
+    })
+}
+
+#[query]
+pub fn take_recipes_of_specific_type(recipes_type: String) -> Result<Vec<RecipeBrief>, Error> {
+    RECIPES.with(|recipes| {
+        let stable_btree_map = &*recipes.borrow();
+        let filtered_recipes: Vec<RecipeBrief>;
+        const TAGS_MAX_LENGTH: usize = 5;
+        filtered_recipes = stable_btree_map
+            .iter()
+            .filter(|(_, recipe)| {
+                if recipes_type == "Popular" {
+                    recipe.popular
+                } else {
+                    recipe.tags.iter().any(|tag| tag == &recipes_type)
+                }
+            })
+            .map(|(name, recipe)| {
+                let first_tags = &recipe.tags[..TAGS_MAX_LENGTH.min(recipe.tags.len())];
+                let recipe_brief = RecipeBrief {
+                    name: name.to_string(),
+                    tags: first_tags.to_vec(),
+                    total_time: recipe.total_time_in_seconds / 60,
+                };
+                recipe_brief
+            })
+            .collect();
+        if filtered_recipes.is_empty() {
+            return Err(Error::RecipesNotFound {
+                msg: "No recipes".to_string(),
+            });
+        } else {
+            Ok(filtered_recipes)
         }
     })
 }

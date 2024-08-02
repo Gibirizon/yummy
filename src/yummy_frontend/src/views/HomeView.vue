@@ -1,9 +1,9 @@
 <script setup>
 import MainHeader from "./../components/MainHeader.vue";
-import AllRecipes from "../components/recipe/AllRecipes.vue";
+import HomePageRecipes from "../components/recipe/HomePageRecipes.vue";
 </script>
 
 <template>
     <MainHeader />
-    <AllRecipes />
+    <HomePageRecipes />
 </template>

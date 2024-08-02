@@ -1,8 +1,10 @@
 import { createWebHistory, createRouter } from "vue-router";
 
 import About from "./views/AboutView.vue";
+import RecipePage from "./components/recipe/RecipePage.vue";
+import RecipesView from "./views/RecipesView.vue";
 import Home from "./views/HomeView.vue";
-import Profile from "./views/ProfileView.vue";
+import ProfileView from "./views/ProfileView.vue";
 import ProfileInfo from "./components/profile/ProfileInfo.vue";
 import ProfileEdit from "./components/profile/ProfileEdit.vue";
 import NewRecipeView from "./views/NewRecipeView.vue";
@@ -14,7 +16,7 @@ const routes = [
     {
         path: "/profile/:id",
         name: "profile",
-        component: Profile,
+        component: ProfileView,
         children: [
             {
                 path: "info",
@@ -27,6 +29,11 @@ const routes = [
                 component: ProfileEdit,
             },
         ],
+    },
+    {
+        path: "/recipes/:type",
+        name: "recipes",
+        component: RecipesView,
     },
 ];
 

@@ -9,6 +9,7 @@ type Error = variant {
   UserNotFound : record { msg : text };
 };
 type ImageData = variant { Url : text; Bytes : blob };
+type RecipeBrief = record { name : text; tags : vec text; total_time : nat16 };
 type RecipeInfo = record {
   total_time_in_seconds : nat16;
   tags : vec text;
@@ -23,6 +24,7 @@ type Result_2 = variant { Ok : vec User; Err : Error };
 type Result_3 = variant { Ok : RecipeInfo; Err : Error };
 type Result_4 = variant { Ok : vec text; Err : Error };
 type Result_5 = variant { Ok : User; Err : Error };
+type Result_6 = variant { Ok : vec RecipeBrief; Err : Error };
 type User = record {
   id : principal;
   recipes : vec record { text; RecipeInfo };
@@ -45,5 +47,6 @@ service : () -> {
   get_user_info_by_principal : () -> (Result_5) query;
   recipe_exists : (text) -> (bool) query;
   recipes_initialization : (text, text) -> ();
+  take_recipes_of_specific_type : (text) -> (Result_6) query;
   update_username : (nat64, text) -> (Result_5);
 }

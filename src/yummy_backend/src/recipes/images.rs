@@ -10,7 +10,7 @@ use ic_stable_structures::{storable::Bound, StableBTreeMap, Storable};
 use std::borrow::Cow;
 use std::cell::RefCell;
 
-const MAX_RESPONSE_BYTES: u64 = 2 * 1024 * 1024; // 2 MB
+const MAX_RESPONSE_BYTES: u64 = 1024 * 1024; // 0.5 MB
 
 #[derive(CandidType, Deserialize, Clone, Debug)]
 pub enum ImageData {
@@ -67,11 +67,12 @@ pub async fn fetch_image(url: &str, name: &str) -> Result<String, Error> {
             },
         ];
 
+        ic_cdk::println!("URL: {}", url);
         let request = CanisterHttpRequestArgument {
             url: url.to_string(),
             method: HttpMethod::GET,
             body: None,
-            max_response_bytes: None,
+            max_response_bytes: Some(MAX_RESPONSE_BYTES),
             transform: None,
             headers: request_headers,
         };
@@ -80,7 +81,12 @@ pub async fn fetch_image(url: &str, name: &str) -> Result<String, Error> {
         match http_request(request, cycles).await {
             Ok((response,)) => {
                 ic_cdk::api::print(format!("Response status {:?}", response.status));
-                if response.status == 206u64 || response.status == 200u64 {
+                if !(response.status == 206u64) && !(response.status == 200u64) {
+                    return Err(Error::ImageNotDownloaded {
+                        msg: "Cannot download image".to_string(),
+                    });
+                }
+                {
                     // Parse Content-Range header to get total size
                     if total_size == 0 {
                         for header in &response.headers {
@@ -95,7 +101,8 @@ pub async fn fetch_image(url: &str, name: &str) -> Result<String, Error> {
                     offset += MAX_RESPONSE_BYTES;
                 }
             }
-            Err(_) => {
+            Err(err) => {
+                ic_cdk::api::print(format!("Error {:?}", err));
                 return Err(Error::ImageNotDownloaded {
                     msg: "Cannot download image".to_string(),
                 });

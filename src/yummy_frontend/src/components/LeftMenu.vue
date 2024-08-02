@@ -190,9 +190,110 @@ function closeMessage() {
                         </div>
                     </div>
                     <ul v-if="isDropdownOpen('recipes')" class="ml-6 mt-2 space-y-2">
-                        <li><a href="#" class="text-gray-400 hover:text-white">Browse</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white">Create New</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white">Favorites</a></li>
+                        <li>
+                            <RouterLink
+                                :to="{
+                                    name: 'recipes',
+                                    query: { canisterId: canisterId },
+                                    params: { type: 'Popular' },
+                                }"
+                                class="text-gray-400 hover:text-white"
+                                >Popular</RouterLink
+                            >
+                        </li>
+                        <li>
+                            <div
+                                @click="toggleDropdown('meals')"
+                                class="flex cursor-pointer items-center justify-between text-gray-300 hover:text-white"
+                            >
+                                <div class="flex items-center gap-3">
+                                    <span>Meals</span>
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        class="h-4 w-4 transition-transform"
+                                        :class="{ 'rotate-180': isDropdownOpen('meals') }"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M19 9l-7 7-7-7"
+                                        />
+                                    </svg>
+                                </div>
+                            </div>
+                            <ul v-if="isDropdownOpen('meals')" class="ml-6 mt-2 space-y-2">
+                                <li>
+                                    <RouterLink
+                                        :to="{
+                                            name: 'recipes',
+                                            query: { canisterId: canisterId },
+                                            params: { type: 'Breakfast' },
+                                        }"
+                                        class="text-gray-400 hover:text-white"
+                                        >Breakfast</RouterLink
+                                    >
+                                </li>
+                                <li>
+                                    <RouterLink
+                                        :to="{
+                                            name: 'recipes',
+                                            query: { canisterId: canisterId },
+                                            params: { type: 'Dinner' },
+                                        }"
+                                        class="text-gray-400 hover:text-white"
+                                        >Dinner</RouterLink
+                                    >
+                                </li>
+                                <li>
+                                    <RouterLink
+                                        :to="{
+                                            name: 'recipes',
+                                            query: { canisterId: canisterId },
+                                            params: { type: 'Dessert' },
+                                        }"
+                                        class="text-gray-400 hover:text-white"
+                                        >Dessert</RouterLink
+                                    >
+                                </li>
+                                <li>
+                                    <RouterLink
+                                        :to="{
+                                            name: 'recipes',
+                                            query: { canisterId: canisterId },
+                                            params: { type: 'Snack' },
+                                        }"
+                                        class="text-gray-400 hover:text-white"
+                                        >Snack</RouterLink
+                                    >
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <RouterLink
+                                :to="{
+                                    name: 'recipes',
+                                    query: { canisterId: canisterId },
+                                    params: { type: 'yours' },
+                                }"
+                                class="text-gray-400 hover:text-white"
+                                >Yours</RouterLink
+                            >
+                        </li>
+                        <li>
+                            <RouterLink
+                                :to="{
+                                    name: 'recipes',
+                                    query: { canisterId: canisterId },
+                                    params: { type: 'others' },
+                                }"
+                                class="text-gray-400 hover:text-white"
+                                >Other Users</RouterLink
+                            >
+                        </li>
                     </ul>
                 </li>
                 <li v-show="isAuthenticated && user_index !== 0">

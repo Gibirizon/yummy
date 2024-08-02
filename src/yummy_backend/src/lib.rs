@@ -4,7 +4,7 @@ use ic_cdk::init;
 use ic_stable_structures::memory_manager::{MemoryManager, VirtualMemory};
 use ic_stable_structures::DefaultMemoryImpl;
 use recipes::images::ImageData;
-use recipes::{recipes_initialization, RecipeInfo};
+use recipes::{recipes_initialization, RecipeBrief, RecipeInfo};
 use std::cell::RefCell;
 use std::time::Duration;
 use user::User;
