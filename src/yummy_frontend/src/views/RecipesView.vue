@@ -25,31 +25,31 @@ const currentType = computed(() => {
 
 // Define hero images for each route
 const ImagesAndPageTitles = {
-    Popular: {
+    popular: {
         image: "/images/popular-hero.jpg",
         title: "Popular",
     },
-    Breakfast: {
+    breakfast: {
         image: "/images/breakfast-hero.jpg",
         title: "Breakfast",
     },
-    Dinner: {
+    dinner: {
         image: "/images/dinner-hero.jpg",
         title: "Dinner",
     },
-    Dessert: {
+    dessert: {
         image: "/images/dessert-hero.jpg",
         title: "Dessert",
     },
-    Snack: {
+    snack: {
         image: "/images/snack-hero.jpg",
         title: "Snack",
     },
-    Yours: {
+    yours: {
         image: "/images/yours-hero.jpg",
         title: "Your Recipes",
     },
-    Users: {
+    users: {
         image: "/images/users-hero.jpg",
         title: "All User's Recipes",
     },
@@ -74,10 +74,14 @@ async function getRecipeData() {
             return;
         }
         all_recipes = await yummy_backend.take_user_recipes(user.Ok);
+        console.log("all recipes: ", all_recipes);
     } else if (currentType.value === "Users") {
         all_recipes = await yummy_backend.take_all_users_recipes();
+        console.log("all recipes: ", all_recipes);
     } else {
-        all_recipes = await yummy_backend.take_recipes_of_specific_type(currentType.value);
+        all_recipes = await yummy_backend.take_recipes_of_specific_type(
+            currentType.value.charAt(0).toUpperCase() + currentType.value.slice(1)
+        );
     }
 
     // getting images for recipes

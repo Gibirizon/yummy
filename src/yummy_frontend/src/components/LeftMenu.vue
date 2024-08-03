@@ -119,7 +119,7 @@ function closeMessage() {
         class="duration-400 left-menu fixed left-0 top-0 z-[130] flex h-screen w-[240px] flex-col items-center gap-4 bg-[#2C2F33] p-4 shadow-lg transition-transform"
         :class="leftMenuIsVisible ? 'translate-x-0' : '-translate-x-full'"
     >
-        <h2 class="p-2 text-2xl text-white">Yummy</h2>
+        <h2 class="p-2 font-['Dancing_Script'] text-5xl text-white">Yummy</h2>
         <div v-if="isReady">
             <div class="flex justify-center">
                 <button v-if="isAuthenticated" @click="signUserOut" type="button" class="left-menu-button">
@@ -134,6 +134,19 @@ function closeMessage() {
         </div>
         <div>
             <ul class="space-y-6 text-[18px]">
+                <li>
+                    <RouterLink
+                        :to="{
+                            name: 'single-recipe',
+                            query: { canisterId: canisterId },
+                            params: { name: encodeURIComponent('recipe test') },
+                        }"
+                        class="flex items-center gap-3 text-gray-300 hover:text-white"
+                    >
+                        <span>Recipe</span>
+                    </RouterLink>
+                </li>
+
                 <li>
                     <RouterLink
                         :to="{ name: 'home', query: { canisterId: canisterId } }"
@@ -200,7 +213,7 @@ function closeMessage() {
                                 :to="{
                                     name: 'recipes',
                                     query: { canisterId: canisterId },
-                                    params: { type: 'Yours' },
+                                    params: { type: 'yours' },
                                 }"
                                 class="text-gray-400 hover:text-white"
                                 >Your recipes</RouterLink
@@ -211,7 +224,7 @@ function closeMessage() {
                                 :to="{
                                     name: 'recipes',
                                     query: { canisterId: canisterId },
-                                    params: { type: 'Users' },
+                                    params: { type: 'users' },
                                 }"
                                 class="text-gray-400 hover:text-white"
                                 >Created by users</RouterLink
@@ -222,7 +235,7 @@ function closeMessage() {
                                 :to="{
                                     name: 'recipes',
                                     query: { canisterId: canisterId },
-                                    params: { type: 'Popular' },
+                                    params: { type: 'popular' },
                                 }"
                                 class="text-gray-400 hover:text-white"
                                 >Popular</RouterLink
@@ -258,7 +271,7 @@ function closeMessage() {
                                         :to="{
                                             name: 'recipes',
                                             query: { canisterId: canisterId },
-                                            params: { type: 'Breakfast' },
+                                            params: { type: 'breakfast' },
                                         }"
                                         class="text-gray-400 hover:text-white"
                                         >Breakfast</RouterLink
@@ -269,7 +282,7 @@ function closeMessage() {
                                         :to="{
                                             name: 'recipes',
                                             query: { canisterId: canisterId },
-                                            params: { type: 'Dinner' },
+                                            params: { type: 'dinner' },
                                         }"
                                         class="text-gray-400 hover:text-white"
                                         >Dinner</RouterLink
@@ -280,7 +293,7 @@ function closeMessage() {
                                         :to="{
                                             name: 'recipes',
                                             query: { canisterId: canisterId },
-                                            params: { type: 'Dessert' },
+                                            params: { type: 'dessert' },
                                         }"
                                         class="text-gray-400 hover:text-white"
                                         >Dessert</RouterLink
@@ -291,7 +304,7 @@ function closeMessage() {
                                         :to="{
                                             name: 'recipes',
                                             query: { canisterId: canisterId },
-                                            params: { type: 'Snack' },
+                                            params: { type: 'snack' },
                                         }"
                                         class="text-gray-400 hover:text-white"
                                         >Snack</RouterLink

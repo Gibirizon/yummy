@@ -139,46 +139,49 @@ fn get_user_by_index(index: u64) -> Result<User, Error> {
 #[query]
 fn get_user_index() -> Result<u64, Error> {
     USERS.with(|users| {
-        let users = &*users.borrow();
         ic_cdk::println!(
             "Get user index by principal caller: {}",
             ic_cdk::api::caller()
         );
 
-        let index = match users.iter().find(|(_, user)| user.id == ic_cdk::caller()) {
+        match users
+            .borrow()
+            .iter()
+            .find(|(_, user)| user.id == ic_cdk::caller())
+        {
             Some((index, _)) => Ok(index),
             None => Err(Error::UserNotFound {
                 msg: "You are not authenticated - login to perform this action".to_string(),
             }),
-        };
-        index
+        }
     })
 }
 
 #[query]
 fn get_user_info() -> Result<User, Error> {
     USERS.with(|users| {
-        let users = &*users.borrow();
         ic_cdk::api::print(format!(
             "Get user by principal caller: {}",
             ic_cdk::api::caller()
         ));
-        let user = match users.iter().find(|(_, user)| user.id == ic_cdk::caller()) {
+        match users
+            .borrow()
+            .iter()
+            .find(|(_, user)| user.id == ic_cdk::caller())
+        {
             Some((_, user)) => Ok(user),
             None => Err(Error::UserNotFound {
                 msg: "You are not authenticated - login to perform this action".to_string(),
             }),
-        };
-        user
+        }
     })
 }
 
 #[query]
 fn get_all_users() -> Result<Vec<User>, Error> {
-    USERS.with(|storage| {
-        let stable_btree_map = &*storage.borrow();
-
-        let records: Vec<User> = stable_btree_map
+    USERS.with(|users| {
+        let records: Vec<User> = users
+            .borrow()
             .iter()
             .map(|(_, user)| user.clone())
             .collect();
@@ -247,17 +250,30 @@ pub fn take_user_recipes(user: User) -> Vec<RecipeBrief> {
 }
 
 #[query]
-pub fn take_all_users_recipes() -> Vec<RecipeBrief> {
-    let users = get_all_users();
-    let mut recipes_to_return = Vec::new();
-    match users {
-        Ok(users) => {
-            for user in users {
-                let user_recipes = take_user_recipes(user);
-                recipes_to_return.extend(user_recipes)
-            }
-            recipes_to_return
+pub fn take_all_users_recipes() -> Vec<Vec<RecipeBrief>> {
+    USERS.with(|users| {
+        users
+            .borrow()
+            .iter()
+            .map(|(_, user)| {
+                take_user_recipes(user.clone())
+                // recipes_to_return.extend(user_recipes)
+            })
+            .collect()
+    })
+}
+
+pub fn take_recipe_by_name(name: String) -> Result<RecipeInfo, Error> {
+    USERS.with(|users| {
+        match users
+            .borrow()
+            .iter()
+            .find(|(_, user)| user.recipes.contains_key(&name))
+        {
+            Some((_, user)) => Ok(user.recipes.get(&name).unwrap().clone()),
+            None => Err(Error::RecipeNotFound {
+                msg: "Recipe not found".to_string(),
+            }),
         }
-        Err(_) => recipes_to_return,
-    }
+    })
 }

@@ -1,5 +1,8 @@
 <template>
-    <div class="overflow-hidden rounded-lg bg-gray-700 shadow-lg transition-shadow duration-300 hover:shadow-xl">
+    <div
+        class="overflow-hidden rounded-lg bg-gray-700 shadow-lg transition-all duration-300 ease-in-out focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 hover:scale-105 hover:bg-gray-600 hover:shadow-2xl"
+        tabindex="0"
+    >
         <img :src="recipe.image" :alt="recipe.name" class="h-[300px] w-full object-cover" />
         <div class="p-4">
             <h3 class="mb-2 text-xl font-semibold text-white">{{ recipe.name }}</h3>
@@ -11,7 +14,7 @@
                 <span
                     v-for="tag in recipe.tags"
                     :key="tag"
-                    class="mb-2 mr-2 rounded-full bg-gray-600 px-2 py-1 text-sm text-gray-300"
+                    class="duration-400 mb-2 mr-2 rounded-full bg-gray-500 px-2 py-1 text-sm text-gray-200 transition-colors hover:bg-gray-400 hover:text-gray-800"
                 >
                     #{{ tag }}
                 </span>

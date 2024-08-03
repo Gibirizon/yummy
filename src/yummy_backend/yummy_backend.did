@@ -51,7 +51,7 @@ service : () -> {
   get_user_info : () -> (Result_5) query;
   recipe_exists : (text) -> (bool) query;
   recipes_initialization : (text, text) -> ();
-  take_all_users_recipes : () -> (vec RecipeBrief) query;
+  take_all_users_recipes : () -> (vec vec RecipeBrief) query;
   take_recipes_of_specific_type : (text) -> (vec RecipeBrief) query;
   take_user_recipes : (User) -> (vec RecipeBrief) query;
   update_username : (nat64, text) -> (Result_5);

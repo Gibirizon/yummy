@@ -48,6 +48,7 @@ pub struct RecipeInfo {
     pub total_time_in_seconds: u16,
     popular: bool,
 }
+
 impl RecipeInfo {
     pub fn new(
         instructions: Vec<String>,
@@ -73,6 +74,7 @@ pub struct RecipeBrief {
     total_time: u16,
     author: Option<String>,
 }
+
 impl RecipeBrief {
     pub fn new(name: String, tags: Vec<String>, total_time: u16, author: Option<String>) -> Self {
         Self {
@@ -214,14 +216,11 @@ pub fn recipe_exists(name: String) -> bool {
 
 #[query]
 pub fn get_recipe(name: String) -> Result<RecipeInfo, Error> {
-    RECIPES.with(|recipes| {
-        let recipe = match recipes.borrow().get(&name) {
-            Some(recipe) => Ok(recipe),
-            None => Err(Error::RecipeNotFound {
-                msg: "Recipe not found".to_string(),
-            }),
-        };
-        recipe
+    RECIPES.with(|recipes| match recipes.borrow().get(&name) {
+        Some(recipe) => Ok(recipe),
+        None => Err(Error::RecipeNotFound {
+            msg: "Recipe not found".to_string(),
+        }),
     })
 }
 #[query]
@@ -251,10 +250,9 @@ pub fn get_recipes_names() -> Result<Vec<String>, Error> {
 #[query]
 pub fn take_recipes_of_specific_type(recipes_type: String) -> Vec<RecipeBrief> {
     RECIPES.with(|recipes| {
-        let stable_btree_map = &*recipes.borrow();
-        let filtered_recipes: Vec<RecipeBrief>;
         const TAGS_MAX_LENGTH: usize = 5;
-        filtered_recipes = stable_btree_map
+        let filtered_recipes = recipes
+            .borrow()
             .iter()
             .filter(|(_, recipe)| {
                 if recipes_type == "Popular" {

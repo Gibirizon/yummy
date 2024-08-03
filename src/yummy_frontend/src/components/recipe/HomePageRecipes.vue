@@ -24,19 +24,19 @@ async function getRecipes() {
 
         // display popular recipes
         for (const recipe of popular) {
-            const new_recipe = await createRecipe(recipe);
+            const new_recipe = await createRecipeBrief(recipe);
             popularRecipes.value.push(new_recipe);
         }
 
         // display breakfast recipes
         for (const recipe of breakfast) {
-            const new_recipe = await createRecipe(recipe);
+            const new_recipe = await createRecipeBrief(recipe);
             breakfastRecipes.value.push(new_recipe);
         }
 
         // display dinner recipes
         for (const recipe of dinner) {
-            const new_recipe = await createRecipe(recipe);
+            const new_recipe = await createRecipeBrief(recipe);
             dinnerRecipes.value.push(new_recipe);
         }
     } catch (error) {
@@ -46,12 +46,12 @@ async function getRecipes() {
     }
 }
 
-async function createRecipe(recipe) {
+async function createRecipeBrief(recipe) {
     let imageUrl;
     try {
         const responseImage = await yummy_backend.get_image(recipe.name);
         const imageData = new Uint8Array(responseImage.Bytes);
-        const blob = new Blob([imageData], { type: "image/jpeg" }); // Adjust type if necessary
+        const blob = new Blob([imageData], { type: "image/jpeg" });
         imageUrl = URL.createObjectURL(blob);
     } catch (error) {
         console.error("Error fetching image:", error);
