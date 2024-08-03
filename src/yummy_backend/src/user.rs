@@ -263,6 +263,7 @@ pub fn take_all_users_recipes() -> Vec<Vec<RecipeBrief>> {
     })
 }
 
+#[query]
 pub fn take_recipe_by_name(name: String) -> Result<RecipeInfo, Error> {
     USERS.with(|users| {
         match users

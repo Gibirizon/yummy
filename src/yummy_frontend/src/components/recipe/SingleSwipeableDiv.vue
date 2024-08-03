@@ -9,7 +9,6 @@ const props = defineProps({
         required: true,
     },
 });
-console.log(props.recipes);
 
 const carouselRef = ref(null);
 const currentOffset = ref(0);

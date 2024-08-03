@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 import Navigation from "./components/Nav.vue";
 import LeftMenu from "./components/LeftMenu.vue";
 

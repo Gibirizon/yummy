@@ -1,31 +1,73 @@
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onBeforeMount } from "vue";
+import Message from "./Message.vue";
+import { useRouter, useRoute } from "vue-router";
 import { Clock, ChefHat, Tag, ChevronDown, ChevronUp, Utensils, List } from "lucide-vue-next";
+import { yummy_backend } from "declarations/yummy_backend/index";
+
+const route = useRoute();
+const router = useRouter();
+
+async function getRecipe() {
+    const recipeName = decodeURIComponent(route.params.name);
+    let recipeInfo;
+
+    // trying to get recipe from downloaded info from api
+    const recipeFromAPI = await yummy_backend.take_recipe(recipeName);
+    if (recipeFromAPI.Ok) {
+        recipeInfo = recipeFromAPI.Ok;
+    } else {
+        // getting image created by users
+        let recipeFromUsers = await yummy_backend.take_recipe_by_name(recipeName);
+
+        // no recipe found
+        if (recipeFromUsers.Err) {
+            console.log(recipeFromUsers.Err);
+            createMessage(recipeFromUsers.Err.RecipeNotFound.msg, "error");
+            return;
+        }
+
+        recipeInfo = recipeFromUsers.Ok;
+    }
+    let imageUrl;
+    try {
+        const responseImage = await yummy_backend.get_image(recipeName);
+        const responseKey = Object.keys(responseImage)[0];
+        // image added by user from url
+        if (responseKey == "Url") {
+            imageUrl = responseImage.Url;
+        } else if (responseImage.Bytes.length == 0) {
+            // no image found, display default
+            imageUrl = "/images/default-recipe.jpg";
+        } else {
+            const imageData = new Uint8Array(responseImage.Bytes);
+            const blob = new Blob([imageData], { type: "image/jpeg" });
+            imageUrl = URL.createObjectURL(blob);
+        }
+    } catch (error) {
+        console.error("Error fetching image:", error);
+    }
+
+    // store informations in variable
+    recipe.value = {
+        name: recipeName,
+        image: imageUrl,
+        instructions: recipeInfo.instructions,
+        ingredients: recipeInfo.ingredients,
+        tags: recipeInfo.tags,
+        prepTime: recipeInfo.total_time_in_seconds / 60,
+        cuisines: recipeInfo.cuisines[0] ? recipeInfo.cuisines[0] : [],
+    };
+}
 
 const recipe = ref({
-    title: "Spicy Thai Basil Chicken",
+    name: "",
     image: "",
-    instructions: [
-        "Heat oil in a large skillet over medium-high heat.",
-        "Add garlic and chili, stir-fry for 30 seconds.",
-        "Add chicken and stir-fry until it loses its raw color.",
-        "Add the sauce mixture and continue to stir-fry until the chicken is cooked.",
-        "Remove from heat and stir in the basil leaves.",
-        "Serve hot with steamed rice.",
-    ],
-    ingredients: [
-        "1 lb boneless, skinless chicken thighs, sliced",
-        "4 cloves garlic, minced",
-        "2-3 Thai chili peppers, finely chopped",
-        "1/4 cup soy sauce",
-        "2 tsp oyster sauce",
-        "1 tsp sugar",
-        "1 cup Thai basil leaves",
-        "2 tbsp vegetable oil",
-    ],
-    tags: ["Spicy", "Quick", "Stir-fry"],
-    prepTime: 30,
-    cuisines: ["Thai", "Asian"],
+    instructions: [],
+    ingredients: [],
+    tags: [],
+    prepTime: 0,
+    cuisines: [],
 });
 
 const showFullInstructions = ref(false);
@@ -46,18 +88,37 @@ const displayedInstructions = computed(() =>
 const displayedIngredients = computed(() =>
     showFullIngredients.value ? recipe.value.ingredients : recipe.value.ingredients.slice(0, 3)
 );
+
+const showMessage = ref(false);
+const messageText = ref("");
+const messageType = ref("");
+function createMessage(msg, type) {
+    messageText.value = msg;
+    messageType.value = type;
+    showMessage.value = true;
+}
+function closeMessage() {
+    showMessage.value = false;
+}
+
+onBeforeMount(async () => {
+    await getRecipe();
+});
 </script>
 
 <template>
-    <div class="min-h-screen w-full bg-gray-800 p-6 text-gray-100 md:p-10">
-        <div class="mx-auto max-w-6xl overflow-hidden rounded-xl bg-gray-700 shadow-xl">
-            <img :src="recipe.image" :alt="recipe.title" class="h-96 w-full object-cover" />
+    <Transition name="slide">
+        <Message v-if="showMessage" :text="messageText" :type="messageType" @close="closeMessage" />
+    </Transition>
+    <div class="min-h-screen w-full bg-gray-800 p-6 text-gray-100 md:p-12">
+        <div class="mx-auto max-w-4xl overflow-hidden rounded-3xl bg-gray-700 shadow-xl">
+            <img :src="recipe.image" :alt="recipe.name" class="h-[400px] w-full object-cover" />
             <div class="p-8 md:p-10">
-                <h1 class="mb-6 text-4xl font-bold text-indigo-300 md:text-5xl">
-                    {{ recipe.title }}
+                <h1 class="mb-6 text-4xl font-bold text-indigo-300 md:text-5xl" v-if="recipe.name.length > 0">
+                    {{ recipe.name }}
                 </h1>
 
-                <div class="mb-8 flex flex-wrap items-center gap-6">
+                <div class="mb-8 flex flex-wrap items-center gap-6" v-if="recipe.prepTime > 0">
                     <div class="flex items-center">
                         <Clock class="mr-3 h-7 w-7 text-indigo-400" />
                         <span class="text-xl">{{ recipe.prepTime }} mins</span>

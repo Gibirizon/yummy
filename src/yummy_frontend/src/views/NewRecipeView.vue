@@ -67,21 +67,21 @@ function toggleTag(tag) {
     }
 }
 
-const imageURL = ref("");
 function handleImageUpload(event) {
+    console.log("event", event);
     const file = event.target.files[0];
     if (!file) return;
 
     // check file size
-    if (file.size > 300 * 1024) {
-        console.log("File size exceeds limit (300kB)");
-        createMessage("File size exceeds limit (300kB)", "warning");
+    if (file.size > 1024 * 1024) {
+        console.log("File size exceeds limit (1MB)");
+        createMessage("File size exceeds limit (1MB)", "warning");
+        event.target.value = "";
         return;
     }
 
     const reader = new FileReader();
     reader.onload = function (e) {
-        console.log(e.target.result);
         uploadedImage.value = e.target.result;
     };
     reader.readAsDataURL(file);
@@ -129,14 +129,15 @@ async function submitRecipe() {
         uploadedImage.value,
         user_index
     );
-    if (response.Ok) {
-        messageText.value = response.Ok;
-        messageType.value = "success";
-        showMessage.value = true;
-    } else {
+    if (response.Err) {
         createErrorFromObject(response.Err);
+        title.value = "";
+        return;
     }
 
+    messageText.value = response.Ok;
+    messageType.value = "success";
+    showMessage.value = true;
     // // Reset title of form after submission
     title.value = "";
     selectedTags.value = [];
@@ -144,6 +145,7 @@ async function submitRecipe() {
     ingredients.value = [];
     prepTime.value = 0;
     uploadedImage.value = "";
+    document.getElementById("image").value = "";
 }
 const closeMessage = () => {
     showMessage.value = false;
@@ -352,10 +354,10 @@ const closeMessage = () => {
                     </div>
 
                     <div>
-                        <label for="images" class="mb-2 block text-lg font-medium text-gray-300">Upload Images</label>
+                        <label for="image" class="mb-2 block text-lg font-medium text-gray-300">Upload Images</label>
                         <input
                             type="file"
-                            id="images"
+                            id="image"
                             @change="handleImageUpload"
                             accept="image/*"
                             class="w-full text-lg text-gray-400 file:mr-4 file:rounded-full file:border-0 file:bg-gray-600 file:px-4 file:py-3 file:text-lg file:font-semibold file:text-gray-200 hover:file:bg-gray-500"

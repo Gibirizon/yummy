@@ -1,5 +1,6 @@
 <script setup>
-import { ref, onMounted, onUnmounted, computed } from "vue";
+import { useRouter, useRoute } from "vue-router";
+import { ref, onBeforeMount } from "vue";
 import { yummy_backend } from "declarations/yummy_backend/index";
 import SingleSwipeableDiv from "./SingleSwipeableDiv.vue";
 
@@ -11,6 +12,9 @@ class RecipeBrief {
     }
 }
 
+const route = useRoute();
+const router = useRouter();
+
 const popularRecipes = ref([]);
 const breakfastRecipes = ref([]);
 const dinnerRecipes = ref([]);
@@ -19,30 +23,24 @@ async function getRecipes() {
     if (popularRecipes.value.length > 0) return;
     try {
         let popular = await yummy_backend.take_recipes_of_specific_type("Popular");
+        dipslayRecipes(popular, popularRecipes);
+
         let breakfast = await yummy_backend.take_recipes_of_specific_type("Breakfast");
+        dipslayRecipes(breakfast, breakfastRecipes);
+
         let dinner = await yummy_backend.take_recipes_of_specific_type("Dinner");
-
-        // display popular recipes
-        for (const recipe of popular) {
-            const new_recipe = await createRecipeBrief(recipe);
-            popularRecipes.value.push(new_recipe);
-        }
-
-        // display breakfast recipes
-        for (const recipe of breakfast) {
-            const new_recipe = await createRecipeBrief(recipe);
-            breakfastRecipes.value.push(new_recipe);
-        }
-
-        // display dinner recipes
-        for (const recipe of dinner) {
-            const new_recipe = await createRecipeBrief(recipe);
-            dinnerRecipes.value.push(new_recipe);
-        }
+        dipslayRecipes(dinner, dinnerRecipes);
     } catch (error) {
         console.log("Error: ", error);
-        getRecipes();
+        setTimeout(getRecipes(), 200);
         return;
+    }
+}
+async function dipslayRecipes(fetchedRecipes, recipesStore) {
+    // display recipes by adding to proper Store
+    for (const recipe of fetchedRecipes) {
+        const new_recipe = await createRecipeBrief(recipe);
+        recipesStore.value.push(new_recipe);
     }
 }
 
@@ -61,9 +59,14 @@ async function createRecipeBrief(recipe) {
 }
 function handleItemClick(item) {
     console.log("Clicked item:", item);
+    router.push({
+        name: "single-recipe",
+        query: { canisterId: route.query.canisterId },
+        params: { name: encodeURIComponent(item.name) },
+    });
 }
 
-onMounted(async () => {
+onBeforeMount(async () => {
     await getRecipes();
 });
 </script>

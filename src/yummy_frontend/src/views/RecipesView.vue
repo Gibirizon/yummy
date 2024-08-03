@@ -61,23 +61,23 @@ watch(currentType, () => {
 });
 
 const authStore = useAuthStore();
+console.log("authstore is ready in recipesview: ", authStore.isReady);
 async function getRecipeData() {
     // clean recipeData
     recipesData.value = [];
     let all_recipes = [];
 
     // taking correct recipes from backend
-    if (currentType.value === "Yours") {
+    if (currentType.value === "yours") {
         let user = await authStore.whoamiActor?.get_user_info();
         if (user.Err) {
             console.log("Error: ", user.Err);
             return;
         }
         all_recipes = await yummy_backend.take_user_recipes(user.Ok);
-        console.log("all recipes: ", all_recipes);
-    } else if (currentType.value === "Users") {
+    } else if (currentType.value === "users") {
         all_recipes = await yummy_backend.take_all_users_recipes();
-        console.log("all recipes: ", all_recipes);
+        all_recipes = all_recipes.flat();
     } else {
         all_recipes = await yummy_backend.take_recipes_of_specific_type(
             currentType.value.charAt(0).toUpperCase() + currentType.value.slice(1)

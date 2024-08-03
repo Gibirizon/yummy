@@ -41,12 +41,12 @@ pub struct Ingredient {
 
 #[derive(CandidType, Deserialize, Clone, Debug)]
 pub struct RecipeInfo {
-    instructions: Vec<String>,
-    ingredients: Vec<String>,
-    cuisines: Option<Vec<String>>,
+    pub instructions: Vec<String>,
+    pub ingredients: Vec<String>,
+    pub cuisines: Option<Vec<String>>,
     pub tags: Vec<String>,
     pub total_time_in_seconds: u16,
-    popular: bool,
+    pub popular: bool,
 }
 
 impl RecipeInfo {
@@ -215,7 +215,7 @@ pub fn recipe_exists(name: String) -> bool {
 }
 
 #[query]
-pub fn get_recipe(name: String) -> Result<RecipeInfo, Error> {
+pub fn take_recipe(name: String) -> Result<RecipeInfo, Error> {
     RECIPES.with(|recipes| match recipes.borrow().get(&name) {
         Some(recipe) => Ok(recipe),
         None => Err(Error::RecipeNotFound {

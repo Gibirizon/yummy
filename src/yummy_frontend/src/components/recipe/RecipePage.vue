@@ -1,5 +1,9 @@
 <script setup>
+import { useRouter, useRoute } from "vue-router";
 import RecipeCard from "./RecipeCard.vue";
+
+const route = useRoute();
+const router = useRouter();
 
 defineProps({
     heroImage: {
@@ -15,6 +19,14 @@ defineProps({
         required: true,
     },
 });
+
+function handleItemClick(item) {
+    router.push({
+        name: "single-recipe",
+        query: { canisterId: route.query.canisterId },
+        params: { name: encodeURIComponent(item.name) },
+    });
+}
 </script>
 
 <template>
@@ -30,7 +42,12 @@ defineProps({
         <!-- Recipe Grid -->
         <div class="container mx-auto px-4">
             <div class="grid grid-cols-1 gap-[30px] md:grid-cols-2 xl:grid-cols-3">
-                <RecipeCard v-for="(recipe, index) in recipes" :key="index" :recipe="recipe" />
+                <RecipeCard
+                    v-for="(recipe, index) in recipes"
+                    :key="index"
+                    :recipe="recipe"
+                    @click="handleItemClick(recipe)"
+                />
             </div>
         </div>
     </div>

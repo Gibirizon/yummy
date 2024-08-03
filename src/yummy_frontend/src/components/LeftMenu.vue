@@ -4,7 +4,7 @@ import { LogIn, LogOut } from "lucide-vue-next";
 import Message from "./Message.vue";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "./../store/auth";
-import { ref, watch, computed } from "vue";
+import { ref, watch, computed, onBeforeMount } from "vue";
 import { RouterLink } from "vue-router";
 import { useRouter, useRoute } from "vue-router";
 
@@ -34,12 +34,22 @@ const props = defineProps({
     },
 });
 
+watch(
+    () => props.isVisible,
+    (_) => {
+        leftMenuIsVisible.value = !leftMenuIsVisible.value;
+    }
+);
+
 const user_index = ref(0);
 const leftMenuIsVisible = ref(false);
+const loggingProcess = ref(false);
+const showMessage = ref(false);
+const messageText = ref("");
+const messageType = ref("");
 
 const authStore = useAuthStore();
 const { isReady, isAuthenticated } = storeToRefs(authStore);
-init();
 async function init() {
     console.log("isReady: ", isReady.value);
     if (isReady.value === false) {
@@ -48,23 +58,12 @@ async function init() {
     }
     await updateLoginStatus();
 }
-const loggingProcess = ref(false);
-
-watch(
-    () => props.isVisible,
-    (_) => {
-        leftMenuIsVisible.value = !leftMenuIsVisible.value;
-    }
-);
 
 async function signUserOut() {
     user_index.value = 0;
     await authStore.logout();
 }
 
-const showMessage = ref(false);
-const messageText = ref("");
-const messageType = ref("");
 function createMessage(msg, type) {
     messageText.value = msg;
     messageType.value = type;
@@ -110,6 +109,10 @@ function goToNewRecipe() {
 function closeMessage() {
     showMessage.value = false;
 }
+
+onBeforeMount(async () => {
+    await init();
+});
 </script>
 <template>
     <Transition name="slide">
@@ -134,19 +137,6 @@ function closeMessage() {
         </div>
         <div>
             <ul class="space-y-6 text-[18px]">
-                <li>
-                    <RouterLink
-                        :to="{
-                            name: 'single-recipe',
-                            query: { canisterId: canisterId },
-                            params: { name: encodeURIComponent('recipe test') },
-                        }"
-                        class="flex items-center gap-3 text-gray-300 hover:text-white"
-                    >
-                        <span>Recipe</span>
-                    </RouterLink>
-                </li>
-
                 <li>
                     <RouterLink
                         :to="{ name: 'home', query: { canisterId: canisterId } }"
