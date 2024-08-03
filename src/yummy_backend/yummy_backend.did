@@ -26,14 +26,9 @@ type RecipeInfo = record {
 type Result = variant { Ok : text; Err : Error };
 type Result_1 = variant { Ok : nat64; Err : Error };
 type Result_2 = variant { Ok : vec User; Err : Error };
-type Result_3 = variant { Ok : vec text; Err : Error };
-type Result_4 = variant { Ok : User; Err : Error };
-type Result_5 = variant { Ok : RecipeInfo; Err : Error };
-type User = record {
-  id : principal;
-  recipes : vec record { text; RecipeInfo };
-  name : text;
-};
+type Result_3 = variant { Ok : User; Err : Error };
+type Result_4 = variant { Ok : RecipeInfo; Err : Error };
+type User = record { id : principal; recipes : vec text; name : text };
 service : () -> {
   add_image : (text, ImageData) -> ();
   add_new_recipe : (text, vec text, vec text, vec text, nat16, text, nat64) -> (
@@ -44,16 +39,16 @@ service : () -> {
   get_all_users : () -> (Result_2) query;
   get_image : (text) -> (ImageData) query;
   get_recipes_len : () -> (nat64) query;
-  get_recipes_names : () -> (Result_3) query;
-  get_user_by_index : (nat64) -> (Result_4) query;
+  get_user_by_index : (nat64) -> (Result_3) query;
   get_user_index : () -> (Result_1) query;
-  get_user_info : () -> (Result_4) query;
+  get_user_info : () -> (Result_3) query;
   recipe_exists : (text) -> (bool) query;
   recipes_initialization : (text, text) -> ();
   take_all_users_recipes : () -> (vec vec RecipeBrief) query;
-  take_recipe : (text) -> (Result_5) query;
-  take_recipe_by_name : (text) -> (Result_5) query;
+  take_recipe : (text) -> (Result_4) query;
+  take_recipe_by_name : (text) -> (Result_4) query;
+  take_recipes_names : () -> (vec text) query;
   take_recipes_of_specific_type : (text) -> (vec RecipeBrief) query;
   take_user_recipes : (User) -> (vec RecipeBrief) query;
-  update_username : (nat64, text) -> (Result_4);
+  update_username : (nat64, text) -> (Result_3);
 }

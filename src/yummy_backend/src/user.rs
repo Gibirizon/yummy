@@ -1,5 +1,5 @@
 use crate::recipes::images::{add_image, ImageData};
-use crate::recipes::{recipe_exists, RecipeBrief, RecipeInfo};
+use crate::recipes::{recipe_exists, take_recipe, RecipeBrief, RecipeInfo, RECIPES};
 use crate::Error;
 use crate::{Memory, MEMORY_MANAGER};
 use candid::{CandidType, Decode, Deserialize, Encode, Principal};
@@ -8,7 +8,6 @@ use ic_stable_structures::memory_manager::MemoryId;
 use ic_stable_structures::{storable::Bound, Cell, StableBTreeMap, Storable};
 use std::borrow::Cow;
 use std::cell::RefCell;
-use std::collections::HashMap;
 
 pub type IdCell = Cell<u64, Memory>;
 thread_local! {
@@ -26,7 +25,7 @@ thread_local! {
 pub struct User {
     id: Principal,
     name: String,
-    pub recipes: HashMap<String, RecipeInfo>,
+    pub recipes: Vec<String>,
 }
 
 impl User {
@@ -34,7 +33,7 @@ impl User {
         Self {
             id,
             name,
-            recipes: HashMap::new(),
+            recipes: Vec::new(),
         }
     }
 }
@@ -219,9 +218,13 @@ pub fn add_new_recipe(
         total_time_minutes * 60 as u16,
     );
 
+    RECIPES.with(|recipes| {
+        recipes.borrow_mut().insert(name.clone(), new_recipe);
+    });
+
     USERS.with(|users| {
         let mut user = users.borrow().get(&user_index).unwrap().clone();
-        user.recipes.insert(name.clone(), new_recipe);
+        user.recipes.push(name.clone());
         users.borrow_mut().insert(user_index, user);
         ic_cdk::println!("Recipe added to user")
     });
@@ -235,18 +238,18 @@ pub fn add_new_recipe(
 #[query]
 pub fn take_user_recipes(user: User) -> Vec<RecipeBrief> {
     const TAGS_MAX_LENGTH: usize = 5;
-    user.recipes
-        .iter()
-        .map(|(name, recipe)| {
-            let first_tags = &recipe.tags[..TAGS_MAX_LENGTH.min(recipe.tags.len())];
-            RecipeBrief::new(
-                name.to_string(),
-                first_tags.to_vec(),
-                recipe.total_time_in_seconds / 60,
-                Some(user.name.clone()),
-            )
-        })
-        .collect()
+    let mut user_recipes = Vec::new();
+    for name in &user.recipes {
+        let recipe = take_recipe(name.to_string()).unwrap();
+        let first_tags = &recipe.tags[..TAGS_MAX_LENGTH.min(recipe.tags.len())];
+        user_recipes.push(RecipeBrief::new(
+            name.to_string(),
+            first_tags.to_vec(),
+            recipe.total_time_in_seconds / 60,
+            Some(user.name.clone()),
+        ));
+    }
+    user_recipes
 }
 
 #[query]
@@ -255,10 +258,7 @@ pub fn take_all_users_recipes() -> Vec<Vec<RecipeBrief>> {
         users
             .borrow()
             .iter()
-            .map(|(_, user)| {
-                take_user_recipes(user.clone())
-                // recipes_to_return.extend(user_recipes)
-            })
+            .map(|(_, user)| take_user_recipes(user.clone()))
             .collect()
     })
 }
@@ -269,9 +269,9 @@ pub fn take_recipe_by_name(name: String) -> Result<RecipeInfo, Error> {
         match users
             .borrow()
             .iter()
-            .find(|(_, user)| user.recipes.contains_key(&name))
+            .find(|(_, user)| user.recipes.contains(&name))
         {
-            Some((_, user)) => Ok(user.recipes.get(&name).unwrap().clone()),
+            Some(_) => Ok(take_recipe(name).unwrap()),
             None => Err(Error::RecipeNotFound {
                 msg: "Recipe not found".to_string(),
             }),

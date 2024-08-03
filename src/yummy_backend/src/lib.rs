@@ -45,9 +45,7 @@ fn setup_for_timer() {
                     tags
                     instructions
                     totalTimeInSeconds
-                    ingredients {
-                        name
-                    }
+                    ingredientLines
                     mainImage
                     name
                 }
@@ -71,9 +69,7 @@ fn setup_for_timer() {
                     tags
                     instructions
                     totalTimeInSeconds
-                    ingredients {{
-                        name
-                    }}
+                    ingredientLines
                     mainImage
                     name
                 }}
@@ -89,7 +85,7 @@ fn setup_for_timer() {
 }
 
 // Error types
-#[derive(CandidType)]
+#[derive(CandidType, Debug)]
 pub enum Error {
     UserNotFound { msg: String },
     UserAlreadyExists { msg: String },

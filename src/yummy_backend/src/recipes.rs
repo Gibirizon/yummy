@@ -1,6 +1,5 @@
 use crate::recipes::images::fetch_image;
 use crate::recipes::key::SUGGESTIC_API_KEY;
-use crate::user::USERS;
 use crate::Error;
 use crate::{Memory, MEMORY_MANAGER};
 use candid::{CandidType, Decode, Deserialize, Encode};
@@ -24,7 +23,7 @@ pub struct RecipeInside {
     name: String,
     main_image: String,
     instructions: Vec<String>,
-    ingredients: Vec<Ingredient>,
+    ingredient_lines: Vec<String>,
     cuisines: Option<Vec<String>>,
     tags: Vec<String>,
     total_time_in_seconds: u16,
@@ -32,11 +31,6 @@ pub struct RecipeInside {
 #[derive(CandidType, Deserialize, Clone, Debug)]
 pub struct RecipeSingleItem {
     node: RecipeInside,
-}
-
-#[derive(CandidType, Deserialize, Clone, Debug)]
-pub struct Ingredient {
-    name: String,
 }
 
 #[derive(CandidType, Deserialize, Clone, Debug)]
@@ -172,18 +166,12 @@ pub async fn transform_and_store_response(http_response: String, recipes_type: &
         let image_fetching = fetch_image(&image_url, &recipe.node.name).await;
         match image_fetching {
             Ok(_) => {
-                let indgredients = recipe
-                    .node
-                    .ingredients
-                    .iter()
-                    .map(|ingredient| ingredient.name.clone())
-                    .collect();
                 let new_recipe = RecipeInfo {
                     instructions: recipe.node.instructions,
                     cuisines: recipe.node.cuisines,
                     tags: recipe.node.tags,
                     total_time_in_seconds: recipe.node.total_time_in_seconds,
-                    ingredients: indgredients,
+                    ingredients: recipe.node.ingredient_lines,
                     popular: if recipes_type == "popularRecipes" {
                         true
                     } else {
@@ -203,15 +191,7 @@ pub async fn transform_and_store_response(http_response: String, recipes_type: &
 
 #[query]
 pub fn recipe_exists(name: String) -> bool {
-    let main_recipes = RECIPES.with(|recipes| recipes.borrow().contains_key(&name));
-    let user_recipes = USERS.with(|users| {
-        users
-            .borrow()
-            .iter()
-            .any(|(_, user)| user.recipes.contains_key(&name))
-    });
-
-    main_recipes || user_recipes
+    RECIPES.with(|recipes| recipes.borrow().contains_key(&name))
 }
 
 #[query]
@@ -229,21 +209,13 @@ pub fn get_recipes_len() -> u64 {
 }
 
 #[query]
-pub fn get_recipes_names() -> Result<Vec<String>, Error> {
+pub fn take_recipes_names() -> Vec<String> {
     RECIPES.with(|recipes| {
-        let stable_btree_map = &*recipes.borrow();
-        let names: Vec<String> = stable_btree_map
+        recipes
+            .borrow()
             .iter()
             .map(|(name, _)| name.clone())
-            .collect();
-
-        if names.is_empty() {
-            return Err(Error::RecipesNotFound {
-                msg: "No recipes".to_string(),
-            });
-        } else {
-            Ok(names)
-        }
+            .collect()
     })
 }
 

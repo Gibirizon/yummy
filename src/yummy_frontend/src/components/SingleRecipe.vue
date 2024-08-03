@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onBeforeMount } from "vue";
+import { ref, computed, onBeforeMount, watch } from "vue";
 import Message from "./Message.vue";
 import { useRouter, useRoute } from "vue-router";
 import { Clock, ChefHat, Tag, ChevronDown, ChevronUp, Utensils, List } from "lucide-vue-next";
@@ -7,27 +7,33 @@ import { yummy_backend } from "declarations/yummy_backend/index";
 
 const route = useRoute();
 const router = useRouter();
+watch(
+    () => route.params,
+    async () => {
+        await getRecipe();
+    }
+);
 
 async function getRecipe() {
     const recipeName = decodeURIComponent(route.params.name);
     let recipeInfo;
 
-    // trying to get recipe from downloaded info from api
-    const recipeFromAPI = await yummy_backend.take_recipe(recipeName);
-    if (recipeFromAPI.Ok) {
-        recipeInfo = recipeFromAPI.Ok;
+    // trying to get recipe from created by users
+    const recipeFromUsers = await yummy_backend.take_recipe_by_name(recipeName);
+    if (recipeFromUsers.Ok) {
+        recipeInfo = recipeFromUsers.Ok;
     } else {
-        // getting image created by users
-        let recipeFromUsers = await yummy_backend.take_recipe_by_name(recipeName);
+        // getting image created downloaded from API
+        let recipeFromAPI = await yummy_backend.take_recipe(recipeName);
 
         // no recipe found
-        if (recipeFromUsers.Err) {
-            console.log(recipeFromUsers.Err);
-            createMessage(recipeFromUsers.Err.RecipeNotFound.msg, "error");
+        if (recipeFromAPI.Err) {
+            console.log(recipeFromAPI.Err);
+            createMessage(recipeFromAPI.Err.RecipeNotFound.msg, "error");
             return;
         }
 
-        recipeInfo = recipeFromUsers.Ok;
+        recipeInfo = recipeFromAPI.Ok;
     }
     let imageUrl;
     try {

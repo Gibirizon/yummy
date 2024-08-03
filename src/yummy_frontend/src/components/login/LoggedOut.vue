@@ -1,5 +1,6 @@
 <script setup>
 import Username from "./Username.vue";
+import { X } from "lucide-vue-next";
 import { useAuthStore } from "./../../store/auth";
 import { ref } from "vue";
 import Message from "../Message.vue";
@@ -23,6 +24,8 @@ function changeSignMethod() {
 
 async function SignIn() {
     try {
+        // todo - prevent invalid signature
+        console.log("Signing in...", authStore);
         await authStore.login();
 
         // Login successful, perform next actions
@@ -78,17 +81,16 @@ const closeMessage = () => {
 };
 </script>
 <template>
-    <div class="absolute z-[200] h-full w-full bg-transparent backdrop-blur-sm"></div>
+    <div class="fixed left-0 top-0 z-[200] h-full w-full bg-transparent backdrop-blur-sm"></div>
     <Transition name="slide">
         <Message v-if="showMessage" :text="messageText" :type="messageType" @close="closeMessage" />
     </Transition>
     <div v-if="signProcess" class="sing-in-box fixed bottom-0 z-[210] w-full rounded-t-3xl bg-[#1b1c21]">
         <button
-            type="button"
-            class="absolute right-4 top-2 h-[30px] w-[30px] rounded-full text-white hover:bg-[#2f313a]"
-            @click="emit('finish-logging-in')"
+            @click="emit('close')"
+            class="absolute right-4 top-2 rounded-full p-2 transition-colors duration-200 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600"
         >
-            <font-awesome-icon :icon="['fas', 'xmark']" @click="emit('close')" />
+            <X class="h-5 w-5 text-gray-300" />
         </button>
         <div class="flex flex-col items-center justify-around gap-2 p-6 text-white">
             <h4 class="text-2xl font-semibold">{{ signMethod }} to Yummy</h4>

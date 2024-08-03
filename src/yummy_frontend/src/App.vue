@@ -1,24 +1,39 @@
 <script setup>
-import { ref } from "vue";
-import Navigation from "./components/Nav.vue";
+import { ref, onMounted, onUnmounted } from "vue";
+import Nav from "./components/Nav.vue";
 import LeftMenu from "./components/LeftMenu.vue";
+import Search from "./components/Search.vue";
 
 console.log("rendering app");
-const leftMenuIsVisible = ref(false);
+const isLeftMenuVisible = ref(false);
+const isSearchVisible = ref(false);
+
+function toggleSearch() {
+    isSearchVisible.value = !isSearchVisible.value;
+}
+// Add event listener for Ctrl+K
+onMounted(() => {
+    window.addEventListener("keydown", (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key === "k") {
+            e.preventDefault();
+            toggleSearch();
+        }
+    });
+});
+
+onUnmounted(() => {
+    window.removeEventListener("keydown", handleKeyDown);
+});
 </script>
 
 <template>
+    <Search :isVisible="isSearchVisible" @close="isSearchVisible = false" />
     <div class="main-container flex w-full flex-row">
-        <div
-            v-show="leftMenuIsVisible"
-            class="mobile-view fixed z-[120] h-full w-full bg-black/40 opacity-100"
-            @click="leftMenuIsVisible = false"
-        ></div>
-        <LeftMenu :isVisible="leftMenuIsVisible" />
+        <LeftMenu :isVisible="isLeftMenuVisible" @toggle-search="toggleSearch" @close="isLeftMenuVisible = false" />
         <div
             class="realative app-content flex w-full flex-1 flex-col items-center overflow-y-auto overflow-x-hidden pt-[80px]"
         >
-            <Navigation class="mobile-view" @show-menu="leftMenuIsVisible = true" />
+            <Nav class="mobile-view" @toggle-search="toggleSearch" @show-menu="isLeftMenuVisible = true" />
             <main class="relative w-full bg-gray-800">
                 <RouterView />
             </main>

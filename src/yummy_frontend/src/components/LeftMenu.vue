@@ -1,4 +1,5 @@
 <script setup>
+import { Search } from "lucide-vue-next";
 import LoggedOut from "./login/LoggedOut.vue";
 import { LogIn, LogOut } from "lucide-vue-next";
 import Message from "./Message.vue";
@@ -10,6 +11,7 @@ import { useRouter, useRoute } from "vue-router";
 
 const route = useRoute();
 const router = useRouter();
+const emit = defineEmits(["toggle-search", "close"]);
 
 const canisterId = computed(() => route.query.canisterId);
 
@@ -34,15 +36,7 @@ const props = defineProps({
     },
 });
 
-watch(
-    () => props.isVisible,
-    (_) => {
-        leftMenuIsVisible.value = !leftMenuIsVisible.value;
-    }
-);
-
 const user_index = ref(0);
-const leftMenuIsVisible = ref(false);
 const loggingProcess = ref(false);
 const showMessage = ref(false);
 const messageText = ref("");
@@ -73,7 +67,7 @@ function LoggedIn(index) {
     console.log("Logged in: ", index);
     loggingProcess.value = false;
     user_index.value = index;
-    createMessage("Logged in successfuly", "success");
+    createMessage("Logged in successfully", "success");
 }
 
 async function updateLoginStatus() {
@@ -110,6 +104,10 @@ function closeMessage() {
     showMessage.value = false;
 }
 
+function toggleSearch() {
+    emit("toggle-search");
+}
+
 onBeforeMount(async () => {
     await init();
 });
@@ -119,10 +117,23 @@ onBeforeMount(async () => {
         <Message v-if="showMessage" :text="messageText" :type="messageType" @close="closeMessage" />
     </Transition>
     <div
-        class="duration-400 left-menu fixed left-0 top-0 z-[130] flex h-screen w-[240px] flex-col items-center gap-4 bg-[#2C2F33] p-4 shadow-lg transition-transform"
-        :class="leftMenuIsVisible ? 'translate-x-0' : '-translate-x-full'"
+        v-if="isVisible"
+        class="mobile-view fixed z-[120] h-full w-full bg-black/40 opacity-100"
+        @click="emit('close')"
+    ></div>
+    <div
+        class="duration-400 left-menu fixed left-0 top-0 z-[130] flex h-screen w-[240px] flex-col items-center gap-8 bg-[#1b263e] p-4 shadow-lg transition-transform"
+        :class="isVisible ? 'translate-x-0' : '-translate-x-full'"
     >
         <h2 class="p-2 font-['Dancing_Script'] text-5xl text-white">Yummy</h2>
+        <button
+            @click="toggleSearch"
+            class="flex items-center gap-2 rounded-md bg-gray-700 px-3 py-2 transition-colors duration-200 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500"
+        >
+            <Search class="h-6 w-6 text-gray-300" />
+            <span class="text-xl font-medium text-gray-400">Search</span>
+            <span class="ml-1 rounded border border-gray-500 px-1 text-sm text-gray-400">Ctrl + K</span>
+        </button>
         <div v-if="isReady">
             <div class="flex justify-center">
                 <button v-if="isAuthenticated" @click="signUserOut" type="button" class="left-menu-button">
@@ -135,7 +146,7 @@ onBeforeMount(async () => {
                 </button>
             </div>
         </div>
-        <div>
+        <div class="mx-auto w-4/5">
             <ul class="space-y-6 text-[18px]">
                 <li>
                     <RouterLink
@@ -197,7 +208,7 @@ onBeforeMount(async () => {
                             </svg>
                         </div>
                     </div>
-                    <ul v-if="isDropdownOpen('recipes')" class="ml-6 mt-2 space-y-3">
+                    <ul v-if="isDropdownOpen('recipes')" class="ml-4 mt-2 space-y-3">
                         <li v-if="isAuthenticated">
                             <RouterLink
                                 :to="{
@@ -406,9 +417,7 @@ onBeforeMount(async () => {
             </div>
         </div>
     </div>
-    <div v-show="loggingProcess">
-        <LoggedOut @logged-in="LoggedIn" @close="loggingProcess = false" />
-    </div>
+    <LoggedOut @logged-in="LoggedIn" @close="loggingProcess = false" v-if="loggingProcess" />
 </template>
 
 <style scoped>

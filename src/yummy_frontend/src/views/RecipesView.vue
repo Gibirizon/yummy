@@ -51,7 +51,7 @@ const ImagesAndPageTitles = {
     },
     users: {
         image: "/images/users-hero.jpg",
-        title: "All User's Recipes",
+        title: "All Users' Recipes",
     },
 };
 
