@@ -4,6 +4,9 @@ Yummy is a modern web application designed for finding and sharing recipes. It l
 
 ## Screenshots
 
+<img src="./.screenshots/home_page.png" width="100%" align="center" alt="Home Page"/>
+<img src="./.screenshots/recipe_example.png" width="100%" align="center" alt="Example of a recipe"/>
+
 ## Features
 
 - **Recipe Sharing:** Discover and share a variety of recipes with the community.
@@ -13,13 +16,11 @@ Yummy is a modern web application designed for finding and sharing recipes. It l
 
 ## Technologies
 
-Built with:
-
-- [Rust 🦀](https://github.com/rust-lang/rust) for backend
-- [Vue.js](https://github.com/vuejs/core) for frontend
-- [Pinia](https://github.com/vuejs/pinia) 🍍 for state management
-- [TailwindCSS](https://github.com/tailwindlabs/tailwindcss) 🍃 for styling
-- [DfinityCDK](https://github.com/dfinity/cdk-rs) for compiling to the Internet Computer
+- **[Rust 🦀](https://github.com/rust-lang/rust)** for backend
+- **[Vue.js](https://github.com/vuejs/core)** for frontend
+- **[Pinia 🍍](https://github.com/vuejs/pinia)** for state management
+- **[TailwindCSS 🍃](https://github.com/tailwindlabs/tailwindcss)** for styling
+- **[DfinityCDK](https://github.com/dfinity/cdk-rs)** for compiling to the Internet Computer
 
 ## Getting Started
 
@@ -55,6 +56,8 @@ Built with:
    ```sh
    dfx deploy
    ```
+
+   If you want to see sample recipes after launch, you need to use your api token from [Suggestic](https://www.suggestic.com).
 
 5. **Run the Development Server:**
 
