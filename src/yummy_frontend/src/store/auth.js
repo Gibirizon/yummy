@@ -84,7 +84,7 @@ export const useAuthStore = () => {
                                 this.isAuthenticated = await authClient.isAuthenticated();
                                 this.identity = this.isAuthenticated ? authClient.getIdentity() : null;
                                 this.whoamiActor = this.identity ? actorFromIdentity(this.identity) : null;
-                                console.log("Login Success");
+                                console.log("Login Successful");
                                 resolve();
                             } catch (error) {
                                 console.error("Error during post-login process:", error);

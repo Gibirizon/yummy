@@ -63,7 +63,6 @@ function handleKeydown(event) {
 }
 
 function selectRecipe(name) {
-    console.log("selected recipe: ", name);
     router.push({
         name: "single-recipe",
         query: { canisterId: route.query.canisterId },

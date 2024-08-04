@@ -1,6 +1,6 @@
 # Yummy 🍽️
 
-Yummy is a modern web application designed for finding and sharing recipes. It leverages the power of the Internet Computer (IC), providing a decentralized and scalable solution.
+Yummy is a modern web application designed for searching and sharing recipes. It leverages the power of the Internet Computer (IC), providing a decentralized and scalable solution.
 
 ## Screenshots
 

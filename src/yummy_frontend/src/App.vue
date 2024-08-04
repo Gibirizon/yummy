@@ -4,7 +4,6 @@ import Nav from "./components/Nav.vue";
 import LeftMenu from "./components/LeftMenu.vue";
 import Search from "./components/Search.vue";
 
-console.log("rendering app");
 const isLeftMenuVisible = ref(false);
 const isSearchVisible = ref(false);
 

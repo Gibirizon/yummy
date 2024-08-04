@@ -11,7 +11,7 @@ let url = "/images/header_salad.png";
                 >
                     Y<span class="lowercase text-[#09f]">umm</span>y
                 </h1>
-                <p class="text-[#ddd] sm:text-[18px] md:text-[20px] lg:text-[24px]">Find and share recipes</p>
+                <p class="text-[#ddd] sm:text-[18px] md:text-[20px] lg:text-[24px]">Search and share recipes</p>
             </div>
         </div>
     </header>

@@ -2,6 +2,7 @@
     <Transition name="slide">
         <Message v-if="showMessage" :text="messageText" :type="messageType" @close="closeMessage" />
     </Transition>
+    <DeleteConfirm v-if="showDeleteConfirmation" @close="closeDeleteConfirmation" @confirm="confirmDelete" />
     <div>
         <RecipePage
             :hero-image="ImagesAndPageTitles[currentType].image"
@@ -13,6 +14,7 @@
 </template>
 
 <script setup>
+import DeleteConfirm from "../components/DeleteConfirm.vue";
 import { ref, onMounted, computed, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
@@ -25,11 +27,13 @@ import { retryICCall } from "../retry/icRetry";
 const route = useRoute();
 const router = useRouter();
 const authStore = useAuthStore();
-const { isReady, isAuthenticated, whoamiActor } = storeToRefs(authStore);
+const { isAuthenticated, whoamiActor } = storeToRefs(authStore);
 const recipesData = ref([]);
 const showMessage = ref(false);
 const messageText = ref("");
 const messageType = ref("");
+const showDeleteConfirmation = ref(false);
+const recipeNameToDelete = ref("");
 
 // Compute the current route name or its parent for nested routes
 const currentType = computed(() => {
@@ -68,8 +72,14 @@ const ImagesAndPageTitles = {
     },
 };
 
-watch(currentType, () => {
-    getRecipeData();
+watch(currentType, async () => {
+    await getRecipeData();
+});
+
+watch(isAuthenticated, async () => {
+    if (currentType.value === "yours") {
+        await getRecipeData();
+    }
 });
 
 async function getRecipeData() {
@@ -83,7 +93,6 @@ async function getRecipeData() {
             router.push({ name: "home", query: { canisterId: route.query.canisterId } });
             return;
         }
-        console.log("User logged in");
         all_recipes = await retryICCall(() => whoamiActor.value.take_user_recipes());
     } else {
         all_recipes = await yummy_backend.take_recipes_of_specific_type(
@@ -123,21 +132,37 @@ async function getRecipeData() {
     }
 }
 
-async function deleteRecipe(name) {
+function closeDeleteConfirmation() {
+    showDeleteConfirmation.value = false;
+}
+
+async function confirmDelete() {
+    createMessage("Deleting recipe...", "warning");
+    closeDeleteConfirmation();
+    if (!isAuthenticated.value) {
+        createMessage("Not logged in", "error");
+        return;
+    }
     const indexResponse = await whoamiActor.value.get_user_index();
     if (indexResponse.Err) {
         createMessage(indexResponse.Err.UserNotFound.msg, "warning");
         return;
     }
 
-    let deleteResponse = await yummy_backend.delete_recipe(name, indexResponse.Ok);
+    let deleteResponse = await yummy_backend.delete_recipe(recipeNameToDelete.value, indexResponse.Ok);
     if (deleteResponse.Err) {
         createMessage(deleteResponse.Err.RecipeNotFound.msg, "warning");
         return;
     }
 
     createMessage(deleteResponse.Ok, "success");
+    recipeNameToDelete.value = "";
     await getRecipeData(currentType.value);
+}
+
+async function deleteRecipe(name) {
+    showDeleteConfirmation.value = true;
+    recipeNameToDelete.value = name;
 }
 
 function createMessage(msg, type) {

@@ -206,8 +206,10 @@ pub fn take_recipe(name: String) -> Result<RecipeInfo, Error> {
         }),
     })
 }
+
+// for testing
 #[query]
-pub fn get_recipes_len() -> u64 {
+fn get_recipes_len() -> u64 {
     RECIPES.with(|recipes| recipes.borrow().len() as u64)
 }
 

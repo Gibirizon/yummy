@@ -52,7 +52,6 @@ function LoggedIn(index) {
 
 async function updateLoginStatus() {
     if (!isAuthenticated.value || !whoamiActor.value) {
-        console.log("not authenticated or no actor");
         return;
     }
     try {
@@ -64,7 +63,6 @@ async function updateLoginStatus() {
             return;
         }
         user_index.value = indexResponse.Ok ? indexResponse.Ok : 0;
-        console.log("Current user index: ", user_index.value);
     } catch (error) {
         await signUserOut();
         createMessage("Problems with identifying - login one more time", "error");

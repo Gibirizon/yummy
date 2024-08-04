@@ -49,7 +49,6 @@ async function SignIn() {
 
 async function creatingNewUser(username) {
     if (!whoamiActor.value) {
-        console.log("Author undefined");
         signProcess.value = true;
         createMessage("Login failed - please try again", "warning");
         return;
@@ -57,15 +56,12 @@ async function creatingNewUser(username) {
     createMessage("Creating new user...", "info");
     let new_user_index = await whoamiActor.value.create_user(username);
     signProcess.value = true;
-    console.log("new_user_index", new_user_index);
     if (new_user_index.Err) {
-        console.log("Failed to create new user");
         createMessage("You already have an account - logging in...", "info");
         let user_index = await whoamiActor.value.get_user_index();
         emit("logged-in", user_index.Ok);
         return;
     }
-    console.log("Login successful");
     emit("logged-in", new_user_index.Ok);
 }
 function createMessage(text, type) {

@@ -1,6 +1,6 @@
 <script setup>
 import { useRouter, useRoute } from "vue-router";
-import { onBeforeMount } from "vue";
+import { onBeforeMount, watch } from "vue";
 import { useAuthStore } from "./../store/auth";
 import { storeToRefs } from "pinia";
 import { retryICCall } from "../retry/icRetry";
@@ -10,6 +10,12 @@ const route = useRoute();
 const authStore = useAuthStore();
 const { isAuthenticated, whoamiActor } = storeToRefs(authStore);
 const id_route = BigInt(route.params.id);
+
+watch(isAuthenticated, () => {
+    if (!isAuthenticated.value) {
+        goToHome();
+    }
+});
 
 async function getUserIndex() {
     if (!isAuthenticated.value) {

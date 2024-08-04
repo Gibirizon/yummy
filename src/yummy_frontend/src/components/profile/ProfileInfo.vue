@@ -15,7 +15,6 @@ const id = ref(null);
 const id_from_route = BigInt(route.params.id);
 
 async function getUser() {
-    console.log("user id from route get user: ", id_from_route);
     const user = await yummy_backend.get_user_by_index(id_from_route);
     if (!user.Ok) {
         emit("go-to-home");

@@ -22,7 +22,6 @@ defineProps({
 });
 
 async function handleTrashClick(item) {
-    console.log("handleTrashClick: ", item);
     emit("delete-recipe", item.name);
 }
 function handleItemClick(item) {

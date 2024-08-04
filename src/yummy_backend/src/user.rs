@@ -109,12 +109,40 @@ fn update_username(index: u64, name: String) -> Result<User, Error> {
 
 #[update]
 fn delete_user() -> Result<String, Error> {
+    let user = match get_user_info() {
+        Ok(user) => user,
+        Err(err) => return Err(err),
+    };
+    // delete all informations about user recipes
+    RECIPES.with(|recipes| {
+        let user_recipes = recipes
+            .borrow()
+            .iter()
+            .filter(|(name, _)| user.recipes.contains(name))
+            .collect::<Vec<(String, RecipeInfo)>>();
+        for (name, _) in user_recipes {
+            recipes.borrow_mut().remove(&name);
+        }
+    });
+
+    // delete images
+    IMAGES.with(|images| {
+        let user_images = images
+            .borrow()
+            .iter()
+            .filter(|(name, _)| user.recipes.contains(name))
+            .collect::<Vec<(String, ImageData)>>();
+        for (name, _) in user_images {
+            images.borrow_mut().remove(&name);
+        }
+    });
+
+    // delete from user list
     USERS.with(|users| {
         let index = match get_user_index() {
             Ok(index) => index,
             Err(err) => return Err(err),
         };
-
         users.borrow_mut().remove(&index);
         Ok("User deleted successfully".to_string())
     })
@@ -225,6 +253,24 @@ pub fn delete_recipe(name: String, user_index: u64) -> Result<String, Error> {
             msg: "Recipe not found".to_string(),
         });
     }
+
+    // Delete from user recipes
+    USERS.with(|users| -> Result<(), Error> {
+        let users = users.borrow_mut();
+        let mut user = users.get(&user_index).ok_or(Error::UserNotFound {
+            msg: "User not found".to_string(),
+        })?;
+
+        if !user.recipes.contains(&name) {
+            return Err(Error::RecipeNotFound {
+                msg: "Recipe not found for this user".to_string(),
+            });
+        }
+
+        user.recipes.retain(|recipe_name| recipe_name != &name);
+        Ok(())
+    })?;
+
     // delete all informations from recipes
     RECIPES.with(|recipes| {
         recipes.borrow_mut().remove(&name);
@@ -233,13 +279,6 @@ pub fn delete_recipe(name: String, user_index: u64) -> Result<String, Error> {
     // delete image
     IMAGES.with(|images| {
         images.borrow_mut().remove(&name);
-    });
-
-    // delete from user recipes
-    USERS.with(|users| {
-        let mut user = users.borrow().get(&user_index).unwrap();
-        user.recipes.retain(|recipe_name| recipe_name != &name);
-        users.borrow_mut().insert(user_index, user.clone());
     });
 
     Ok("Recipe deleted successfully".to_string())
@@ -253,7 +292,10 @@ pub fn take_user_recipes() -> Vec<RecipeBrief> {
         match users.borrow().iter().find(|(_, user)| user.id == caller()) {
             Some((_, user)) => {
                 for name in &user.recipes {
-                    let recipe = take_recipe(name.to_string()).unwrap();
+                    let recipe = match take_recipe(name.to_string()) {
+                        Ok(recipe) => recipe,
+                        Err(_) => return user_recipes,
+                    };
                     let first_tags = &recipe.tags[..TAGS_MAX_LENGTH.min(recipe.tags.len())];
                     user_recipes.push(RecipeBrief::new(
                         name.to_string(),

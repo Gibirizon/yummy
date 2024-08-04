@@ -1,10 +1,12 @@
 <script setup>
 import { yummy_backend } from "declarations/yummy_backend/index";
 import { ref } from "vue";
+import { storeToRefs } from "pinia";
 import { useAuthStore } from "./../store/auth";
 import Message from "../components/Message.vue";
 
 const authStore = useAuthStore();
+const { whoamiActor } = storeToRefs(authStore);
 
 const title = ref("");
 const instructions = ref([]);
@@ -22,6 +24,7 @@ const availableTags = [
     "Breakfast",
     "Dinner",
     "Dessert",
+    "Snack",
     "High-Protein",
 ];
 const selectedTags = ref([]);
@@ -73,7 +76,6 @@ function handleImageUpload(event) {
 
     // check file size
     if (file.size > 1024 * 1024) {
-        console.log("File size exceeds limit (1MB)");
         createMessage("File size exceeds limit (1MB)", "warning");
         event.target.value = "";
         return;
@@ -102,7 +104,7 @@ function createMessage(msg, type) {
 async function submitRecipe() {
     createMessage("Creating recipe...", "info");
     // check is user authorized to create recipe
-    if (!authStore.whoamiActor) {
+    if (!whoamiActor.value) {
         createMessage("You are not logged in. Please log in first.", "warning");
         return;
     }
@@ -111,7 +113,7 @@ async function submitRecipe() {
         createMessage("Recipe should have at least one instruction, one ingredient, and one tag", "warning");
         return;
     }
-    let user_index = await authStore.whoamiActor?.get_user_index();
+    let user_index = await whoamiActor.value.get_user_index();
     if (user_index.Err) {
         createMessage(user_index.Err);
         return;
