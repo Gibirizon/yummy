@@ -37,7 +37,7 @@ service : () -> {
     );
   create_user : (text) -> (Result_1);
   delete_recipe : (text, nat64) -> (Result);
-  delete_user_by_index : (nat64) -> (Result);
+  delete_user : () -> (Result);
   get_all_users : () -> (Result_2) query;
   get_image : (text) -> (ImageData) query;
   get_recipes_len : () -> (nat64) query;

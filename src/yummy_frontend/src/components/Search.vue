@@ -86,11 +86,11 @@ watchEffect(() => {
 <template>
     <div
         v-if="isVisible"
-        class="fixed inset-0 z-[300] flex items-start justify-center p-4 sm:items-center sm:p-0"
+        class="fixed inset-0 z-[300] flex items-start justify-center p-4 sm:p-0"
         @keydown="handleKeydown"
     >
         <div class="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm" @click="closeSearch"></div>
-        <div class="relative w-full overflow-hidden rounded-2xl bg-gray-900 shadow-xl sm:w-[560px]">
+        <div class="relative w-full overflow-hidden rounded-2xl bg-gray-900 shadow-xl sm:mt-[100px] sm:w-[560px]">
             <div class="p-6">
                 <button
                     @click="closeSearch"

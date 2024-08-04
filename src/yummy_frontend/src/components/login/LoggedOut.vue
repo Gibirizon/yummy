@@ -26,25 +26,19 @@ function changeSignMethod() {
 
 async function SignIn() {
     try {
-        // todo - prevent invalid signature
-        console.log("Signing in...", authStore);
         await authStore.login();
-        console.log("After .login()");
 
         // Login successful, perform next actions
         if (!whoamiActor.value) {
-            console.log("Author undefined");
             createMessage("Login failed - please try again", "warning");
             return;
         }
         let user_index = await whoamiActor.value.get_user_index();
         if (user_index.Err) {
-            console.log("First time login");
             createMessage("You have signed up - set your username", "info");
             signProcess.value = false;
             return;
         }
-        console.log("Login successful");
         emit("logged-in", user_index.Ok);
     } catch (err) {
         // Handle login error

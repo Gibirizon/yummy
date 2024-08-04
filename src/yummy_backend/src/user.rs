@@ -108,20 +108,15 @@ fn update_username(index: u64, name: String) -> Result<User, Error> {
 }
 
 #[update]
-fn delete_user_by_index(index: u64) -> Result<String, Error> {
+fn delete_user() -> Result<String, Error> {
     USERS.with(|users| {
-        let mut users = users.borrow_mut();
-        if let Some(_) = users
-            .iter()
-            .position(|(storage_index, _)| storage_index == index)
-        {
-            users.remove(&index);
-            Ok("User successfully deleted".to_string())
-        } else {
-            Err(Error::UserNotFound {
-                msg: "User not found".to_string(),
-            })
-        }
+        let index = match get_user_index() {
+            Ok(index) => index,
+            Err(err) => return Err(err),
+        };
+
+        users.borrow_mut().remove(&index);
+        Ok("User deleted successfully".to_string())
     })
 }
 
