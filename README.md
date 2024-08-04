@@ -2,17 +2,7 @@
 
 Yummy is a modern web application designed for finding and sharing recipes. It leverages the power of the Internet Computer (IC), providing a decentralized and scalable solution.
 
-Built with:
-
-- [Rust 🦀](https://github.com/rust-lang/rust) for backend
-- [Vue.js](https://github.com/vuejs/core) for frontend
-- [Pinia](https://github.com/vuejs/pinia) 🍍 for state management
-- [TailwindCSS](https://github.com/tailwindlabs/tailwindcss) 🍃 for styling
-- [DfinityCDK](https://github.com/dfinity/cdk-rs) for compiling to the Internet Computer
-
 ## Screenshots
-
-[Add your screenshots here]
 
 ## Features
 
@@ -23,22 +13,13 @@ Built with:
 
 ## Technologies
 
-<div style="display: flex; align-items: center;">
-  <img src="https://www.rust-lang.org/static/images/rust-logo-blk.svg" alt="Rust" width="50" height="50"/>
-  <span style="margin-left: 10px; font-size: 1.2em;">Rust Backend</span>
-</div>
-<div style="display: flex; align-items: center; margin-top: 10px;">
-  <img src="https://vuejs.org/images/logo.png" alt="Vue.js" width="50" height="50"/>
-  <span style="margin-left: 10px; font-size: 1.2em;">Vue.js Frontend</span>
-</div>
-<div style="display: flex; align-items: center; margin-top: 10px;">
-  <img src="https://tailwindcss.com/_next/static/media/tailwindcss-logotype.c55cdf77c96ef34e74009c6ec2d9f13c.svg" alt="Tailwind CSS" width="150" height="50"/>
-  <span style="margin-left: 10px; font-size: 1.2em;">Tailwind CSS</span>
-</div>
-<div style="display: flex; align-items: center; margin-top: 10px;">
-  <img src="https://internetcomputer.org/img/logo.svg" alt="Internet Computer" width="50" height="50"/>
-  <span style="margin-left: 10px; font-size: 1.2em;">Internet Computer</span>
-</div>
+Built with:
+
+- [Rust 🦀](https://github.com/rust-lang/rust) for backend
+- [Vue.js](https://github.com/vuejs/core) for frontend
+- [Pinia](https://github.com/vuejs/pinia) 🍍 for state management
+- [TailwindCSS](https://github.com/tailwindlabs/tailwindcss) 🍃 for styling
+- [DfinityCDK](https://github.com/dfinity/cdk-rs) for compiling to the Internet Computer
 
 ## Getting Started
 
