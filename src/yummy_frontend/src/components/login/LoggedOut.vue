@@ -4,11 +4,13 @@ import { X } from "lucide-vue-next";
 import { useAuthStore } from "./../../store/auth";
 import { ref } from "vue";
 import Message from "../Message.vue";
+import { storeToRefs } from "pinia";
 const emit = defineEmits(["close", "logged-in"]);
 
 const signMethod = ref("Sign in");
 
 const authStore = useAuthStore();
+const { whoamiActor } = storeToRefs(authStore);
 const showMessage = ref(false);
 const messageText = ref("");
 const messageType = ref("");
@@ -27,14 +29,15 @@ async function SignIn() {
         // todo - prevent invalid signature
         console.log("Signing in...", authStore);
         await authStore.login();
+        console.log("After .login()");
 
         // Login successful, perform next actions
-        if (!authStore.whoamiActor) {
+        if (!whoamiActor.value) {
             console.log("Author undefined");
             createMessage("Login failed - please try again", "warning");
             return;
         }
-        let user_index = await authStore.whoamiActor?.get_user_index();
+        let user_index = await whoamiActor.value.get_user_index();
         if (user_index.Err) {
             console.log("First time login");
             createMessage("You have signed up - set your username", "info");
@@ -51,20 +54,20 @@ async function SignIn() {
 }
 
 async function creatingNewUser(username) {
-    if (!authStore.whoamiActor) {
+    if (!whoamiActor.value) {
         console.log("Author undefined");
         signProcess.value = true;
         createMessage("Login failed - please try again", "warning");
         return;
     }
     createMessage("Creating new user...", "info");
-    let new_user_index = await authStore.whoamiActor?.create_user(username);
+    let new_user_index = await whoamiActor.value.create_user(username);
     signProcess.value = true;
     console.log("new_user_index", new_user_index);
     if (new_user_index.Err) {
         console.log("Failed to create new user");
         createMessage("You already have an account - logging in...", "info");
-        let user_index = await authStore.whoamiActor?.get_user_index();
+        let user_index = await whoamiActor.value.get_user_index();
         emit("logged-in", user_index.Ok);
         return;
     }

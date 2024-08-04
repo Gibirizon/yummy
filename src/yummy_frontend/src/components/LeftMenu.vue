@@ -5,9 +5,17 @@ import { LogIn, LogOut } from "lucide-vue-next";
 import Message from "./Message.vue";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "./../store/auth";
-import { ref, watch, computed, onBeforeMount } from "vue";
+import { ref, computed, onBeforeMount } from "vue";
 import { RouterLink } from "vue-router";
 import { useRouter, useRoute } from "vue-router";
+import { retryICCall } from "../retry/icRetry";
+
+const props = defineProps({
+    isVisible: {
+        type: Boolean,
+        required: true,
+    },
+});
 
 const route = useRoute();
 const router = useRouter();
@@ -17,25 +25,6 @@ const canisterId = computed(() => route.query.canisterId);
 
 const openDropdowns = ref([]);
 
-function toggleDropdown(dropdown) {
-    const index = openDropdowns.value.indexOf(dropdown);
-    if (index === -1) {
-        openDropdowns.value.push(dropdown);
-    } else {
-        openDropdowns.value.splice(index, 1);
-    }
-}
-
-function isDropdownOpen(dropdown) {
-    return openDropdowns.value.includes(dropdown);
-}
-const props = defineProps({
-    isVisible: {
-        type: Boolean,
-        required: true,
-    },
-});
-
 const user_index = ref(0);
 const loggingProcess = ref(false);
 const showMessage = ref(false);
@@ -43,15 +32,7 @@ const messageText = ref("");
 const messageType = ref("");
 
 const authStore = useAuthStore();
-const { isReady, isAuthenticated } = storeToRefs(authStore);
-async function init() {
-    console.log("isReady: ", isReady.value);
-    if (isReady.value === false) {
-        await authStore.init();
-        console.log("isAuthenticated: ", isAuthenticated.value);
-    }
-    await updateLoginStatus();
-}
+const { isReady, isAuthenticated, whoamiActor } = storeToRefs(authStore);
 
 async function signUserOut() {
     user_index.value = 0;
@@ -64,35 +45,27 @@ function createMessage(msg, type) {
     showMessage.value = true;
 }
 function LoggedIn(index) {
-    console.log("Logged in: ", index);
     loggingProcess.value = false;
     user_index.value = index;
     createMessage("Logged in successfully", "success");
 }
 
 async function updateLoginStatus() {
-    if (!isAuthenticated.value) {
-        console.log("not authenticated");
+    if (!isAuthenticated.value || !whoamiActor.value) {
+        console.log("not authenticated or no actor");
         return;
     }
-    console.log("updating login status");
-    if (!authStore.whoamiActor) {
-        console.log("no actor");
-    }
     try {
-        await authStore.whoamiActor?.get_user_index().then((res) => {
-            console.log("User index: ", res);
-            if (res.Err) {
-                console.log("Error: ", res.Err);
-                createMessage("You don't have account", "warning");
-                signUserOut();
-                return;
-            }
-            user_index.value = res.Ok ? res.Ok : 0;
-            console.log(user_index.value);
-        });
+        let indexResponse = await retryICCall(() => whoamiActor.value.get_user_index());
+        if (indexResponse.Err) {
+            console.log("Error: ", indexResponse.Err);
+            createMessage("You don't have account", "warning");
+            signUserOut();
+            return;
+        }
+        user_index.value = indexResponse.Ok ? indexResponse.Ok : 0;
+        console.log("Current user index: ", user_index.value);
     } catch (error) {
-        console.log("Error: ", error);
         await signUserOut();
         createMessage("Problems with identifying - login one more time", "error");
     }
@@ -108,8 +81,21 @@ function toggleSearch() {
     emit("toggle-search");
 }
 
+function toggleDropdown(dropdown) {
+    const index = openDropdowns.value.indexOf(dropdown);
+    if (index === -1) {
+        openDropdowns.value.push(dropdown);
+    } else {
+        openDropdowns.value.splice(index, 1);
+    }
+}
+
+function isDropdownOpen(dropdown) {
+    return openDropdowns.value.includes(dropdown);
+}
+
 onBeforeMount(async () => {
-    await init();
+    setTimeout(async () => await updateLoginStatus(), 100);
 });
 </script>
 <template>

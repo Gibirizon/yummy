@@ -68,7 +68,6 @@ function toggleTag(tag) {
 }
 
 function handleImageUpload(event) {
-    console.log("event", event);
     const file = event.target.files[0];
     if (!file) return;
 

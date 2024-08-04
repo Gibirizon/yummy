@@ -1,9 +1,9 @@
-use crate::recipes::images::{add_image, ImageData};
+use crate::recipes::images::{add_image, ImageData, IMAGES};
 use crate::recipes::{recipe_exists, take_recipe, RecipeBrief, RecipeInfo, RECIPES};
 use crate::Error;
 use crate::{Memory, MEMORY_MANAGER};
 use candid::{CandidType, Decode, Deserialize, Encode, Principal};
-use ic_cdk::{query, update};
+use ic_cdk::{api::caller, query, update};
 use ic_stable_structures::memory_manager::MemoryId;
 use ic_stable_structures::{storable::Bound, Cell, StableBTreeMap, Storable};
 use std::borrow::Cow;
@@ -54,7 +54,7 @@ impl Storable for User {
 
 #[update]
 fn create_user(name: String) -> Result<u64, Error> {
-    let id = ic_cdk::caller();
+    let id = caller();
     let index = INDEX_COUNTER
         .with(|counter| {
             let current_value = *counter.borrow().get();
@@ -85,8 +85,8 @@ fn update_username(index: u64, name: String) -> Result<User, Error> {
                     msg: "Name cannot be empty".to_string(),
                 });
             }
-            ic_cdk::api::print(format!("Updating username: {}", ic_cdk::api::caller()));
-            if ic_cdk::caller() == Principal::anonymous() || user.id != ic_cdk::caller() {
+            ic_cdk::api::print(format!("Updating username: {}", caller()));
+            if caller() == Principal::anonymous() || user.id != caller() {
                 return Err(Error::CallerNotAuthorized {
                     msg: "The caller is not authorized".to_string(),
                 });
@@ -138,16 +138,9 @@ fn get_user_by_index(index: u64) -> Result<User, Error> {
 #[query]
 fn get_user_index() -> Result<u64, Error> {
     USERS.with(|users| {
-        ic_cdk::println!(
-            "Get user index by principal caller: {}",
-            ic_cdk::api::caller()
-        );
+        ic_cdk::println!("Get user index by principal caller: {}", caller());
 
-        match users
-            .borrow()
-            .iter()
-            .find(|(_, user)| user.id == ic_cdk::caller())
-        {
+        match users.borrow().iter().find(|(_, user)| user.id == caller()) {
             Some((index, _)) => Ok(index),
             None => Err(Error::UserNotFound {
                 msg: "You are not authenticated - login to perform this action".to_string(),
@@ -159,15 +152,8 @@ fn get_user_index() -> Result<u64, Error> {
 #[query]
 fn get_user_info() -> Result<User, Error> {
     USERS.with(|users| {
-        ic_cdk::api::print(format!(
-            "Get user by principal caller: {}",
-            ic_cdk::api::caller()
-        ));
-        match users
-            .borrow()
-            .iter()
-            .find(|(_, user)| user.id == ic_cdk::caller())
-        {
+        ic_cdk::api::print(format!("Get user by principal caller: {}", caller()));
+        match users.borrow().iter().find(|(_, user)| user.id == caller()) {
             Some((_, user)) => Ok(user),
             None => Err(Error::UserNotFound {
                 msg: "You are not authenticated - login to perform this action".to_string(),
@@ -211,22 +197,24 @@ pub fn add_new_recipe(
             msg: "Recipe with this title already exists - change the title".to_string(),
         });
     };
+
+    let username = USERS.with(|users| {
+        let mut user = users.borrow().get(&user_index).unwrap().clone();
+        user.recipes.push(name.clone());
+        users.borrow_mut().insert(user_index, user.clone());
+        ic_cdk::println!("Recipe added to user");
+        user.name.clone()
+    });
     let new_recipe = RecipeInfo::new(
         instructions,
         ingredients,
         tags,
         total_time_minutes * 60 as u16,
+        Some(username),
     );
 
     RECIPES.with(|recipes| {
         recipes.borrow_mut().insert(name.clone(), new_recipe);
-    });
-
-    USERS.with(|users| {
-        let mut user = users.borrow().get(&user_index).unwrap().clone();
-        user.recipes.push(name.clone());
-        users.borrow_mut().insert(user_index, user);
-        ic_cdk::println!("Recipe added to user")
     });
 
     if !image_data.is_empty() {
@@ -235,46 +223,53 @@ pub fn add_new_recipe(
     Ok("Recipe added successfully".to_string())
 }
 
-#[query]
-pub fn take_user_recipes(user: User) -> Vec<RecipeBrief> {
-    const TAGS_MAX_LENGTH: usize = 5;
-    let mut user_recipes = Vec::new();
-    for name in &user.recipes {
-        let recipe = take_recipe(name.to_string()).unwrap();
-        let first_tags = &recipe.tags[..TAGS_MAX_LENGTH.min(recipe.tags.len())];
-        user_recipes.push(RecipeBrief::new(
-            name.to_string(),
-            first_tags.to_vec(),
-            recipe.total_time_in_seconds / 60,
-            Some(user.name.clone()),
-        ));
+#[update]
+pub fn delete_recipe(name: String, user_index: u64) -> Result<String, Error> {
+    if !recipe_exists(name.clone()) {
+        return Err(Error::RecipeNotFound {
+            msg: "Recipe not found".to_string(),
+        });
     }
-    user_recipes
+    // delete all informations from recipes
+    RECIPES.with(|recipes| {
+        recipes.borrow_mut().remove(&name);
+    });
+
+    // delete image
+    IMAGES.with(|images| {
+        images.borrow_mut().remove(&name);
+    });
+
+    // delete from user recipes
+    USERS.with(|users| {
+        let mut user = users.borrow().get(&user_index).unwrap();
+        user.recipes.retain(|recipe_name| recipe_name != &name);
+        users.borrow_mut().insert(user_index, user.clone());
+    });
+
+    Ok("Recipe deleted successfully".to_string())
 }
 
 #[query]
-pub fn take_all_users_recipes() -> Vec<Vec<RecipeBrief>> {
+pub fn take_user_recipes() -> Vec<RecipeBrief> {
+    const TAGS_MAX_LENGTH: usize = 5;
     USERS.with(|users| {
-        users
-            .borrow()
-            .iter()
-            .map(|(_, user)| take_user_recipes(user.clone()))
-            .collect()
-    })
-}
-
-#[query]
-pub fn take_recipe_by_name(name: String) -> Result<RecipeInfo, Error> {
-    USERS.with(|users| {
-        match users
-            .borrow()
-            .iter()
-            .find(|(_, user)| user.recipes.contains(&name))
-        {
-            Some(_) => Ok(take_recipe(name).unwrap()),
-            None => Err(Error::RecipeNotFound {
-                msg: "Recipe not found".to_string(),
-            }),
-        }
+        let mut user_recipes = Vec::new();
+        match users.borrow().iter().find(|(_, user)| user.id == caller()) {
+            Some((_, user)) => {
+                for name in &user.recipes {
+                    let recipe = take_recipe(name.to_string()).unwrap();
+                    let first_tags = &recipe.tags[..TAGS_MAX_LENGTH.min(recipe.tags.len())];
+                    user_recipes.push(RecipeBrief::new(
+                        name.to_string(),
+                        first_tags.to_vec(),
+                        recipe.total_time_in_seconds / 60,
+                        Some(user.name.clone()),
+                    ));
+                }
+            }
+            None => return user_recipes,
+        };
+        user_recipes
     })
 }

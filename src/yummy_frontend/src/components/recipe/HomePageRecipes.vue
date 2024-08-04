@@ -58,7 +58,6 @@ async function createRecipeBrief(recipe) {
     return new_recipe;
 }
 function handleItemClick(item) {
-    console.log("Clicked item:", item);
     router.push({
         name: "single-recipe",
         query: { canisterId: route.query.canisterId },

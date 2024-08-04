@@ -7,7 +7,7 @@ import Message from "../Message.vue";
 
 const emit = defineEmits(["go-to-home"]);
 const authStore = useAuthStore();
-const { isReady, isAuthenticated, whoamiActor } = storeToRefs(authStore);
+const { whoamiActor } = storeToRefs(authStore);
 
 const router = useRouter();
 const route = useRoute();
@@ -21,8 +21,6 @@ async function saveChanges() {
     messageText.value = "Saving new username...";
     messageType.value = "info";
     showMessage.value = true;
-    console.log("Saving new username:", newUsername.value);
-    console.log("isauthenticated", isAuthenticated.value);
     await whoamiActor.value.update_username(id_from_route, newUsername.value);
     goToInfo();
 }
@@ -36,6 +34,10 @@ function goToInfo() {
 }
 function cancelChanges() {
     emit("go-to-home");
+}
+
+function closeMessage() {
+    showMessage.value = false;
 }
 </script>
 <template>

@@ -1,22 +1,35 @@
 <template>
+    <Transition name="slide">
+        <Message v-if="showMessage" :text="messageText" :type="messageType" @close="closeMessage" />
+    </Transition>
     <div>
         <RecipePage
             :hero-image="ImagesAndPageTitles[currentType].image"
             :page-title="ImagesAndPageTitles[currentType].title"
             :recipes="recipesData"
+            @delete-recipe="deleteRecipe"
         />
     </div>
 </template>
 
 <script setup>
 import { ref, onMounted, computed, watch } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
+import { storeToRefs } from "pinia";
 import RecipePage from "../components/recipe/RecipePage.vue";
+import Message from "../components/Message.vue";
 import { yummy_backend } from "declarations/yummy_backend/index";
 import { useAuthStore } from "../store/auth";
-console.log("RecipesView.vue");
+import { retryICCall } from "../retry/icRetry";
 
 const route = useRoute();
+const router = useRouter();
+const authStore = useAuthStore();
+const { isReady, isAuthenticated, whoamiActor } = storeToRefs(authStore);
+const recipesData = ref([]);
+const showMessage = ref(false);
+const messageText = ref("");
+const messageType = ref("");
 
 // Compute the current route name or its parent for nested routes
 const currentType = computed(() => {
@@ -56,12 +69,9 @@ const ImagesAndPageTitles = {
 };
 
 watch(currentType, () => {
-    console.log("currentType: ", currentType.value);
     getRecipeData();
 });
 
-const authStore = useAuthStore();
-console.log("authstore is ready in recipesview: ", authStore.isReady);
 async function getRecipeData() {
     // clean recipeData
     recipesData.value = [];
@@ -69,15 +79,12 @@ async function getRecipeData() {
 
     // taking correct recipes from backend
     if (currentType.value === "yours") {
-        let user = await authStore.whoamiActor?.get_user_info();
-        if (user.Err) {
-            console.log("Error: ", user.Err);
+        if (!isAuthenticated.value) {
+            router.push({ name: "home", query: { canisterId: route.query.canisterId } });
             return;
         }
-        all_recipes = await yummy_backend.take_user_recipes(user.Ok);
-    } else if (currentType.value === "users") {
-        all_recipes = await yummy_backend.take_all_users_recipes();
-        all_recipes = all_recipes.flat();
+        console.log("User logged in");
+        all_recipes = await retryICCall(() => whoamiActor.value.take_user_recipes());
     } else {
         all_recipes = await yummy_backend.take_recipes_of_specific_type(
             currentType.value.charAt(0).toUpperCase() + currentType.value.slice(1)
@@ -111,14 +118,41 @@ async function getRecipeData() {
             time: recipe.total_time,
             tags: recipe.tags,
             author: recipe.author.length > 0 ? recipe.author[0] : null,
+            yourRecipes: currentType.value === "yours" ? true : false,
         });
     }
 }
 
-// Define or fetch recipe data for each route
-const recipesData = ref([]);
+async function deleteRecipe(name) {
+    const indexResponse = await whoamiActor.value.get_user_index();
+    if (indexResponse.Err) {
+        createMessage(indexResponse.Err.UserNotFound.msg, "warning");
+        return;
+    }
+
+    let deleteResponse = await yummy_backend.delete_recipe(name, indexResponse.Ok);
+    if (deleteResponse.Err) {
+        createMessage(deleteResponse.Err.RecipeNotFound.msg, "warning");
+        return;
+    }
+
+    createMessage(deleteResponse.Ok, "success");
+    await getRecipeData(currentType.value);
+}
+
+function createMessage(msg, type) {
+    messageText.value = msg;
+    messageType.value = type;
+    showMessage.value = true;
+}
+
+function closeMessage() {
+    showMessage.value = false;
+}
 
 onMounted(async () => {
-    getRecipeData(currentType.value);
+    setTimeout(async () => {
+        await getRecipeData();
+    }, 100);
 });
 </script>

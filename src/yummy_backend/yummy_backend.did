@@ -20,6 +20,7 @@ type RecipeInfo = record {
   tags : vec text;
   popular : bool;
   instructions : vec text;
+  author : opt text;
   cuisines : opt vec text;
   ingredients : vec text;
 };
@@ -35,6 +36,7 @@ service : () -> {
       Result,
     );
   create_user : (text) -> (Result_1);
+  delete_recipe : (text, nat64) -> (Result);
   delete_user_by_index : (nat64) -> (Result);
   get_all_users : () -> (Result_2) query;
   get_image : (text) -> (ImageData) query;
@@ -44,11 +46,9 @@ service : () -> {
   get_user_info : () -> (Result_3) query;
   recipe_exists : (text) -> (bool) query;
   recipes_initialization : (text, text) -> ();
-  take_all_users_recipes : () -> (vec vec RecipeBrief) query;
   take_recipe : (text) -> (Result_4) query;
-  take_recipe_by_name : (text) -> (Result_4) query;
   take_recipes_names : () -> (vec text) query;
   take_recipes_of_specific_type : (text) -> (vec RecipeBrief) query;
-  take_user_recipes : (User) -> (vec RecipeBrief) query;
+  take_user_recipes : () -> (vec RecipeBrief) query;
   update_username : (nat64, text) -> (Result_3);
 }

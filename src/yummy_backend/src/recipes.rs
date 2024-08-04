@@ -41,6 +41,7 @@ pub struct RecipeInfo {
     pub tags: Vec<String>,
     pub total_time_in_seconds: u16,
     pub popular: bool,
+    pub author: Option<String>,
 }
 
 impl RecipeInfo {
@@ -49,6 +50,7 @@ impl RecipeInfo {
         ingredients: Vec<String>,
         tags: Vec<String>,
         total_time_in_seconds: u16,
+        author: Option<String>,
     ) -> Self {
         Self {
             instructions,
@@ -57,6 +59,7 @@ impl RecipeInfo {
             tags,
             total_time_in_seconds,
             popular: false,
+            author,
         }
     }
 }
@@ -106,7 +109,6 @@ impl Storable for RecipeInfo {
 
 #[update]
 pub async fn recipes_initialization(query: String, recipes_type: String) {
-    // ic_cdk::api::print(format!("New Query: {}", query));
     let res = fetch_recipes(query).await;
     transform_and_store_response(res, recipes_type.as_str()).await;
 }
@@ -177,6 +179,7 @@ pub async fn transform_and_store_response(http_response: String, recipes_type: &
                     } else {
                         false
                     },
+                    author: None,
                 };
 
                 RECIPES.with(|m| m.borrow_mut().insert(recipe.node.name, new_recipe));
@@ -229,6 +232,8 @@ pub fn take_recipes_of_specific_type(recipes_type: String) -> Vec<RecipeBrief> {
             .filter(|(_, recipe)| {
                 if recipes_type == "Popular" {
                     recipe.popular
+                } else if recipes_type == "Users" {
+                    recipe.author.is_some()
                 } else {
                     recipe.tags.iter().any(|tag| tag == &recipes_type)
                 }
@@ -239,7 +244,7 @@ pub fn take_recipes_of_specific_type(recipes_type: String) -> Vec<RecipeBrief> {
                     name.clone(),
                     first_tags.to_vec(),
                     recipe.total_time_in_seconds / 60,
-                    None,
+                    recipe.author,
                 )
             })
             .collect();

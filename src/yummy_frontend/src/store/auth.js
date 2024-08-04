@@ -38,60 +38,79 @@ function actorFromIdentity(identity) {
     });
 }
 
-export const useAuthStore = defineStore("auth", {
-    id: "auth",
-    state: () => {
-        return {
-            isReady: false,
-            isAuthenticated: null,
-            authClient: null,
-            identity: null,
-            whoamiActor: null,
-        };
-    },
-    actions: {
-        async init() {
-            const authClient = await AuthClient.create(defaultOptions.createOptions);
-            this.authClient = authClient;
-            const isAuthenticated = await authClient.isAuthenticated();
-            const identity = isAuthenticated ? authClient.getIdentity() : null;
-            const whoamiActor = identity ? actorFromIdentity(identity) : null;
-            this.isAuthenticated = isAuthenticated;
-            this.identity = identity;
-            this.whoamiActor = whoamiActor;
-            this.isReady = true;
+export const useAuthStore = () => {
+    const innerStore = defineStore("auth", {
+        id: "auth",
+        state: () => {
+            return {
+                initialisation: true,
+                isReady: false,
+                isAuthenticated: null,
+                authClient: null,
+                identity: null,
+                whoamiActor: null,
+            };
         },
-        async login() {
-            const authClient = toRaw(this.authClient);
-            return new Promise((resolve, reject) => {
-                authClient.login({
-                    ...defaultOptions.loginOptions,
-                    identityProvider: getIdentityProvider(),
-                    maxTimeToLive: BigInt(7) * BigInt(24) * BigInt(3_600_000_000_000),
-                    onSuccess: async () => {
-                        try {
-                            this.isAuthenticated = await authClient.isAuthenticated();
-                            this.identity = this.isAuthenticated ? authClient.getIdentity() : null;
-                            this.whoamiActor = this.identity ? actorFromIdentity(this.identity) : null;
-                            console.log("Login Success");
-                            resolve();
-                        } catch (error) {
-                            console.error("Error during post-login process:", error);
-                            reject(error);
-                        }
-                    },
-                    onError: (error) => {
-                        console.error("Login Failed: ", error);
-                    },
+        actions: {
+            async init() {
+                return new Promise(async (resolve, reject) => {
+                    try {
+                        const authClient = await AuthClient.create(defaultOptions.createOptions);
+                        this.authClient = authClient;
+                        const isAuthenticated = await authClient.isAuthenticated();
+                        const identity = isAuthenticated ? authClient.getIdentity() : null;
+                        const whoamiActor = identity ? actorFromIdentity(identity) : null;
+                        this.initialisation = false;
+                        this.isAuthenticated = isAuthenticated;
+                        this.identity = identity;
+                        this.whoamiActor = whoamiActor;
+                        this.isReady = true;
+                        resolve();
+                    } catch (error) {
+                        console.error("Error during initialization:", error);
+                        reject(error);
+                    }
                 });
-            });
+            },
+            async login() {
+                const authClient = toRaw(this.authClient);
+                return new Promise((resolve, reject) => {
+                    authClient.login({
+                        ...defaultOptions.loginOptions,
+                        identityProvider: getIdentityProvider(),
+                        maxTimeToLive: BigInt(7) * BigInt(24) * BigInt(3_600_000_000_000),
+                        onSuccess: async () => {
+                            try {
+                                this.isAuthenticated = await authClient.isAuthenticated();
+                                this.identity = this.isAuthenticated ? authClient.getIdentity() : null;
+                                this.whoamiActor = this.identity ? actorFromIdentity(this.identity) : null;
+                                console.log("Login Success");
+                                resolve();
+                            } catch (error) {
+                                console.error("Error during post-login process:", error);
+                                reject(error);
+                            }
+                        },
+                        onError: (error) => {
+                            console.error("Login Failed: ", error);
+                        },
+                    });
+                });
+            },
+            async logout() {
+                const authClient = toRaw(this.authClient);
+                await authClient?.logout();
+                this.isAuthenticated = false;
+                this.identity = null;
+                this.whoamiActor = null;
+            },
         },
-        async logout() {
-            const authClient = toRaw(this.authClient);
-            await authClient?.logout();
-            this.isAuthenticated = false;
-            this.identity = null;
-            this.whoamiActor = null;
-        },
-    },
-});
+    });
+    const s = innerStore();
+    if (s.initialisation == true) {
+        s.init().then(() => {
+            return s;
+        });
+    }
+    return s;
+};

@@ -4,6 +4,7 @@ import RecipeCard from "./RecipeCard.vue";
 
 const route = useRoute();
 const router = useRouter();
+const emit = defineEmits(["delete-recipe"]);
 
 defineProps({
     heroImage: {
@@ -20,6 +21,10 @@ defineProps({
     },
 });
 
+async function handleTrashClick(item) {
+    console.log("handleTrashClick: ", item);
+    emit("delete-recipe", item.name);
+}
 function handleItemClick(item) {
     router.push({
         name: "single-recipe",
@@ -40,13 +45,14 @@ function handleItemClick(item) {
         </div>
 
         <!-- Recipe Grid -->
-        <div class="container mx-auto px-4">
+        <div class="container mx-auto mb-10 px-4">
             <div class="grid grid-cols-1 gap-[30px] md:grid-cols-2 xl:grid-cols-3">
                 <RecipeCard
                     v-for="(recipe, index) in recipes"
                     :key="index"
                     :recipe="recipe"
-                    @click="handleItemClick(recipe)"
+                    @item-click="handleItemClick"
+                    @trash-click="handleTrashClick"
                 />
             </div>
         </div>
