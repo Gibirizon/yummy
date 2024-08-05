@@ -198,13 +198,13 @@ const closeMessage = () => {
                             </li>
                         </ul>
                         <div v-if="addingInstruction" class="flex items-center">
-                            <input
+                            <textarea
                                 v-model="newInstruction"
-                                type="text"
-                                @keydown.enter="addInstruction"
-                                maxlength="100"
-                                class="w-full rounded-md border-gray-500 bg-gray-600 px-4 py-3 text-lg text-white focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50"
-                            />
+                                @keydown.enter.prevent="addInstruction"
+                                maxlength="300"
+                                rows="3"
+                                class="w-full resize-y rounded-md border-gray-500 bg-gray-600 px-4 py-3 text-lg text-white focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50"
+                            ></textarea>
                             <button @click="addInstruction" class="ml-2 p-1 text-green-500 hover:text-green-400">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -272,13 +272,13 @@ const closeMessage = () => {
                             </li>
                         </ul>
                         <div v-if="addingIngredient" class="flex items-center">
-                            <input
+                            <textarea
                                 v-model="newIngredient"
-                                @keydown.enter="addIngredient"
-                                type="text"
-                                maxlength="100"
-                                class="w-full rounded-md border-gray-500 bg-gray-600 px-4 py-3 text-lg text-white focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50"
-                            />
+                                @keydown.enter.prevent="addIngredient"
+                                maxlength="300"
+                                rows="3"
+                                class="w-full resize-y rounded-md border-gray-500 bg-gray-600 px-4 py-3 text-lg text-white focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50"
+                            ></textarea>
                             <button @click="addIngredient" class="ml-2 p-1 text-green-500 hover:text-green-400">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"

@@ -44,7 +44,7 @@ function handleItemClick(item) {
         </div>
 
         <!-- Recipe Grid -->
-        <div class="container mx-auto mb-10 px-4">
+        <div class="container mx-auto mb-10 px-6">
             <div class="grid grid-cols-1 gap-[30px] md:grid-cols-2 xl:grid-cols-3">
                 <RecipeCard
                     v-for="(recipe, index) in recipes"

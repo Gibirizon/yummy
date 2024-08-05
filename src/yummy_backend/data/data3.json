@@ -1,0 +1,865 @@
+{
+  "data": {
+    "recipesByTag": {
+      "edges": [
+        {
+          "node": {
+            "cuisines": [
+              "American",
+              "Kid-Friendly"
+            ],
+            "tags": [
+              "main dish",
+              "Lunch",
+              "Dinner",
+              "main course",
+              "15 - 30 MINUTES",
+              "meal salad",
+              "Fast & Easy"
+            ],
+            "instructions": [
+              "In a large bowl, combine the chopped lettuce, diced tomatoes, chopped red onion, crumbled feta cheese, chickpeas.",
+              "In a separate small bowl, whisk together the olive oil, red wine vinegar, dried oregano, salt, and pepper.",
+              "Pour the dressing over the salad.",
+              "Toss everything together to coat the salad ingredients with the dressing."
+            ],
+            "totalTimeInSeconds": 1200,
+            "ingredientLines": [
+              "2 cups chopped lettuce",
+              "1 cup diced tomatoes",
+              "1/2 cup slcied red onion",
+              "1/2 cup crumbled feta cheese",
+              "8 oz canned chickpeas, drained and rinsed",
+              "2 tbsp olive oil",
+              "2 tbsp red wine vinegar",
+              "1 tsp dried oregano",
+              "Salt, to taste",
+              "Ground black pepper, to taste",
+              "2 tbsp sliced olives"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/4ad59edcf7124c2c979b5a73a185cd88.jpg",
+            "name": "Greek Marinated Chickpea Salad"
+          }
+        },
+        {
+          "node": {
+            "cuisines": [
+              "American",
+              "Kid-Friendly"
+            ],
+            "tags": [
+              "main dish",
+              "Lunch",
+              "Dinner",
+              "main course",
+              "15 - 30 MINUTES",
+              "meal salad",
+              "Fast & Easy"
+            ],
+            "instructions": [
+              "Start by cooking 1/2 cup of dry couscous. In a small saucepan, bring 1/2 cup of water to a boil. Stir in the 1/2 cup of dry couscous.",
+              "Remove the saucepan from heat, cover it with a lid, and let it sit for 5 minutes to allow the couscous to absorb the water.",
+              "After 5 minutes, fluff the couscous with a fork to separate the grains. Allow it to cool.",
+              "After 5 minutes, fluff the couscous with a fork to separate the grains. Allow it to cool.",
+              "Drizzle 1 tablespoon of extra-virgin olive oil and 1 tablespoon of fresh lemon juice over the ingredients in the bowl.",
+              "Season the couscous salad with salt and black pepper to taste.",
+              "Toss all the ingredients together until they are well combined."
+            ],
+            "totalTimeInSeconds": 1500,
+            "ingredientLines": [
+              "1/3 cup couscous",
+              "1/2 cup diced tomato",
+              "1/4 cup crumbled feta cheese",
+              "1 tbsp chopped dill",
+              "1 tbsp olive oil",
+              "1 tbsp lemon juice",
+              "Salt, to taste",
+              "Ground black pepper, to taste"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/f79386dee74441309290811815fcf8ea.jpg",
+            "name": "Couscous Salad"
+          }
+        },
+        {
+          "node": {
+            "cuisines": [
+              "American",
+              "Kid-Friendly"
+            ],
+            "tags": [
+              "main dish",
+              "GRILLED",
+              "Lunch",
+              "Dinner",
+              "main course",
+              "15 - 30 MINUTES",
+              "meal salad",
+              "Fast & Easy"
+            ],
+            "instructions": [
+              "Preheat your grill to medium-high heaT.",
+              "Season the chicken breasts with salt and pepper.",
+              "Grill the chicken breasts for about 6-8 minutes per side, or until they are cooked through and no longer pink in the center. Make sure to brush them lightly with olive oil before placing them on the grill to prevent sticking.",
+              "While the chicken is grilling, rinse the lentils and quinoa separately under cold water.",
+              "In a separate pot, bring 1 cup of water to a boil. Add the quinoa, reduce the heat to low, cover, and let it simmer for about 15 minutes or until the water is absorbed and the quinoa is fluffy.",
+              "In another pot, bring 1 cup of water to a boil, add the lentils, and simmer for about 20-25 minutes or until they are tender but not mushy. Drain any excess water.",
+              "In a large salad bowl, combine the sliced cucumber, diced avocado, chopped kale, cooked quinoa, and cooked lentils.",
+              "Once the grilled chicken is done, let it rest for a few minutes before slicing it into thin strips.",
+              "Add the sliced grilled chicken to the salad. Toss with olive oil and balsamic vinegar."
+            ],
+            "totalTimeInSeconds": 1800,
+            "ingredientLines": [
+              "1/2 cup quinoa",
+              "8 oz skinless, boneless chicken breast",
+              "1 cucumber sliced",
+              "1 avocado, diced",
+              "1/2 cup lentils",
+              "4 cups kale, chopped",
+              "2 tbsp olive oil",
+              "Salt, to taste",
+              "Ground black pepper, to taste",
+              "2 tbsp balsamic vinegar"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/44ad5e0117b349498f44de0ed16e80f4.jpg",
+            "name": "Power Salad With Chicken"
+          }
+        },
+        {
+          "node": {
+            "cuisines": [
+              "American",
+              "Kid-Friendly"
+            ],
+            "tags": [
+              "main dish",
+              "Lunch",
+              "Dinner",
+              "main course",
+              "15 - 30 MINUTES",
+              "meal salad",
+              "Fast & Easy"
+            ],
+            "instructions": [
+              "Preheat your oven to 400°F.",
+              "Place the diced sweet potato on a baking sheet. Drizzle with a little olive oil, salt, and pepper, and toss to coat.",
+              "Roast the sweet potato in the preheated oven for about 20-25 minutes, or until they are tender and slightly crispy.",
+              "While the sweet potatoes are roasting, prepare the dressing. In a small bowl, whisk together olive oil, balsamic vinegar, minced garlic, salt, and pepper.",
+              "In a large salad bowl, add the fresh spinach leaves.",
+              "Once the sweet potatoes are done roasting, remove them from the oven and let them cool slightly.",
+              "Add the roasted sweet potatoes, chickpeas, and diced avocado to the salad bowl with the spinach.",
+              "Drizzle the dressing over the salad.",
+              "Gently toss everything together until the salad is well coated with the dressing."
+            ],
+            "totalTimeInSeconds": 1800,
+            "ingredientLines": [
+              "4 cups spinach leaves",
+              "1 sweet potato peeled and sliced",
+              "8 oz canned chickpeas, drained and rinsed",
+              "1 avocado, sliced",
+              "2 tbsp olive oil",
+              "1 tbsp balsamic vinegar",
+              "1 clove garlic, minced",
+              "Salt, to taste",
+              "Ground black pepper, to taste"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/babb32c43ad74f2789374ccdd37254ee.jpg",
+            "name": "Spinach Salad With Roasted Sweet Potatoes"
+          }
+        },
+        {
+          "node": {
+            "cuisines": [
+              "American",
+              "Kid-Friendly"
+            ],
+            "tags": [
+              "main dish",
+              "Lunch",
+              "Dinner",
+              "main course",
+              "salad",
+              "meal salad",
+              "15 - 30 MINUTES",
+              "Fast & Easy"
+            ],
+            "instructions": [
+              "In a small bowl, combine the drained and rinsed chickpeas with 1/2 teaspoon of smoked paprika and 1/2 teaspoon of cumin. Toss to coat the chickpeas in the spices.",
+              "Heat a non-stick skillet over medium-high heat. Once hot, add the seasoned chickpeas to the skillet.",
+              "Sauté the chickpeas for about 4-5 minutes until they become slightly crispy and browned. Stir occasionally to prevent sticking. Remove from heat and let them cool.",
+              "In a salad bowl, place 2 cups of chopped lettuce.",
+              "Add the thinly sliced radishes, halved cherry tomatoes, and sliced cucumber to the bowl with the lettuce.",
+              "Drizzle the salad with the juice of half a lemon and 1 tablespoon of olive oil.",
+              "Season the salad with salt and pepper to taste.",
+              "Once the sautéed chickpeas have cooled slightly, add them to the salad.",
+              "Toss all the ingredients together until well combined."
+            ],
+            "totalTimeInSeconds": 1200,
+            "ingredientLines": [
+              "1/2 cup canned chickpeas, drained and rinsed",
+              "2 cups chopped lettuce",
+              "4 radishes, sliced",
+              "1/2 cup cherry tomatoes. halved",
+              "1/2 cucumber, sliced",
+              "1/2 tsp smoked paprika",
+              "1/2 tsp cumin",
+              "1/2 lemon, juiced",
+              "1 tbsp olive oil",
+              "Salt, to taste",
+              "Ground black pepper, to taste"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/1087ee16e76d40e089d44cbe22fdcd0a.jpg",
+            "name": "Smoky Chickpea Salad"
+          }
+        },
+        {
+          "node": {
+            "cuisines": [
+              "Middle eastern",
+              "Kid-Friendly"
+            ],
+            "tags": [
+              "main dish",
+              "Lunch",
+              "Dinner",
+              "main course",
+              "15 - 30 MINUTES",
+              "meal salad",
+              "Salad",
+              "Fast & Easy"
+            ],
+            "instructions": [
+              "Rinse the dry lentils under cold water.",
+              "In a saucepan, combine the rinsed lentils with 3 cups of water.",
+              "Place the saucepan over medium-high heat and bring the water to a boil.",
+              "Reduce the heat to low, cover the saucepan, and let the lentils simmer for about 20-25 minutes or until they are tender but still firm (you can taste test them).",
+              "Drain any excess water from the cooked lentils and let them cool to room temperature.",
+              "In a bowl, combine the cooked lentils, arugula, diced tomato, sliced black olives, and crumbled feta cheese.",
+              "In a separate small bowl, whisk together the fresh lemon juice and extra-virgin olive oil to create a dressing. Season with salt and pepper to taste.",
+              "Drizzle the lemony dressing over the salad.",
+              "Toss everything together to ensure the salad is evenly coated with the dressing."
+            ],
+            "totalTimeInSeconds": 1800,
+            "ingredientLines": [
+              "1 cup lentils",
+              "2 cup arugula",
+              "2 tomatoes, diced",
+              "6 olives, pitted and sliced",
+              "4 oz feta cheese",
+              "4 tbsp lemon juice",
+              "4 tbsp olive oil",
+              "Salt, to taste",
+              "Ground black pepper, to taste"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/55bb4a0d9827498c83d0db0cdb93c794.jpg",
+            "name": "Lemony Lentil Salad With Feta"
+          }
+        },
+        {
+          "node": {
+            "cuisines": [
+              "American",
+              "Kid-Friendly"
+            ],
+            "tags": [
+              "main dish",
+              "Lunch",
+              "Dinner",
+              "main course",
+              "15 - 30 MINUTES",
+              "meal salad",
+              "Fast & Easy"
+            ],
+            "instructions": [
+              "In a bowl, arrange the arugula as the base for your salad.",
+              "Slice the strawberries and scatter them over the arugula.",
+              "Tear the fresh mozzarella into bite-sized pieces and add it to the salad.",
+              "Place the fresh basil leaves on top of the other ingredients.",
+              "Slice 1/2 avocado and add it to the salad.",
+              "For the avocado dressing, remove the pit, and scoop the flesh into a blender or food processor.",
+              "Add water, olive oil, fresh lemon juice, salt, and pepper to the blender with the avocado.",
+              "Blend until the dressing is smooth and creamy. If it's too thick, you can add more water to reach your desired consistency.",
+              "Drizzle the avocado dressing over the salad.",
+              "Toss the salad gently to combine all the ingredients with the dressing."
+            ],
+            "totalTimeInSeconds": 1200,
+            "ingredientLines": [
+              "4 cups arugula",
+              "8 strawberries, sliced",
+              "2 oz mozzarella, torn into pieces",
+              "1/4 cup basil leaves",
+              "1 avocado",
+              "1/4 cup water",
+              "2 tbsp olive oil",
+              "2 tbsp lemon juice",
+              "Salt, to taste",
+              "Ground black pepper, to taste"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/b3dddefad2fe440e974e691378c9f9b7.jpg",
+            "name": "Strawberry Salad With Avocado"
+          }
+        },
+        {
+          "node": {
+            "cuisines": [
+              "American",
+              "Kid-Friendly"
+            ],
+            "tags": [
+              "main dish",
+              "Lunch",
+              "Dinner",
+              "main course",
+              "15 - 30 MINUTES",
+              "meal salad",
+              "Salad",
+              "Fast & Easy"
+            ],
+            "instructions": [
+              "Preheat your oven to 375°F.",
+              "Season the chicken breasts with salt and pepper.",
+              "Place the seasoned chicken breasts on a baking sheet.",
+              "Bake the chicken in the preheated oven for about 25-30 minutes or until they reach an internal temperature of 165°F.",
+              "While the chicken is cooking, prepare the salad. In a large bowl, combine the torn lettuce and halved cherry tomatoes.",
+              "Once the chicken is cooked, let it cool for a few minutes, then slice it into thin strips.",
+              "Top the salad with the sliced chicken.",
+              "Add the sliced ripe avocados to the salad.",
+              "Drizzle balsamic vinegar over the salad.",
+              "Toss the salad to mix the ingredients."
+            ],
+            "totalTimeInSeconds": 1800,
+            "ingredientLines": [
+              "6 oz boneless, skinless chicken breasts",
+              "6 cup lettuce, torn",
+              "1 cup cherry tomato, halved",
+              "2 avocados, sliced",
+              "2 tbsp balsamic vinegar",
+              "Salt, to taste",
+              "Ground black pepper, to taste"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/7df9a9666763482782bcbdeab03b1208.jpg",
+            "name": "Avocado Chicken Salad"
+          }
+        },
+        {
+          "node": {
+            "cuisines": [
+              "American",
+              "Kid-Friendly"
+            ],
+            "tags": [
+              "main dish",
+              "Lunch",
+              "Dinner",
+              "main course",
+              "15 - 30 MINUTES",
+              "meal salad",
+              "Fast & Easy"
+            ],
+            "instructions": [
+              "Preheat your oven to 375°F.",
+              "Place the salmon fillets on a baking sheet lined with parchment paper or a lightly greased baking dish.",
+              "Season the salmon fillets with salt and pepper.",
+              "Bake the salmon in the preheated oven for about 15-20 minutes or until the salmon flakes easily with a fork.",
+              "While the salmon is cooking, prepare the Creamy Garlic Dressing. In a small bowl, whisk together minced garlic, Greek yogurt, olive oil, lemon juice, salt, and pepper until well combined.",
+              "Once the salmon is done, remove it from the oven and let it cool slightly.",
+              "In a large salad bowl, arrange the mixed lettuce and tomato slices.",
+              "Place the cooked salmon fillets on top of the salad.",
+              "Squeeze lemon wedges over the salmon and salad for extra flavor.",
+              "Drizzle the Creamy Garlic Dressing over the salad.",
+              "Toss the salad gently to combine all the ingredients."
+            ],
+            "totalTimeInSeconds": 1800,
+            "ingredientLines": [
+              "8 oz salmon fillets",
+              "6 cups mixed lettuce",
+              "2 tomatoes, sliced",
+              "1 lemon, wedged",
+              "2 cloves garlic, minced",
+              "1/4 cup greek yogurt",
+              "2 tbsp olive oil",
+              "1 tbsp lemon juice",
+              "Salt, to taste",
+              "Ground black pepper, to taste"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/9ad455a08c924fd29e062511633c36af.jpg",
+            "name": "Salad With Salmon & Creamy Garlic Dressing"
+          }
+        },
+        {
+          "node": {
+            "cuisines": [
+              "American",
+              "Kid-Friendly"
+            ],
+            "tags": [
+              "main dish",
+              "Lunch",
+              "Dinner",
+              "main course",
+              "15 - 30 MINUTES",
+              "meal salad",
+              "Fast & Easy"
+            ],
+            "instructions": [
+              "Preheat your oven to 375°F.",
+              "Place the salmon fillets on a baking sheet and season with salt and pepper.",
+              "Bake the salmon in the preheated oven for 12-15 minutes or until it flakes easily with a fork.",
+              "While the salmon is baking, in a small bowl, whisk together the soy sauce, rice vinegar, sesame oil, grated ginger, and sesame seeds to create the dressing.",
+              "In two serving plates, divide the mixed greens and arrange the halved cherry tomatoes and sliced red bell pepper.",
+              "Once the salmon is cooked, let it cool slightly and then flake it into bite-sized pieces.",
+              "Place the flaked salmon on top of the prepared salads.",
+              "Drizzle the Asian Ginger Sesame Dressing over the salads.",
+              "Garnish each plate with slices of lime."
+            ],
+            "totalTimeInSeconds": 1800,
+            "ingredientLines": [
+              "6 oz salmon fillets",
+              "4 cups mixed greens",
+              "1 cup cherry tomatoes, halved",
+              "1/2 red bell pepper, sliced",
+              "1 lime, wedged",
+              "2 tbsp soy sauce",
+              "1 tbsp rice vinegar",
+              "1 tbsp sesame oil",
+              "1 tbsp grated ginger",
+              "1 tbsp sesame seeds"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/45937d4a7c4c4666989872f3d9e81174.jpg",
+            "name": "Salmon Salad With Asian Ginger Sesame Dressing"
+          }
+        },
+        {
+          "node": {
+            "cuisines": [
+              "Middle eastern",
+              "Kid-Friendly"
+            ],
+            "tags": [
+              "main dish",
+              "GRILLED",
+              "Lunch",
+              "Dinner",
+              "main course",
+              "15 - 30 MINUTES",
+              "meal salad",
+              "Salad",
+              "Fast & Easy"
+            ],
+            "instructions": [
+              "Preheat your grill or a grill pan to 375°F.",
+              "Season the boneless, skinless chicken breast with olive oil, salt, and pepper.",
+              "Grill the chicken breast for about 6-8 minutes per side, or until it's cooked through and has nice grill marks. Make sure the internal temperature reaches 165°F.",
+              "While the chicken is cooking, you can grill the small pita bread pieces until they are crispy and lightly browned.",
+              "Once the chicken is done, remove it from the grill and let it rest for a few minutes before slicing it into thin strips.",
+              "In a large bowl, combine the chopped romaine lettuce, diced cucumbers, diced tomatoes, diced onions, chopped fresh parsley, and chopped fresh mint.",
+              "Add the grilled chicken strips to the salad.",
+              "Drizzle the salad with olive oil and fresh lemon juice.",
+              "Toss everything together to ensure the salad is evenly coated with the dressing."
+            ],
+            "totalTimeInSeconds": 1800,
+            "ingredientLines": [
+              "4 oz boneless, skinless chicken breast",
+              "1 oz pita bread, torn",
+              "1/2 cup chopped romaine lettuce",
+              "1/4 cup diced cucumber",
+              "1/4 cup diced tomatoes",
+              "2 tbsp diced onions",
+              "1 tbsp chopped parsley",
+              "1 tbsp chopped mint",
+              "1 tbsp olive oil",
+              "1 tbsp lemon juice",
+              "Salt, to taste",
+              "Ground black pepper, to taste"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/fde296637b2b48ad9c9d911c5068ba18.jpg",
+            "name": "Lebanese Fattoush Salad With Grilled Chicken"
+          }
+        },
+        {
+          "node": {
+            "cuisines": [
+              "American",
+              "Kid-Friendly"
+            ],
+            "tags": [
+              "main dish",
+              "Lunch",
+              "Dinner",
+              "main course",
+              "15 - 30 MINUTES",
+              "meal salad",
+              "Fast & Easy"
+            ],
+            "instructions": [
+              "Cook the lentils in a pot of water according to the instructions on the packaging.",
+              "Preheat your oven to 375°F.",
+              "Place the diced eggplant on a baking sheet, drizzle with a bit of olive oil, and season with salt and black pepper",
+              "Roast in the preheated oven for about 20-25 minutes or until the eggplant is tender and slightly caramelized. Remove from the oven and let it cool.",
+              "In a large salad bowl, combine the cooked and cooled lentils, diced tomato, and finely sliced red onion.",
+              "Add the roasted eggplant to the salad.",
+              "In a small bowl, whisk together the dressing ingredients: olive oil, balsamic vinegar, minced garlic, salt, and black pepper to taste.",
+              "Drizzle the dressing over the salad.",
+              "Toss the salad gently to ensure that all the ingredients are coated with the dressing.",
+              "Garnish with fresh parsley leaves."
+            ],
+            "totalTimeInSeconds": 1800,
+            "ingredientLines": [
+              "1 1/2 cup brown lentils",
+              "2 eggplants, diced",
+              "2 tomatoes, diced",
+              "1 onion, sliced",
+              "2 tsp parsley",
+              "2 tbsp olive oil",
+              "1 tbsp balsamic vinegar",
+              "1 clvoe garlic, minced",
+              "Salt, to taste",
+              "Ground black pepper, to taste"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/bff7c6a14f8648828b28bfdfcffd08ae.jpg",
+            "name": "Lentil And Roasted Eggplant Salad"
+          }
+        },
+        {
+          "node": {
+            "cuisines": [
+              "American",
+              "Kid-Friendly"
+            ],
+            "tags": [
+              "main dish",
+              "GRILLED",
+              "Lunch",
+              "Dinner",
+              "main course",
+              "15 - 30 MINUTES",
+              "meal salad",
+              "Fast & Easy"
+            ],
+            "instructions": [
+              "Preheat your grill to 400°F.",
+              "In a small bowl, mix together the olive oil, ground cumin, paprika, ground coriander, salt, and black pepper.",
+              "Rub the spice mixture evenly over both sides of the chicken breasts.",
+              "Grill the chicken breasts for about 6-8 minutes per side or until the internal temperature reaches 165°F. Remove from heat and let them rest for a few minutes before slicing.",
+              "While the chicken is cooking, prepare the Cauliflower 'Rice' Tabbouleh.",
+              "Cut the cauliflower into florets and place them in a food processor. Pulse until the cauliflower resembles rice grains.",
+              "In a large bowl, combine the cauliflower 'rice', chopped parsley, diced tomato, and diced bell pepper.",
+              "In a separate small bowl, whisk together the lemon juice, olive oil, salt, and black pepper.",
+              "Pour the dressing over the cauliflower 'rice' mixture and toss to combine."
+            ],
+            "totalTimeInSeconds": 1800,
+            "ingredientLines": [
+              "8 oz boneless, skinless chicken breast",
+              "1 tsp olive oil",
+              "1 tsp ground cumin",
+              "1 tsp paprika",
+              "1/2 tsp ground coriander",
+              "Salt, to taste",
+              "Ground black pepper, to taste",
+              "1 head of cauliflower",
+              "1 cup chopped parsley",
+              "1 tomato, diced",
+              "1/2 bell pepper, diced",
+              "1 lemon, juiced",
+              "2 tbsp olive oil",
+              "Salt, to taste",
+              "Ground black pepper, to taste"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/a8b7070938014eceabcf702225210cbb.jpg",
+            "name": "Spiced Grilled Chicken With Cauliflower 'Rice' Tabbouleh"
+          }
+        },
+        {
+          "node": {
+            "cuisines": [
+              "American",
+              "Kid-Friendly"
+            ],
+            "tags": [
+              "ABOVE 30 MINUTES",
+              "main dish",
+              "Dinner",
+              "meal salad",
+              "Salad",
+              "main course",
+              "Lunch",
+              "Fast & Easy"
+            ],
+            "instructions": [
+              "Preheat your oven to 400°F.",
+              "Place the diced sweet potatoes on a baking sheet. Drizzle with 1 tablespoons of olive oil and season with salt and black pepper. Toss to coat the sweet potato evenly in the oil and seasonings.",
+              "Roast the sweet potatoes in the preheated oven for about 20-25 minutes or until they become tender and slightly caramelized.",
+              "In a small bowl, whisk together 2 tablespoons of olive oil, 2 tablespoons of lemon juice, minced garlic, salt, and black pepper. Adjust the seasoning to your taste.",
+              "Place the torn kale leaves in a large salad bowl.",
+              "Pour the dressing over the kale leaves.",
+              "Use your hands to massage the kale with the dressing for a few minutes. This will help soften the kale and make it more tender.",
+              "Add the roasted sweet potato pieces to the salad bowl with the kale.",
+              "Add the sliced avocado on top.",
+              "Toss all the ingredients together gently to combine."
+            ],
+            "totalTimeInSeconds": 2400,
+            "ingredientLines": [
+              "4 cups kale, torn",
+              "2 sweet potatoes, peeled and diced",
+              "1 avocado, sliced",
+              "3 tbsp olive oil",
+              "Salt, to taste",
+              "Ground black pepper, to taste",
+              "2 tbsp lemon juice",
+              "2 garlic cloves, minced"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/c4ca4b2a87b44955a922bae3e08a7395.jpg",
+            "name": "Kale Salad With Roasted Sweet Potato And Avocado"
+          }
+        },
+        {
+          "node": {
+            "cuisines": [
+              "American",
+              "Kid-Friendly"
+            ],
+            "tags": [
+              "main dish",
+              "Lunch",
+              "Dinner",
+              "main course",
+              "15 - 30 MINUTES",
+              "meal salad",
+              "Fast & Easy"
+            ],
+            "instructions": [
+              "In a large salad bowl, combine the chopped Romaine lettuce, chopped cooked chicken breast, chopped hard-boiled eggs, diced tomato, crumbled blue cheese, corn, crumbled bacon, and diced avocado.",
+              "Season the salad with salt and pepper to taste. Drizzle with greek yogurt.",
+              "Toss all the ingredients together until well combined and evenly coated with the dressing."
+            ],
+            "totalTimeInSeconds": 1800,
+            "ingredientLines": [
+              "2 cups chopped romaine lettuce",
+              "1 cup chopped cooked chicken breast",
+              "2 hard boiled eggs, chopped",
+              "1 tomato, chopped",
+              "1/2 cup crumbled blue cheese",
+              "1 oz crumbled bacon",
+              "1/2 avocado, diced",
+              "Salt, to taste",
+              "Ground black pepper, to taste",
+              "1/2 cup greek yogurt",
+              "1/2 cup corn kernels"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/94f8df04b7344e24b9669ae470e2e21f.jpg",
+            "name": "Chopped Cobb Salad"
+          }
+        },
+        {
+          "node": {
+            "cuisines": [
+              "American",
+              "Kid-Friendly"
+            ],
+            "tags": [
+              "main dish",
+              "Lunch",
+              "Dinner",
+              "main course",
+              "15 - 30 MINUTES",
+              "meal salad",
+              "Fast & Easy"
+            ],
+            "instructions": [
+              "Boil the potatoes for 10-15 minutes.",
+              "In a large salad bowl, arrange the mixed salad greens as the base of your salad.",
+              "Place the drained tuna in the center of the greens.",
+              "Arrange the hard-boiled egg halves, cherry tomatoes, Kalamata olives, capers, and sliced red potatoes around the tuna.",
+              "In a small bowl, whisk together the dressing ingredients: olive oil, red wine vinegar, Dijon mustard, salt, and black pepper to taste.",
+              "Drizzle the dressing over the salad."
+            ],
+            "totalTimeInSeconds": 1800,
+            "ingredientLines": [
+              "4 cups mixed greens",
+              "5 oz canned tuna, drained",
+              "4 eggs, hardboiled",
+              "1 cup cherry tomatoes, halved",
+              "1/4 cup Kalamata olives, pitted",
+              "2 tbsp capers",
+              "2 red potatoes",
+              "2 tbsp olive oil",
+              "1 tbsp red wine vinegar",
+              "1 tsp DIjon mustard",
+              "Salt, to taste",
+              "Ground black pepper, to taste"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/4e073866656144e18ba45b6ec1001560.jpg",
+            "name": "Nicoise Salad"
+          }
+        },
+        {
+          "node": {
+            "cuisines": [
+              "Kid-Friendly",
+              "Middle eastern"
+            ],
+            "tags": [
+              "main dish",
+              "Lunch",
+              "Dinner",
+              "main course",
+              "15 - 30 MINUTES",
+              "meal salad",
+              "Salad",
+              "Fast & Easy"
+            ],
+            "instructions": [
+              "Rinse the quinoa under cold water and cook it according to the package instructions. Typically, this takes about 15 minutes. Once cooked, let it cool slightly.",
+              "While the quinoa is cooking, slice the raw halloumi cheese into thin slices.",
+              "In a non-stick skillet, heat a small amount of olive oil over medium heat.",
+              "Once the skillet is hot, add the halloumi slices and cook for about 1-2 minutes on each side until they develop a golden brown crust.",
+              "In a bowl, combine the raw spinach, sliced cucumber, and fresh pomegranate seeds.",
+              "In a small cup, whisk together the remaining olive oil, lemon juice, salt, and pepper to create the dressing.",
+              "Once the quinoa is cooked and slightly cooled, add it to the salad mixture.",
+              "Place the cooked halloumi on top of the prepared salad.",
+              "Pour the dressing over the salad and toss until well combined."
+            ],
+            "totalTimeInSeconds": 1800,
+            "ingredientLines": [
+              "2 oz raw halloumi cheese",
+              "1/4 cup quinoa",
+              "1 cup raw spinach",
+              "1/4 cup sliced cucumber",
+              "1/4 cup pomegranate",
+              "1 tbsp olive oil",
+              "1 tbsp lemon juice",
+              "Salt, to taste",
+              "Ground black pepper, to taste"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/e0d9163ac8ea40c882a2cee49930e603.jpg",
+            "name": "Halloumi & Quinoa Fattoush"
+          }
+        },
+        {
+          "node": {
+            "cuisines": [
+              "American",
+              "Kid-Friendly"
+            ],
+            "tags": [
+              "main dish",
+              "Lunch",
+              "Dinner",
+              "main course",
+              "15 - 30 MINUTES",
+              "meal salad",
+              "Fast & Easy"
+            ],
+            "instructions": [
+              "Cook the quinoa in a pot of water according to the instructions on the packaging.",
+              "In a large salad bowl, place the fresh spinach leaves.",
+              "Add the sliced strawberries on top of the spinach.",
+              "Sprinkle the chopped nuts over the salad.",
+              "Scatter the crumbled feta cheese over the salad.",
+              "Add the cooked quinoa to the salad.",
+              "In a small bowl or jar, prepare the vinaigrette. Combine olive oil, balsamic vinegar, honey, salt, and black pepper. Whisk or shake well to emulsify the dressing.",
+              "Taste the vinaigrette and adjust the sweetness or seasoning according to your preference.",
+              "Drizzle the vinaigrette over the salad.",
+              "Gently toss all the ingredients in the salad bowl to coat them with the dressing."
+            ],
+            "totalTimeInSeconds": 1800,
+            "ingredientLines": [
+              "1/2 cup quinoa",
+              "4 cup spinach leaves",
+              "1 cup strawberries, sliced",
+              "1/4 cup chopped nuts",
+              "1/3 cup crumbled feta cheese",
+              "2 tbsp olive",
+              "1 tbsp balsamic vinegar",
+              "1 tsp honey",
+              "Salt, to taste",
+              "Ground black pepper, to taste"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/39952d04db5a4b8fa86e760653ddeabf.jpg",
+            "name": "Spinach & Strawberry Salad With Quinoa"
+          }
+        },
+        {
+          "node": {
+            "cuisines": [
+              "American",
+              "Kid-Friendly"
+            ],
+            "tags": [
+              "main dish",
+              "Lunch",
+              "Dinner",
+              "main course",
+              "15 - 30 MINUTES",
+              "meal salad",
+              "Fast & Easy"
+            ],
+            "instructions": [
+              "Cook the rice in a pot of water according to the instructions on the packaging.",
+              "In a large salad bowl, combine the cooked and cooled rice, fresh arugula, and diced tomato.",
+              "In a small bowl, whisk together the dressing ingredients: olive oil, balsamic vinegar, honey, minced garlic, dried oregano, salt, and black pepper to taste.",
+              "Drizzle the dressing over the salad.",
+              "Toss the salad gently to ensure that all the ingredients are coated with the dressing."
+            ],
+            "totalTimeInSeconds": 1800,
+            "ingredientLines": [
+              "3/4 cup rice",
+              "3 cups arugula",
+              "2 tomatoes, diced",
+              "2 tbsp olive oil",
+              "2 tbsp balsamic vinegar",
+              "1 tsp honey",
+              "1 clove garlic, minced",
+              "1/2 tsp dried oregano",
+              "Salt, to taste",
+              "Ground black pepper, to taste"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/7ebd1ad9c9464e7ebf8ae7589eaeabd1.jpg",
+            "name": "Mediterranean Brown Rice Salad"
+          }
+        },
+        {
+          "node": {
+            "cuisines": [
+              "Middle eastern",
+              "Kid-Friendly"
+            ],
+            "tags": [
+              "main dish",
+              "Lunch",
+              "Dinner",
+              "main course",
+              "15 - 30 MINUTES",
+              "meal salad",
+              "Salad",
+              "Fast & Easy"
+            ],
+            "instructions": [
+              "In a bowl, place the fine bulgur wheat.",
+              "Pour enough boiling water over the bulgur to cover it and let it sit for about 15-20 minutes, or until it's softened. Drain any excess water.",
+              "In the same bowl, combine the softened bulgur, chopped fresh parsley, diced tomatoes, diced cucumbers, diced onions, canned chickpeas, and crumbled feta cheese.",
+              "In a small bowl, whisk together the fresh lemon juice, olive oil, salt, and pepper to create the dressing.",
+              "Drizzle the dressing over the tabbouleh.",
+              "Toss everything together to ensure the tabbouleh is evenly coated with the dressing."
+            ],
+            "totalTimeInSeconds": 1800,
+            "ingredientLines": [
+              "1/4 cup fine bulgur wheat",
+              "1/2 cup chopped fresh parsley",
+              "2 tbsp diced tomatoes",
+              "2 tbsp diced cucumber",
+              "2 tbsp diced onions",
+              "1/2 cup canned chickpeas, drained and rinsed",
+              "2 tbsp lemon juice",
+              "1 tbsp lemon juice",
+              "2 tbsp crumbled feta cheese",
+              "Salt, to taste",
+              "Ground black pepper, to taste"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/ad557c4030f14125a3b3bf703be84035.jpg",
+            "name": "Tabbouleh With Chickpeas"
+          }
+        }
+      ]
+    }
+  }
+}

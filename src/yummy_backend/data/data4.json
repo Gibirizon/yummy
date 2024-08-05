@@ -1,0 +1,717 @@
+{
+  "data": {
+    "recipesByTag": {
+      "edges": [
+        {
+          "node": {
+            "cuisines": [
+              "American",
+              "Kid-Friendly"
+            ],
+            "tags": [
+              "15 - 30 MINUTES",
+              "Snack",
+              "Dessert",
+              "Fast & Easy"
+            ],
+            "instructions": [
+              "Preheat your air fryer to 375°F.",
+              "Lay one half of the small flour tortilla on a clean surface.",
+              "Place the thinly sliced apple in a single layer on top of the tortilla half.",
+              "Sprinkle the apple slices with ground cinnamon.",
+              "Fold the tortilla in half to cover the apple slices, creating a semi-circle shape. Repeat with other half.",
+              "Lightly spray the chimichanga with cooking spray or olive oil spray on both sides to help it crisp up in the air fryer.",
+              "Place the chimichangas seam-side down in the preheated air fryer basket.",
+              "Cook the chimichanga in the air fryer for about 6-8 minutes or until it becomes golden brown and crispy. You may want to flip it halfway through for even browning.",
+              "Once done, carefully remove the chimichanga from the air fryer basket, let it cool for a minute, and then transfer it to a serving plate."
+            ],
+            "totalTimeInSeconds": 1200,
+            "ingredientLines": [
+              "1 tortilla, halved",
+              "1 apple, sliced",
+              "1/2 tsp cinnamon"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/9967e53605ed48f587bbbcef2bab765b.jpg",
+            "name": "Apple Cinnamon Chimichangas"
+          }
+        },
+        {
+          "node": {
+            "cuisines": null,
+            "tags": [
+              "ACIDIC FOODS/DRINKS",
+              "15 - 30 MINUTES",
+              "Dessert",
+              "MOIST & SMOOTH",
+              "VEGETARIAN",
+              "LOW_SAT_FAT",
+              "PROTEIN-DENSE",
+              "Snack",
+              "VEGAN",
+              "Fast & Easy"
+            ],
+            "instructions": [
+              "Chop up the real pineapple and put in bowl in freezer.",
+              "When it’s frozen use a hand blender or food processor to blend, along with mint and protein powder.",
+              "When nicely mixed, place in bowls. Serve immediately."
+            ],
+            "totalTimeInSeconds": 900,
+            "ingredientLines": [
+              "15 oz pineapple",
+              "1 cup mint, fresh",
+              "2 oz vegan protein powder"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/c36589b907134ff4811b8ea4c919c34e.jpg",
+            "name": "Pineapple Sorbet With Mint"
+          }
+        },
+        {
+          "node": {
+            "cuisines": null,
+            "tags": [
+              "ACIDIC FOODS/DRINKS",
+              "15 - 30 MINUTES",
+              "Dessert",
+              "SOFT & TENDER",
+              "VEGETARIAN",
+              "PROTEIN-DENSE",
+              "Snack",
+              "VEGAN",
+              "FRIED/GREASY FOODS",
+              "Fast & Easy"
+            ],
+            "instructions": [
+              "Preheat the air fryer to 375°F. Line the air fryer basket with parchment paper.",
+              "Core pineapple using a pineapple corer or slicer and slice into rings.",
+              "In a small bowl, mix nutmeg, protein powder and cinnamon. Coat the pineapple slices with the mixture. Place pineapple rings into the prepared basket.",
+              "Air fry until slices start to roast, 8 minutes. Flip slices over and air fry an additional 3 minutes."
+            ],
+            "totalTimeInSeconds": 1800,
+            "ingredientLines": [
+              "1 pineapple",
+              "1 tsp nutmeg",
+              "1 tbsp unflavored pea protein powder (or other)",
+              "2 tsp cinnamon"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/6f5591804e7a4ec09f81a948d3758390.jpg",
+            "name": "Air Fryer Roasted Pineapple"
+          }
+        },
+        {
+          "node": {
+            "cuisines": null,
+            "tags": [
+              "RH Approved",
+              "Dessert",
+              "Fast & Easy",
+              "15 - 30 MINUTES",
+              "VEGETARIAN",
+              "PROTEIN-DENSE",
+              "Snack",
+              "LABOR INTENSIVE",
+              "HIGH-FIBER",
+              "HIGH_FIBER",
+              "SOFT & TENDER"
+            ],
+            "instructions": [
+              "Preheat the oven to 375°F with a rack in the center of the oven. Butter the bottom of a 9×13 casserole dish.",
+              "In a small bowl, combine the filling ingredients: rolled oats, walnuts, protein powder, cranberries, and cinnamon.",
+              "Drizzle with maple syrup and melted butter and stir to combine. Cut pears in half lengthwise. Scoop out the seeds with a teaspoon.",
+              "Arrange pears in the buttered casserole dish and divide the filling evenly between pears. Lightly sprinkle cinnamon over pears.",
+              "Bake uncovered for 25 minutes. Serve immediately."
+            ],
+            "totalTimeInSeconds": 1800,
+            "ingredientLines": [
+              "4 pears",
+              "¼ cup rolled oats",
+              "¼ cup walnuts, chopped",
+              "1 oz unflavored pea protein powder (or other)",
+              "¼ tsp cinnamon",
+              "2 tbsp maple syrup",
+              "2 tbsp butter, melted"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/9a5520c5138842a69b98f52d72efe54d.jpg",
+            "name": "Baked Pears"
+          }
+        },
+        {
+          "node": {
+            "cuisines": null,
+            "tags": [
+              "DAIRY_FREE",
+              "GLUTEN_FREE",
+              "Breakfast",
+              "Dessert",
+              "MOIST & SMOOTH",
+              "15 - 30 MINUTES",
+              "VEGETARIAN",
+              "TART/SOUR",
+              "PROTEIN-DENSE",
+              "VEGAN",
+              "PLANT_BASED",
+              "Fast & Easy"
+            ],
+            "instructions": [
+              "Toss all ingredients together and serve in a bowl."
+            ],
+            "totalTimeInSeconds": 1500,
+            "ingredientLines": [
+              "2 teaspoons almonds",
+              "1 cup unsweetened coconut milk yogurt",
+              "1/4 cup blackberries",
+              "1 teaspoon vanilla extract"
+            ],
+            "mainImage": "https://sg-data.storage.googleapis.com/images_bucket/ae30589e09e88f26589eff9b5814225b.png",
+            "name": "Coconut Yogurt With Blackberries And Almonds"
+          }
+        },
+        {
+          "node": {
+            "cuisines": [
+              "American",
+              "Kid-Friendly"
+            ],
+            "tags": [
+              "15 - 30 MINUTES",
+              "Snack",
+              "Dessert",
+              "Fast & Easy"
+            ],
+            "instructions": [
+              "reheat your oven to 350°F.",
+              "In a small mixing bowl, combine the mashed ripe banana, oil, vanilla extract, and whisked egg. Mix well.",
+              "In another bowl, whisk together the all-purpose flour, baking powder, baking soda, and a pinch of salt.",
+              "Pour the wet banana mixture into the dry ingredients. Stir until just combined. Be careful not to overmix; a few lumps are okay.",
+              "Lightly grease a muffin tin or a single muffin cup with cooking spray.",
+              "Pour the muffin batter into the greased muffin cup.",
+              "Place the muffin tin or cup in the preheated oven.",
+              "Bake for about 18-20 minutes, or until a toothpick or knife inserted into the center of the muffin comes out clean.",
+              "Carefully remove the Banana Crumb Muffin from the oven.",
+              "Allow it to cool for a minute before serving."
+            ],
+            "totalTimeInSeconds": 1800,
+            "ingredientLines": [
+              "1 banana, mashed",
+              "1/4 cup flour",
+              "1/4 tsp baking powder",
+              "1/8 tsp baking soda",
+              "Pinch of salt",
+              "1/2 tbsp coconut oil",
+              "1/4 tsp vanilla extract",
+              "1 egg"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/e50cbb0830b546009362147c13bc1b3e.jpg",
+            "name": "Banana Crumb Muffins"
+          }
+        },
+        {
+          "node": {
+            "cuisines": [
+              "South american"
+            ],
+            "tags": [
+              "Fried",
+              "15 - 30 MINUTES",
+              "Dessert",
+              "PROTEIN-DENSE",
+              "Snack",
+              "CRUNCHY/HARD",
+              "WARM/HOT",
+              "FRIED/GREASY FOODS",
+              "Fast & Easy"
+            ],
+            "instructions": [
+              "Peel the plantain and cut it into 1-inch chunks, coat in protein powder. Heat the oil in a large skillet. Place the plantains in the oil and fry on both sides.",
+              "Remove the plantains from the pan and flatten the plantains by placing a plate over the fried plantains and pressing down.",
+              "Dip the plantains in water, then return them to the hot oil and fry 1 minute on each side. Salt to taste and serve immediately."
+            ],
+            "totalTimeInSeconds": 1800,
+            "ingredientLines": [
+              "1 green plantain",
+              "1 tbsp olive oil",
+              "1 oz unflavored whey protein powder (or other)",
+              "3 cups cold water",
+              "Salt, to taste"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/42f906bf72754422a63bd6f562865a39.jpg",
+            "name": "Puerto Rican Tostones"
+          }
+        },
+        {
+          "node": {
+            "cuisines": [
+              "American"
+            ],
+            "tags": [
+              "Snack",
+              "Dessert",
+              "ABOVE 30 MINUTES"
+            ],
+            "instructions": [
+              "Dissolve yeast in warm milk and let it sit for 5 minutes until foamy. Mix flour, sugar, melted ghee, vanilla extract, ground cinnamon, and salt in a bowl.",
+              "Pour the yeast mixture into the bowl with the dry ingredients and mix to form a dough. Knead the dough for 5 minutes until smooth.",
+              "Let the dough rise for 30 minutes.",
+              "Preheat a small stroopwafel iron or pizzelle maker. Roll small portions of dough into walnut-sized balls.",
+              "Cook the dough balls in the preheated iron for 1-2 minutes until golden brown and crispy. Slice the cooked stroopwafels in half horizontally.",
+              "Spread caramel syrup or honey on one half and sandwich it with the other half. Repeat with remaining dough balls.",
+              "Let the stroopwafels cool before serving."
+            ],
+            "totalTimeInSeconds": 3000,
+            "ingredientLines": [
+              "1/2 cup flour",
+              "1 tbsp ghee",
+              "1/2 tbsp sugar",
+              "1/8 tsp dry yeast",
+              "2 tbsp warm milk",
+              "1/4 tsp vanilla extract",
+              "1/8 tsp ground cinnamon",
+              "Pinch of salt",
+              "1 tbso honey"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/106979c58ce64b6f8a577465626ddd43.jpg",
+            "name": "Dutch Stroopwafels "
+          }
+        },
+        {
+          "node": {
+            "cuisines": [
+              "Chinese"
+            ],
+            "tags": [
+              "ABOVE 30 MINUTES",
+              "WARM/HOT",
+              "LABOR INTENSIVE",
+              "PROTEIN-DENSE",
+              "ACIDIC FOODS/DRINKS",
+              "Dessert",
+              "Snack",
+              "SOFT & TENDER"
+            ],
+            "instructions": [
+              "Sieve the flour and mix with the egg, a pinch of salt and 1 cup hot water. Knead to form a smooth, homogeneous dough. Shape into a ball, cover and leave to rest for around 30 minutes.",
+              "For the filling, mix ¾ of the blueberries with the honey and corn starch.",
+              "Roll the dough out on a floured surface and cut out circles 3 inch in diameter. Spoon 1 tsp of filling onto one half of each circle and fold into a semicircular shape. Use a fork to press the edges together.",
+              "Bring a large pan of water to the boil with a pinch each of salt and sugar and cook the parcels for 5 minutes. Remove with a slotted spoon and arrange on plates. Top with the remaining blueberries."
+            ],
+            "totalTimeInSeconds": 3600,
+            "ingredientLines": [
+              "1½ cups flour",
+              "½ egg",
+              "½ cup water",
+              "1½ cups fresh blueberries",
+              "½ tbsp honey",
+              "½ tsp corn starch"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/5eaa8ca626cc452eb491708c64212077.jpg",
+            "name": "Blueberry Dumplings"
+          }
+        },
+        {
+          "node": {
+            "cuisines": [
+              "American"
+            ],
+            "tags": [
+              "DRY FOODS",
+              "ABOVE 30 MINUTES",
+              "WARM/HOT",
+              "LABOR INTENSIVE",
+              "PROTEIN-DENSE",
+              "GLUTEN_FREE",
+              "VEGAN",
+              "Dessert",
+              "ENERGY-DENSE",
+              "Snack",
+              "COLD",
+              "VEGETARIAN"
+            ],
+            "instructions": [
+              "Preheat the oven to 350°F. Line a brownie pan with parchment paper.",
+              "Rinse the red lentils. Drain and add to a saucepan. Add 1½ cups of water and cook for 8 minutes, partially covered, over medium heat.",
+              "Stir once in between. Cool for a few minutes, then drain any excess water from the saucepan. Add to a food processor or blender.",
+              "Heat oil in a skillet over medium heat. When hot, add chocolate and mix. Take off heat. Continue to mix until chocolate is melted and well combined.",
+              "Add the melted chocolate and the rest of the ingredients to the food processor and process until a smooth batter.",
+              "Pour into prepared brownie pan. Sprinkle 2 tbsp chocolate chips on top and mix them in. Bake for 20 minutes.",
+              "Cool before slicing and serving."
+            ],
+            "totalTimeInSeconds": 2700,
+            "ingredientLines": [
+              "¼ cup red lentils",
+              "1 tsp olive oil",
+              "2 oz dark chocolate",
+              "3 tbsp cashew butter",
+              "1 tbsp raw almonds",
+              "1 tsp vanilla extract",
+              "3 tbsp gluten-free flour",
+              "¼ tsp salt",
+              "1 tbsp vegan dark chocolate chips",
+              "¼ tsp baking powder"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/aeeaec7a0753414fa629176985d69ed3.jpg",
+            "name": "Lentil Brownies"
+          }
+        },
+        {
+          "node": {
+            "cuisines": [
+              "American"
+            ],
+            "tags": [
+              "Breakfast",
+              "STEAMED",
+              "HIGH-POTASSIUM",
+              "ABOVE 30 MINUTES",
+              "WARM/HOT",
+              "LABOR INTENSIVE",
+              "PROTEIN-DENSE",
+              "HIGH-FIBER",
+              "Dessert",
+              "ENERGY-DENSE",
+              "DRY FOODS",
+              "VEGETARIAN",
+              "PLANT_BASED",
+              "HIGH_FIBER"
+            ],
+            "instructions": [
+              "Preheat the oven to 350°F.",
+              "Peel the eggplant, then cut in half lengthwise. Scoop out the seeds, then chop into large pieces.",
+              "Transfer to a steamer basket set over a large pot of simmering water, cover, and steam for 20 minutes, until the eggplant is very soft.",
+              "Transfer the hot eggplant to the bowl of the food processor with 2 oz chocolate chips, the unsweetened chocolate, milk, maple syrup, and vanilla extract.",
+              "The heat from the eggplant will melt the chocolate. Blend on high speed for 2 minutes, until very smooth, scraping down the sides of the bowl as needed.",
+              "In a bowl, beat eggs, then add the flour, cocoa powder, salt, and whisk to combine. Add the eggplant mixture and fold with a spatula. Add remaining chocolate chips.",
+              "Transfer the batter to a greased 8-inch square baking dish and smooth the top. Bake for 35 minutes. Serve immediately."
+            ],
+            "totalTimeInSeconds": 2700,
+            "ingredientLines": [
+              "½ lb eggplant",
+              "4 oz semisweet chocolate chips, divided",
+              "1 oz unsweetened chocolate, chopped",
+              "3 tbsp almond milk",
+              "1 tsp vanilla extract",
+              "2 eggs",
+              "½ cup almond flour",
+              "¼ cup dutch processed cocoa powder",
+              "Salt, to taste"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/3816a6349746428abe1d099cee8badab.jpg",
+            "name": "Fudgy Eggplant Brownies"
+          }
+        },
+        {
+          "node": {
+            "cuisines": null,
+            "tags": [
+              "FULL LIQUIDS",
+              "HIGH-POTASSIUM",
+              "PROTEIN-DENSE",
+              "UNDER 15 MINUTES",
+              "VEGAN",
+              "Dessert",
+              "snack"
+            ],
+            "instructions": [
+              "Blend ripe frozen banana, silken tofu, cacao powder, vanilla extract and coconut sugar until homogenous and creamy.",
+              "Immediately place in a container with a lid on and freeze overnight.",
+              "Take out of the freezer 10 minutes before serving. Serve 2-3 scoops per person."
+            ],
+            "totalTimeInSeconds": 600,
+            "ingredientLines": [
+              "5 oz banana, frozen",
+              "7 oz silken tofu",
+              "2 tbsp cacao powder",
+              "1 tbsp vanilla extract",
+              "1 tbsp coconut sugar"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/7ce9f8f9db0d4f739eaff1efe4e27292.jpg",
+            "name": "Silken Tofu Vegan Ice Cream"
+          }
+        },
+        {
+          "node": {
+            "cuisines": null,
+            "tags": [
+              "Snack",
+              "HIGH-LACTOSE",
+              "ABOVE 30 MINUTES",
+              "LABOR INTENSIVE",
+              "Dessert",
+              "DRY FOODS"
+            ],
+            "instructions": [
+              "Preheat the oven to 400°F.",
+              "For the potato puree, place potatoes into a large saucepan and cover with water. Bring to a boil and reduce to a steady simmer. Cook for 15 minutes. Drain the potatoes and transfer to a food processor. Puree until the potatoes are smooth.",
+              "In a large bowl sift together all the flour, baking powder, cinnamon, protein powder and salt. Set aside.",
+              "In a medium bowl, whisk together the oil, milk, honey, maple syrup, vanilla and sweet potato puree. Slowly add the wet ingredients to the dry ingredients. Gently combine. Do not over mix the batter.",
+              "Transfer to a muffin pan. Bake for 18 minutes. Serve cooled."
+            ],
+            "totalTimeInSeconds": 3600,
+            "ingredientLines": [
+              "1 large purple sweet potatoes, peeled and diced",
+              "½ cups all-purpose flour",
+              "½ tbsp baking powder",
+              "½ tsp cinnamon",
+              "1 oz unflavored pea protein powder (or other)",
+              "¼ tsp salt",
+              "¼ cup olive oil",
+              "½ tbsp milk",
+              "¼ cup almond milk",
+              "1 tbsp honey",
+              "1 tbsp maple syrup",
+              "½ tsp vanilla extract"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/149eb4773a5d4caea1cc3fc81a634ce6.jpg",
+            "name": "Purple Sweet Potato Muffins"
+          }
+        },
+        {
+          "node": {
+            "cuisines": null,
+            "tags": [
+              "KETO-FRIENDLY",
+              "Dessert",
+              "MOIST & SMOOTH",
+              "VEGETARIAN",
+              "Snack",
+              "ENERGY-DENSE",
+              "LABOR INTENSIVE",
+              "best",
+              "ABOVE 30 MINUTES",
+              "COLD",
+              "WARM/HOT"
+            ],
+            "instructions": [
+              "Whisk together egg yolks, almond milk, vanilla, and optional sweetener in a medium metal bowl.",
+              "Slowly mix in the melted coconut oil or butter. Be sure the oil isn't too hot, or the eggs may cook unevenly.",
+              "Place the bowl over a saucepan of simmering water. Whisk the mixture constantly and vigorously until thickened.",
+              "Remove the custard from the water bath. Serve either warm or chilled."
+            ],
+            "totalTimeInSeconds": 8400,
+            "ingredientLines": [
+              "6 egg yolks",
+              "½ cup unsweetened almond milk",
+              "1 tsp vanilla extract",
+              "1 tsp erythritol",
+              "¼ cup melted coconut oil"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/2d8b6dfd9e8c4014bd1f7624db9d489f.jpg",
+            "name": "Low-Fat Vegan Vanilla Pudding"
+          }
+        },
+        {
+          "node": {
+            "cuisines": [
+              "American",
+              "Kid-Friendly"
+            ],
+            "tags": [
+              "Dessert",
+              "sweet potato",
+              "sweet",
+              "casserole"
+            ],
+            "instructions": [
+              "Preheat the oven to 375°F (190°C).",
+              "Boil or steam the diced sweet potato until tender. Drain any excess water.",
+              "In a bowl, mash the sweet potatoes with a fork or potato masher.",
+              "Add applesauce, olive oil, chopped pecans, ground cinnamon, nutmeg, and salt. Mix well.",
+              "Transfer the mixture to a baking dish.",
+              "Bake in the preheated oven for 20-25 minutes or until the top is golden and the casserole is heated through.",
+              "Allow the Sweet Potato Casserole to cool slightly before serving."
+            ],
+            "totalTimeInSeconds": 2400,
+            "ingredientLines": [
+              "1 sweet potato, peeled and diced",
+              "1/4 cup applesauce",
+              "1 tbsp olive oil",
+              "1/4 cup chopped pecans",
+              "1/2 tsp ground cinnamon",
+              "1/4 tsp nutmeg",
+              "Salt, to taste"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/a4b773ea981b44e7a9154c4888f7e292.jpg",
+            "name": "Sweet Potato Casserole"
+          }
+        },
+        {
+          "node": {
+            "cuisines": [
+              "French"
+            ],
+            "tags": [
+              "KETO-FRIENDLY",
+              "Dessert",
+              "15 - 30 MINUTES",
+              "Snack",
+              "LN-vitamine",
+              "HIGH-LACTOSE"
+            ],
+            "instructions": [
+              "Melt chocolate in a double boiler or in a glass bowl set above a pot of simmering water.",
+              "Place avocado,melted chocolate and honey in a food processor and blend together until smooth, whilst pouring in the milk. Keep blending until the mousse is very smooth and creamy.",
+              "Spoon into serving glasses and chill in fridge briefly for 15 minutes. Garnish with raspberries and peppermint."
+            ],
+            "totalTimeInSeconds": 1800,
+            "ingredientLines": [
+              "1 ripe avocado, chopped",
+              "2 oz dark chocolate",
+              "½ cup milk",
+              "1 tbsp honey",
+              "½ cup raspberries",
+              "Peppermint, to taste"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/b9d0135085ce4213a06fd04bfdd19231.jpg",
+            "name": "Chocolate Avocado Mousse"
+          }
+        },
+        {
+          "node": {
+            "cuisines": null,
+            "tags": [
+              "MOIST & SMOOTH",
+              "ABOVE 30 MINUTES",
+              "ACIDIC FOODS/DRINKS",
+              "LABOR INTENSIVE",
+              "desserts",
+              "Dessert",
+              "best",
+              "Snack",
+              "TART/SOUR"
+            ],
+            "instructions": [
+              "Sprinkle the gelatin over 2 tablespoons of water in a small dish and let stand a few minutes to soften and dissolve.",
+              "Heat the cream, honey and salt in a small saucepan over medium heat, stirring all the time. Heat until very warm, but not boiling. Stir in the gelatin until it dissolves.",
+              "Remove from the heat and add the yogurt. Stir until smoothly incorporated into the cream.",
+              "Pour the cream into the molds, dividing evenly. Cover with plastic wrap and place in the refrigerator to chill and set, at least 1 hour.",
+              "About an hour before serving, bring the pomegranate juice and honey to a boil in a small saucepan. Cook until the syrup reduces to the consistency of maple syrup, 10 minutes.",
+              "Serve the panna cottas in their cups. Drizzle some pomegranate syrup over the panna cottas and sprinkle with pomegranate seeds."
+            ],
+            "totalTimeInSeconds": 4500,
+            "ingredientLines": [
+              "2 tsp unflavored gelatin",
+              "2 cups heavy cream",
+              "3 tbsp honey",
+              "1/4 salt",
+              "1/2 cup Greek yogurt",
+              "1/2 pomegranate juice",
+              "6 oz fresh pomegranate seeds"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/a97ac76c1a694fc4b01958c78067b029.jpg",
+            "name": "Pomegranate Panna Cotta"
+          }
+        },
+        {
+          "node": {
+            "cuisines": [
+              "American",
+              "Kid-Friendly"
+            ],
+            "tags": [
+              "Snack",
+              "Dessert",
+              "sweet",
+              "ABOVE 30 MINUTES"
+            ],
+            "instructions": [
+              "In a mixing bowl, combine the masa harina, orange juice, oil, orange zest, and a pinch of salt. Mix until it forms a smooth, thick dough.",
+              "Cut a 12-inch by 12-inch square from the banana leaf",
+              "Place half of the dough in the center of the banana leaf",
+              "Fold the leaf or paper over the dough, covering it completely.",
+              "Roll the covered dough into a cylinder shape, twisting the ends to seal it.",
+              "Repeat steps 3-5 with the remaining dough.",
+              "Preheat your oven to 350°F.",
+              "Place the wrapped tamales directly on the oven rack.",
+              "Bake for about 25-30 minutes or until the tamales are cooked through and have a firm texture.",
+              "Remove the tamales from the oven and let them cool for a few minutes."
+            ],
+            "totalTimeInSeconds": 2400,
+            "ingredientLines": [
+              "1/4 cup masa harina",
+              "2 tbsp orange juice",
+              "1 tbsp coconut oil",
+              "1/4 tsp orange zest",
+              "1 banana leaf",
+              "Pinch of salt"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/ffd3e95546014d229fb9ac7c5e0d3a69.jpg",
+            "name": "Sweet Orange Tamales"
+          }
+        },
+        {
+          "node": {
+            "cuisines": null,
+            "tags": [
+              "KETO-FRIENDLY",
+              "Dessert",
+              "15 - 30 MINUTES",
+              "Snack",
+              "drinks",
+              "Paleo",
+              "COLD",
+              "PROTEIN-DENSE",
+              "FULL LIQUIDS"
+            ],
+            "instructions": [
+              "In a small bowl or measuring cup, whisk together the eggs and egg yolk. Slowly whisk in the milk.",
+              "Pour into a medium saucepan and set over low heat. Add the cinnamon, nutmeg, and vanilla. Cook over low heat for about 15 minutes, whisking often.",
+              "Pour the eggnog into a container and let it cool at room temperature, then set it in the refrigerator. When ready to serve, stir or shake well."
+            ],
+            "totalTimeInSeconds": 1800,
+            "ingredientLines": [
+              "2 eggs",
+              "1 egg yolk",
+              "2 cups almond milk",
+              "¼ tsp cinnamon",
+              "½ tsp nutmeg",
+              "1 tsp vanilla extract"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/a7320450329543c4a5bf4c87263f6622.jpg",
+            "name": "Paleo-Inspired Spiced Eggnog"
+          }
+        },
+        {
+          "node": {
+            "cuisines": [
+              "British"
+            ],
+            "tags": [
+              "ACIDIC FOODS/DRINKS",
+              "ENERGY-DENSE",
+              "Breakfast",
+              "Dessert",
+              "15 - 30 MINUTES",
+              "VEGETARIAN",
+              "TART/SOUR",
+              "PROTEIN-DENSE",
+              "DRY FOODS",
+              "LABOR INTENSIVE",
+              "VEGAN",
+              "HIGH-FIBER",
+              "HIGH_FIBER"
+            ],
+            "instructions": [
+              "Preheat the oven to 400°F. Line a baking tray with a silicone mat.",
+              "In a bowl add the milk and lemon juice for the scones and set aside. Add the flour, sugar, baking powder, lemon zest, salt, and ginger into a large bowl and mix well.",
+              "Add the coconut oil, in tablespoon-sized chunks, using your hands to integrate thoroughly until it has reached a sand-like texture.",
+              "Give the lemon/milk mixture a quick stir before pouring a little into the other ingredients. Adding a little at a time, continue until you have a soft but not too wet dough.",
+              "Divide the dough into two even pieces. Starting with one, kneed for about 30 seconds before forming it into a round disk, about 1 inch thick.",
+              "Cut the disc into 6 even pieces and place on the baking tray, spaced at least an inch apart. Repeat with the second piece of dough.",
+              "Place the scones in the oven, and cook until they’ve hardened and are turning gold on the bottom. Serve immediately."
+            ],
+            "totalTimeInSeconds": 1800,
+            "ingredientLines": [
+              "½ cup almond milk",
+              "2 tbsp lemon juice",
+              "2 cups gluten-free flour",
+              "1 tbsp baking powder",
+              "1 tsp salt",
+              "1 tsp ground ginger",
+              "¼ cup coconut oil"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/9f24f77b715a40bfa79f0e97efb9dc57.jpg",
+            "name": "Vegan Lemon Scones"
+          }
+        }
+      ]
+    }
+  }
+}

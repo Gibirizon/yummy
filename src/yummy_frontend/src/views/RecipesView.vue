@@ -103,22 +103,19 @@ async function getRecipeData() {
     // getting images for recipes
     for (const recipe of all_recipes) {
         let imageUrl;
-        try {
+        if (recipe.author.length) {
+            // recipe created by user
             const responseImage = await yummy_backend.get_image(recipe.name);
-            const responseKey = Object.keys(responseImage)[0];
-            // image added by user from url
-            if (responseKey == "Url") {
-                imageUrl = responseImage.Url;
-            } else if (responseImage.Bytes.length == 0) {
+            if (!responseImage.length) {
                 // no image found, display default
                 imageUrl = "/images/default-recipe.jpg";
             } else {
-                const imageData = new Uint8Array(responseImage.Bytes);
-                const blob = new Blob([imageData], { type: "image/jpeg" });
-                imageUrl = URL.createObjectURL(blob);
+                imageUrl = responseImage;
             }
-        } catch (error) {
-            console.error("Error fetching image:", error);
+        } else {
+            // recipe added from data
+            const cleanedName = recipe.name.replace(/[ ,&']/g, "");
+            imageUrl = `/images/recipes_data/${cleanedName}.jpg`;
         }
 
         recipesData.value.push({

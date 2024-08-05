@@ -10,16 +10,16 @@ const props = defineProps({
     },
 });
 
+const cardRef = ref(null);
 const carouselRef = ref(null);
 const currentOffset = ref(0);
-let containerWidth = ref(0);
+const containerWidth = ref(0);
 
 let startX = 0;
 let currentX = 0;
 let temporaryX = 0;
 let startOffset = 0;
-
-const itemWidth = 300;
+let itemWidth = 300;
 
 const totalWidth = computed(() => props.recipes.length * itemWidth);
 const maxOffset = computed(() => Math.max(0, totalWidth.value - containerWidth.value));
@@ -78,6 +78,11 @@ const onItemClick = (item) => {
 };
 
 function getContainerWidth() {
+    if (window.innerWidth < 768) {
+        itemWidth = 300;
+    } else {
+        itemWidth = 400;
+    }
     containerWidth.value = carouselRef.value.offsetWidth;
 }
 
@@ -92,7 +97,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <div class="relative mx-auto mb-[80px] mt-[30px] overflow-hidden">
+    <div class="relative mx-auto mb-[80px] mt-[30px] overflow-hidden px-4">
         <div
             ref="carouselRef"
             class="flex transition-transform duration-300 ease-in-out"
@@ -105,7 +110,7 @@ onUnmounted(() => {
                 v-for="(recipe, index) in recipes"
                 v-if="recipes"
                 :key="index"
-                class="w-[300px] flex-shrink-0 cursor-pointer p-4 md:w-[400px]"
+                class="w-[300px] flex-shrink-0 cursor-pointer p-2 md:w-[400px]"
                 @click="onItemClick(recipe)"
             >
                 <div class="flex h-full flex-col">

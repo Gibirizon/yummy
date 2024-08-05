@@ -32,7 +32,7 @@ async function getRecipes() {
         dipslayRecipes(dinner, dinnerRecipes);
     } catch (error) {
         console.log("Error: ", error);
-        setTimeout(getRecipes(), 200);
+        setTimeout(async () => await getRecipes(), 200);
         return;
     }
 }
@@ -46,14 +46,21 @@ async function dipslayRecipes(fetchedRecipes, recipesStore) {
 
 async function createRecipeBrief(recipe) {
     let imageUrl;
-    try {
+    if (recipe.author.length) {
+        // recipe created by user
         const responseImage = await yummy_backend.get_image(recipe.name);
-        const imageData = new Uint8Array(responseImage.Bytes);
-        const blob = new Blob([imageData], { type: "image/jpeg" });
-        imageUrl = URL.createObjectURL(blob);
-    } catch (error) {
-        console.error("Error fetching image:", error);
+        if (!responseImage.length) {
+            // no image found, display default
+            imageUrl = "/images/default-recipe.jpg";
+        } else {
+            imageUrl = responseImage;
+        }
+    } else {
+        // recipe added from data
+        const cleanedName = recipe.name.replace(/[ ,&']/g, "");
+        imageUrl = `/images/recipes_data/${cleanedName}.jpg`;
     }
+
     let new_recipe = new RecipeBrief(recipe.name, imageUrl, recipe.total_time);
     return new_recipe;
 }
@@ -72,7 +79,7 @@ onBeforeMount(async () => {
 
 <template>
     <div class="min-h-screen bg-gradient-to-r from-gray-900 via-gray-800 to-gray-700 py-8">
-        <h1 class="mb-12 text-center text-5xl font-bold text-white">Our Recipes</h1>
+        <h2 class="mb-12 text-center text-4xl lg:text-5xl font-bold text-white">Our Recipes</h2>
 
         <section class="mb-16">
             <div class="mb-6 flex items-center justify-center">

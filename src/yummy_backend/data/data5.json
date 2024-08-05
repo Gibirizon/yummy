@@ -1,0 +1,792 @@
+{
+  "data": {
+    "recipesByTag": {
+      "edges": [
+        {
+          "node": {
+            "cuisines": null,
+            "tags": [
+              "Lunch",
+              "Dinner",
+              "Fast & Easy",
+              "15 - 30 MINUTES",
+              "PROTEIN-DENSE",
+              "Snack",
+              "HIGH-POTASSIUM",
+              "LABOR INTENSIVE",
+              "HIGH-FIBER",
+              "HIGH_FIBER",
+              "SOFT & TENDER"
+            ],
+            "instructions": [
+              "In a large wok, over medium heat, heat the oil. Add the vegetable and stir fry about 3 minutes or until vegetables are crisp-tender. Add the garlic and ginger and cook until fragrant.",
+              "In a small bowl, combine all the ingredients for the stir fry sauce. Pour the sauce over the vegetables and stir.",
+              "Turn heat down to medium/low and cook 3-4 minutes, until sauce thickens and vegetables are desired tenderness."
+            ],
+            "totalTimeInSeconds": 1200,
+            "ingredientLines": [
+              "1 large carrots, sliced",
+              "1 cups broccoli florets",
+              "4 oz mushrooms, sliced",
+              "3 tbsp olive oil",
+              "2 garlic cloves, peeled and minced",
+              "1 tsp ginger, minced",
+              "¼ cup chicken broth",
+              "2 tbsp soy sauce",
+              "6 oz canned corn, drained"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/abc064f5916b490c9e8394ce6def6cb2.jpg",
+            "name": "Vegetable Stir Fry"
+          }
+        },
+        {
+          "node": {
+            "cuisines": null,
+            "tags": [
+              "Snack",
+              "ABOVE 30 MINUTES",
+              "ACIDIC FOODS/DRINKS",
+              "LABOR INTENSIVE",
+              "Fast & Easy",
+              "COLD",
+              "SOFT & TENDER"
+            ],
+            "instructions": [
+              "Preheat the oven to 375°F.",
+              "Using olive oil, lightly oil a 10-inch pan with a removable bottom and set it aside.",
+              "To make the polenta, bring the water to a boil. Add salt. Slowly whisk in the polenta and continue whisking until thickened. Reduce the heat to low-medium and continue cooking for 10 minutes, whisking very frequently. Remove from heat and stir in 2 tablespoons olive oil and ¼ cup basil.",
+              "Let the polenta cool slightly and then pour it into the pan. Use the back of a wet spoon to smooth it evenly into the pan. Set it aside to firm up.",
+              "Meanwhile, toss the tomatoes and garlic with 1 tablespoon olive oil and a generous amount of salt and pepper and spread them out evenly on a baking sheet. Roast until the tomatoes are just bursting, about 10 minutes. Remove from the oven.",
+              "Place the polenta crust in the oven and bake for about 20 minutes until the edges are somewhat dry and crisp. Remove from the oven and arrange the tomatoes on top. Return the tart to the oven for 5 more minutes or until heated through.",
+              "To serve, drizzle the remaining olive oil on top and cut into pieces. Serve warm or at room temperature."
+            ],
+            "totalTimeInSeconds": 2700,
+            "ingredientLines": [
+              "4 cups water",
+              "Salt, to taste",
+              "1 cup polenta",
+              "4 tbsp olive oil, divided",
+              "1 lb cherry tomatoes",
+              "2 garlic cloves, smashed",
+              "Freshly ground black pepper, to taste",
+              "1 cup basil leaves"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/5064d93cfe874f128a6b73dbbb00ba2c.jpg",
+            "name": "Polenta Tart With Roasted Cherry Tomatoes"
+          }
+        },
+        {
+          "node": {
+            "cuisines": [
+              "Indian"
+            ],
+            "tags": [
+              "ACIDIC FOODS/DRINKS",
+              "15 - 30 MINUTES",
+              "DOES NOT DISSOLVE VIA SALIVA",
+              "VEGETARIAN",
+              "best",
+              "Snack",
+              "LABOR INTENSIVE",
+              "VEGAN",
+              "Low-Carb",
+              "SPICY",
+              "PLANT_BASED",
+              "Fast & Easy"
+            ],
+            "instructions": [
+              "Heat olive oil in a saucepan over medium-high heat, add onion and garlic and stir occasionally until tender, 5 minutes.",
+              "Add ginger, cook until fragrant, 2 minutes, add spices (except garam masala) and stir until fragrant.",
+              "Add stock, tomato, cover and simmer until starting to become tender, 5 minutes.",
+              "Add cauliflower, cover and simmer until tender, 5 minutes.",
+              "Stir in garam marsala, and serve."
+            ],
+            "totalTimeInSeconds": 1800,
+            "ingredientLines": [
+              "2 tbsp olive oil",
+              "1 onion, minced",
+              "2 garlic cloves, sliced",
+              "1/2 tsp chopped ginger",
+              "1 tsp ground cumin",
+              "1 tsp ground turmeric",
+              "1/2 tsp ground chili",
+              "2 cups vegetable stock",
+              "3 tomatoes, diced",
+              "2 cups cauliflower florets",
+              "1 tsp garam masala"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/9949bc81cb704bed81b428e861f14291.jpg",
+            "name": "Cauliflower Curry With Tomato"
+          }
+        },
+        {
+          "node": {
+            "cuisines": null,
+            "tags": [
+              "KETO-FRIENDLY",
+              "VEGETARIAN",
+              "Fried",
+              "15 - 30 MINUTES",
+              "Snack",
+              "FRIED/GREASY FOODS",
+              "ENERGY-DENSE",
+              "best",
+              "Fast & Easy",
+              "PROTEIN-DENSE"
+            ],
+            "instructions": [
+              "Preheat air fryer to 390°F.",
+              "Prepare tempeh by slicing into bite-sized chunks. Place chunks into a large mixing bowl.",
+              "To the same bowl add olive oil, soy sauce, sesame oil, garlic powder and salt. Toss to coat. Let sit and marinate for 10 minutes.",
+              "When marination has finished, place the tempeh in a single layer in your air fryer basket or tray.",
+              "Air fry for 15 minutes or until tempeh is firm, crispy and golden."
+            ],
+            "totalTimeInSeconds": 1800,
+            "ingredientLines": [
+              "8 oz tempeh",
+              "1 tbsp olive oil",
+              "1 tbsp soy sauce",
+              "1 tsp toasted sesame oil",
+              "1 tsp garlic powder",
+              "½ tsp sea salt"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/65ef4a72842a48728ac7fe533d0b05c7.jpg",
+            "name": "Air-Fryer Tempeh"
+          }
+        },
+        {
+          "node": {
+            "cuisines": null,
+            "tags": [
+              "MOIST & SMOOTH",
+              "PROTEIN-DENSE",
+              "UNDER 15 MINUTES",
+              "VEGAN",
+              "ENERGY-DENSE",
+              "Snack",
+              "Fast & Easy",
+              "ACIDIC FOODS/DRINKS",
+              "TART/SOUR"
+            ],
+            "instructions": [
+              "Place cashews in a bowl and cover with water. Soak until soft, at least 4 hours but preferably overnight.",
+              "Drain and rinse cashews; place in the bowl of a food processor. Add apple cider vinegar, salt, garlic powder, and onion powder.",
+              "Blend until smooth and creamy, occasionally scraping down bowl sides with a spatula, 3 to 5 minutes."
+            ],
+            "totalTimeInSeconds": 600,
+            "ingredientLines": [
+              "1 cup unsalted raw cashews",
+              "3 tbsp water",
+              "1/2 tbsp apple cider vinegar",
+              "1/3 tsp salt",
+              "1 tsp garlic powder",
+              "1 tsp onion powder"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/6da85274c271414aa37794377f11b0e0.jpg",
+            "name": "Cashew Sour Cream"
+          }
+        },
+        {
+          "node": {
+            "cuisines": [
+              "Mexican",
+              "Kid-Friendly",
+              "World"
+            ],
+            "tags": [
+              "COLD",
+              "Pescatarian",
+              "ACIDIC FOODS/DRINKS",
+              "RH Approved",
+              "DOES NOT DISSOLVE VIA SALIVA",
+              "15 - 30 MINUTES",
+              "VEGETARIAN",
+              "TART/SOUR",
+              "PROTEIN-DENSE",
+              "Snack",
+              "HIGH-POTASSIUM",
+              "LABOR INTENSIVE",
+              "WARM/HOT",
+              "Low-Carb",
+              "HIGH-FIBER",
+              "HIGH_FIBER",
+              "Fast & Easy"
+            ],
+            "instructions": [
+              "Place clam juice and oregano in a saucepa, bring to a boil over medium-high heat.",
+              "Add shrimp and stir just until shrimp turn pink and are not quite cooked through, about 2 minutes.",
+              "Transfer shrimp to a bowl with a slotted spoon. Reserve liquid. Let shrimp cool to room temperature.",
+              "Place chopped tomatoes, cucumbers, celery, red onion, and jalapenos is a mixing bowl.",
+              "Add ketchup, cooking liquid from the shrimp, lime juice, cilantro, and hot sauce. Gently mix until ingredients are well blended.",
+              "Chop shrimp into bite-size pieces, leaving a few whole for garnishes. Stir chopped pieces into the vegetable mixture.",
+              "Wrap mixing bowl with plastic wrap. Place reserved shrimp in a bowl, wrap with plastic wrap.",
+              "Refrigerate shrimp cocktail and reserved shrimp until thoroughly chilled, 2 to 3 hours.",
+              "If mixture seems a bit thick, add a little tomato juice or pickle juice. Stir in avocado cubes.",
+              "Serve, if possible, in clear glass bowls. Top with reserved whole shrimp and some cilantro leaves."
+            ],
+            "totalTimeInSeconds": 900,
+            "ingredientLines": [
+              "3/4 cup clam juice",
+              "1/3 tsp dried oregano",
+              "3/4 lb large shrimp, peeled and deveined",
+              "3/4 cup diced tomatoes",
+              "3/4 cup diced cucumber",
+              "1/3 cup diced celery",
+              "1/3 diced red onion",
+              "1 tbsp diced jalapeno peppers",
+              "1/3 cup tomato sauce",
+              "1 lime, juiced",
+              "1 tbsp chopped cilantro",
+              "1 avocado, cubed",
+              "Sriracha sauce, to taste"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/4b07305366b84d0eb4cbc9be806c5aeb.jpg",
+            "name": "Shrimp Cocktail"
+          }
+        },
+        {
+          "node": {
+            "cuisines": [
+              "Mediterranean"
+            ],
+            "tags": [
+              "GLUTEN_FREE",
+              "Fast & Easy",
+              "DOES NOT DISSOLVE VIA SALIVA",
+              "15 - 30 MINUTES",
+              "Mediterranean",
+              "best",
+              "TART/SOUR",
+              "PROTEIN-DENSE",
+              "Snack",
+              "HIGH-POTASSIUM",
+              "LABOR INTENSIVE",
+              "ACIDIC FOODS/DRINKS",
+              "Vegetarian",
+              "Snacks",
+              "SOFT & TENDER"
+            ],
+            "instructions": [
+              "In a medium skillet bring salted water to a boil. Add rice and cook according to package directions.",
+              "In a bowl mix together 1 chopped tomato, bell pepper, olive oil, lemon juice, cooked rice, and green onion.",
+              "To serve, fill each tomato with rice mix. Top with shrimp and slice of lemon."
+            ],
+            "totalTimeInSeconds": 1800,
+            "ingredientLines": [
+              "10 oz shrimp",
+              "1 green onion, chopped",
+              "1 yellow bell pepper, chopped",
+              "1/3 cup rice",
+              "4 tomatoes, cored",
+              "Salt, to taste",
+              "1 lemon, sliced and juiced",
+              "1 tbsp olive oil"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/5b31eccbf3c443d99701c4ccdb3ef5d4.jpg",
+            "name": "Stuffed Tomatoes With Shrimp"
+          }
+        },
+        {
+          "node": {
+            "cuisines": [
+              "American",
+              "Kid-Friendly",
+              "Italian"
+            ],
+            "tags": [
+              "COLD",
+              "15 - 30 MINUTES",
+              "TART/SOUR",
+              "Snack",
+              "LABOR INTENSIVE",
+              "ACIDIC FOODS/DRINKS",
+              "fingerfood",
+              "HIGH-FIBER",
+              "Fast & Easy"
+            ],
+            "instructions": [
+              "Preheat the oven to 400­°F. Grease a 2 cup muffin tin, or line with paper liners.",
+              "In a large bowl, mix together the yogurt, lemon juice, egg whites, and lemon extract.",
+              "In a separate bowl, stir together the flour, baking powder, salt, and lemon zest.",
+              "Add the wet ingredients to the dry, and mix until just blended. Gently stir in the raspberries.",
+              "Spoon batter evenly into the prepared muffin cups",
+              "Bake for 15 to 17 minutes in the preheated oven, or until the top springs back when lightly touched. Cool muffins in the tin on a wire rack."
+            ],
+            "totalTimeInSeconds": 1800,
+            "ingredientLines": [
+              "1/4 cup yogurt",
+              "1 tbsp lemon juice",
+              "1 egg white",
+              "1/8 tsp lemon extract",
+              "1/2 cup oat flour",
+              "1/2 tsp baking powder",
+              "1/2 tsp grated lemon zest",
+              "1 cup raspberry"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/0ca76fd3b6734490ae0eb7b740b4fa5d.jpg",
+            "name": "Rasperry Lemon Muffins"
+          }
+        },
+        {
+          "node": {
+            "cuisines": [
+              "American",
+              "Kid-Friendly"
+            ],
+            "tags": [
+              "Snack",
+              "Fast & Easy",
+              "Side",
+              "Salad"
+            ],
+            "instructions": [
+              "In a small bowl, combine beet with olive oil and caraway seeds. Mix well.",
+              "Season with salt and pepper to taste.",
+              "Garnish with chopped fresh parsley.",
+              "Serve immediately."
+            ],
+            "totalTimeInSeconds": 900,
+            "ingredientLines": [
+              "1 beet, cooked, peeled and sliced",
+              "1/2 tbsp olive oil",
+              "1/4 tsp caraway seeds",
+              "Salt, to taste",
+              "Ground black pepper, to taste",
+              "1 tbsp chopped parsley"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/fd0f7c8c46454f308e7110ad4c975d12.jpg",
+            "name": "Beet Salad With Caraway Seeds"
+          }
+        },
+        {
+          "node": {
+            "cuisines": [
+              "World"
+            ],
+            "tags": [
+              "Fast & Easy",
+              "15 - 30 MINUTES",
+              "VEGETARIAN",
+              "HIGH-LACTOSE",
+              "PROTEIN-DENSE",
+              "Snack",
+              "DRY FOODS",
+              "LABOR INTENSIVE",
+              "PLANT_BASED",
+              "Snacks",
+              "best"
+            ],
+            "instructions": [
+              "Preheat oven to 350°F.",
+              "Mix the flour, cheddar and baking powder together.",
+              "Whisk the eggs, and add the salt to the eggs, then add to the flour bowl. Add the melted butter to the flour bowl. Combine.",
+              "Add the milk and mix well. Stir in the crumbled feta. Stir in the chopped spinach",
+              "Spoon the mixture into your muffin tin, or into muffin cases. Throw a little extra cheddar on top of the muffins.",
+              "Bake for 20 minutes. Take out of the oven when the muffin tops are golden brown and cooked through."
+            ],
+            "totalTimeInSeconds": 1800,
+            "ingredientLines": [
+              "1 cup all-purpose flour",
+              "1 tsp baking powder",
+              "2 eggs",
+              "2 cups spinach, chopped",
+              "1/2 cup shredded cheddar cheese",
+              "1/4 cup crumbled feta cheese",
+              "1 tbsp butter",
+              "Salt, to taste",
+              "1 cup milk"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/acccb8d307624a3daf5fb7702762ef90.jpg",
+            "name": "Spinach And Cheese Muffins"
+          }
+        },
+        {
+          "node": {
+            "cuisines": [
+              "American",
+              "Kid-Friendly"
+            ],
+            "tags": [
+              "KETO-FRIENDLY",
+              "DOES NOT DISSOLVE VIA SALIVA",
+              "Fast & Easy",
+              "VEGETARIAN",
+              "ACIDIC FOODS/DRINKS",
+              "15 - 30 MINUTES",
+              "Snack",
+              "ENERGY-DENSE",
+              "TART/SOUR",
+              "LABOR INTENSIVE",
+              "Low-Carb",
+              "COLD",
+              "HIGH-LACTOSE"
+            ],
+            "instructions": [
+              "Combine cabbage, carrot, mayonnaise, cranberries, walnuts, milk, cider and vinegar in a bowl; stir well. Cover and refrigerate until chilled, about 4 hours."
+            ],
+            "totalTimeInSeconds": 900,
+            "ingredientLines": [
+              "1/2 red cabbage, sliced and chopped",
+              "1/4 cup grated carrot",
+              "1/4 cup mayonnaise",
+              "2 tbsp dried cranberries",
+              "2 tbsp chopped walnuts",
+              "1/2 tbsp milk",
+              "1/2 tbsp apple cider vinegar"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/7558660f07254b859d24aa396bd62eba.jpg",
+            "name": "Red Cabbage Slaw"
+          }
+        },
+        {
+          "node": {
+            "cuisines": [
+              "American",
+              "Kid-Friendly"
+            ],
+            "tags": [
+              "Snack",
+              "Side",
+              "Fast & Easy",
+              "airfryer"
+            ],
+            "instructions": [
+              "Preheat your air fryer to 375°F.",
+              "In a bowl, mix together the cream cheese, Parmesan cheese, chopped parsley, garlic powder, salt, and pepper until well combined.",
+              "Spoon the cream cheese mixture into the mushroom caps, filling them evenly.",
+              "Lightly grease the air fryer basket with cooking spray or olive oil.",
+              "Place the stuffed mushrooms in the air fryer basket in a single layer.",
+              "Air fry the stuffed mushrooms at 375°F for 8-10 minutes, or until the mushrooms are tender and the filling is golden brown and bubbly.",
+              "Once cooked, remove the stuffed mushrooms from the air fryer and serve hot.",
+              "Enjoy your delicious Air Fryer Stuffed Mushrooms as a tasty appetizer or snack!"
+            ],
+            "totalTimeInSeconds": 1200,
+            "ingredientLines": [
+              "3 mushrooms, stems removed and cleaned",
+              "1/4 cup cream cheese, softened",
+              "1 tbsp grated Parmesan cheese",
+              "1 tbsp chopped parsley",
+              "1/4 tsp garlic powder",
+              "Salt, to taste",
+              "Ground black pepper, to taste"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/fd052b546760448aa0d5fdac7cb6f69f.jpg",
+            "name": "Air Fryer Stuffed Mushrooms"
+          }
+        },
+        {
+          "node": {
+            "cuisines": [
+              "Kid-Friendly",
+              "Greek",
+              "Middle eastern"
+            ],
+            "tags": [
+              "Snack",
+              "Breakfast",
+              "ABOVE 30 MINUTES",
+              "Fast & Easy"
+            ],
+            "instructions": [
+              "Preheat your oven to 375°F.",
+              "In a bowl, combine the all-purpose flour, baking powder, and salt.",
+              "Add Greek yogurt, olive oil, cottage cheese, grated halloumi, mint, and parsley to the flour mixture. Mix until the dough comes together.",
+              "On a lightly floured surface, roll out the dough into a circle.",
+              "Transfer the dough to a baking sheet lined with parchment paper.",
+              "Spread crumbled feta cheese over the center of the dough, leaving a border around the edges.",
+              "Fold the edges of the dough over the filling, creating a rustic, free-form shape.",
+              "Brush the exposed dough with beaten egg",
+              "Bake in the preheated oven for 15-20 minutes or until the crust is golden and cooked through."
+            ],
+            "totalTimeInSeconds": 2400,
+            "ingredientLines": [
+              "1/2 cup flour",
+              "1/4 tsp baking powder",
+              "1/8 tsp salt",
+              "1/4 cup greek yogurt",
+              "1 tbsp olive oil",
+              "2 tbsp cottage cheese",
+              "1 tbsp grated halloumi cheese",
+              "1 tbsp chopped mint leaves",
+              "1 tbsp chopped parsley",
+              "1/4 cup crumbled feta cheese",
+              "1 egg, beaten"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/5f8d3c624a52481e9c265726451668b7.jpg",
+            "name": "Flaounes"
+          }
+        },
+        {
+          "node": {
+            "cuisines": [
+              "Korean",
+              "Asian",
+              "Kid-Friendly"
+            ],
+            "tags": [
+              "Vegan",
+              "15 - 30 MINUTES",
+              "DOES NOT DISSOLVE VIA SALIVA",
+              "TART/SOUR",
+              "PROTEIN-DENSE",
+              "Snack",
+              "HIGH-POTASSIUM",
+              "LABOR INTENSIVE",
+              "ACIDIC FOODS/DRINKS",
+              "Fast & Easy"
+            ],
+            "instructions": [
+              "In a medium bowl, stir together vinegar, black pepper, and red pepper flakes.",
+              "Heat oil in a saucepan over medium-high heat. Stir in sesame seeds, and reduce heat to medium. Cook until seeds are brown, about 5 minutes.",
+              "Remove seeds with a slotted spoon, and stir into vinegar mixture. Mix in cucumber, green onions, and carrot. Cover, and refrigerate at least 5 minutes."
+            ],
+            "totalTimeInSeconds": 1500,
+            "ingredientLines": [
+              "1/2 cup white vinegar",
+              "1/2 tsp ground black pepper",
+              "1 tsp red pepper flakes",
+              "1/2 tbsp vegetable oil",
+              "1/4 cup sesame seeds",
+              "2 cucumbers, thinly sliced",
+              "1 green onion, thinly sliced",
+              "1 carrot, shredded"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/c869b2dd3d0a4a81ae7b35af1c4cd987.jpg",
+            "name": "Korean Cucumber Salad"
+          }
+        },
+        {
+          "node": {
+            "cuisines": [
+              "American",
+              "Kid-Friendly"
+            ],
+            "tags": [
+              "Snack",
+              "Fast & Easy",
+              "Side",
+              "Appetizer",
+              "airfryer"
+            ],
+            "instructions": [
+              "Preheat the air fryer to 360°F for 3-5 minutes.",
+              "Slice about 1/2 inch off the top of the onion and peel the outer skin off. Cut about 1/2 inch off the root end of the onion, ensuring the onion sits flat on the cutting board.",
+              "Use a sharp knife to make vertical cuts about 1/4 inch apart from the top of the onion down, stopping about 1/2 inch from the root end. Make 4-6 cuts around the onion to create \"petals.\"",
+              "In a small bowl, mix together breadcrumbs, olive oil, paprika, garlic powder, onion powder, cayenne pepper (if using), salt, and pepper.",
+              "Carefully open the \"petals\" of the onion and sprinkle the breadcrumb mixture between them, ensuring it gets into each layer.",
+              "Lightly coat the onion with non-stick cooking spray.",
+              "Place the onion in the air fryer basket.",
+              "Air fry for 20-25 minutes, until the onion is golden brown and crispy, and the petals are tender.",
+              "Serve the air fryer blooming onion hot with your favorite dipping sauce."
+            ],
+            "totalTimeInSeconds": 1800,
+            "ingredientLines": [
+              "1 onion",
+              "1/4 cup breadcrumbs",
+              "1 tbsp olive oil",
+              "1 tsp paprika",
+              "1/2 tsp garlic powder",
+              "1/2 tsp onion powder",
+              "1/4 tsp cayenne pepper",
+              "Salt, to taste",
+              "Ground black pepper, to taste"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/8ff4d5936e41407eb9a84905c4467efc.jpg",
+            "name": "Air Fryer Blooming Onion"
+          }
+        },
+        {
+          "node": {
+            "cuisines": [
+              "Mediterranean"
+            ],
+            "tags": [
+              "COLD",
+              "15 - 30 MINUTES",
+              "best",
+              "Appetizer",
+              "HIGH-POTASSIUM",
+              "DRY FOODS",
+              "LABOR INTENSIVE",
+              "Snack",
+              "PROTEIN-DENSE",
+              "ACIDIC FOODS/DRINKS",
+              "FRIED/GREASY FOODS",
+              "Fast & Easy"
+            ],
+            "instructions": [
+              "Chop onions and carrots with a knife or a blender, let them simmer in a frying pan with a small amount of oil and cool.",
+              "Pour milk over the loaf, allow some time to swell and squeeze.",
+              "Mince the fillet, bread, onion, and carrot through a meat grinder, put an egg in there, salt and pepper. Form patties. Roll in crackers.",
+              "Fry under cover until cooked, 10 minutes."
+            ],
+            "totalTimeInSeconds": 1200,
+            "ingredientLines": [
+              "8 oz salmon fillet",
+              "1 onion",
+              "1/2 cup almond milk",
+              "1 carrot",
+              "1 egg",
+              "Salt, to taste",
+              "Black pepper, to taste",
+              "3 tbsp breadcrumbs",
+              "1 tsp olive oil"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/5d81141b3a1b4534bb11192f29891685.jpg",
+            "name": "Red Fish Cutlets"
+          }
+        },
+        {
+          "node": {
+            "cuisines": [
+              "American",
+              "Kid-Friendly"
+            ],
+            "tags": [
+              "Snack",
+              "Side",
+              "Staples & Sides",
+              "Fast & Easy",
+              "airfryer"
+            ],
+            "instructions": [
+              "Preheat your air fryer to 375°F.",
+              "In a shallow bowl, mix together the breadcrumbs, grated Parmesan cheese, garlic powder, paprika, salt, and pepper.",
+              "Place the flour, beaten egg, and breadcrumb mixture in three separate shallow bowls.",
+              "Dredge each tomato slice in the flour, then dip it into the beaten egg, and finally coat it evenly with the breadcrumb mixture, pressing gently to adhere.",
+              "Place the coated tomato slices in the air fryer basket in a single layer, leaving some space between each slice.",
+              "Lightly spray the tomato slices with cooking spray.",
+              "Air fry at 375°F for 8-10 minutes, flipping halfway through, until the tomatoes are golden brown and crispy.",
+              "Once cooked, remove the fried green tomatoes from the air fryer and let them cool slightly before serving.",
+              "Serve the air-fried fried green tomatoes hot as a delicious appetizer or side dish."
+            ],
+            "totalTimeInSeconds": 900,
+            "ingredientLines": [
+              "1 green tomato, sliced",
+              "1/4 cup flour",
+              "1 egg, beaten",
+              "1/2 cup breadcrumbs",
+              "1/4 cup grated Parmesan cheese",
+              "1/4 tsp garlic powder",
+              "1/4 tsp paprika",
+              "Salt, to taste",
+              "Ground black pepper, to taste"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/864da44e9f994143a41a5decf0017948.jpg",
+            "name": "Air Fryer Fried Green Tomatoes"
+          }
+        },
+        {
+          "node": {
+            "cuisines": [
+              "American",
+              "Kid-Friendly"
+            ],
+            "tags": [
+              "smoothie",
+              "Breakfast",
+              "UNDER 15 MINUTES",
+              "Snack",
+              "Fast & Easy"
+            ],
+            "instructions": [
+              "Wash the kale leaves thoroughly. Peel and segment the orange.",
+              "Place the kale leaves, orange segments, banana into a blender.",
+              "Blend until smooth, gradually adding water as needed to achieve your desired consistency."
+            ],
+            "totalTimeInSeconds": 600,
+            "ingredientLines": [
+              "1 cup kale leaves",
+              "1 orange",
+              "1 banana",
+              "1/2 cup water"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/b2094cd3e9264dfca59c3ababed4e75c.jpg",
+            "name": "Kale Orange Banana Smoothie"
+          }
+        },
+        {
+          "node": {
+            "cuisines": [
+              "American"
+            ],
+            "tags": [
+              "KETO-FRIENDLY",
+              "Fast & Easy",
+              "VEGETARIAN",
+              "ACIDIC FOODS/DRINKS",
+              "Keto-Friendly",
+              "Keto",
+              "15 - 30 MINUTES",
+              "Snack",
+              "SOFT & TENDER",
+              "Paleo",
+              "LABOR INTENSIVE",
+              "Low-Carb",
+              "COLD",
+              "PROTEIN-DENSE",
+              "HIGH-LACTOSE"
+            ],
+            "instructions": [
+              "Preheat the oven to 350°F.",
+              "Heat oil in large skillet over medium-high heat. Add onion, and cook 5 minutes.",
+              "Add spinach and cook 5 minutes, or until spinach begins to wilt. Transfer vegetables to bowl and let cool. Add cheese.",
+              "Whisk milk and eggs in large bowl. Season with salt and pepper. Pour eggs over veggies and stir well to combine.",
+              "Divide the mixture evenly among prepared muffin cups and bake 20 minutes, or until puffed up and set. Serve with chopped green onion."
+            ],
+            "totalTimeInSeconds": 1800,
+            "ingredientLines": [
+              "1 tbsp olive oil",
+              "1/4 cup diced onion",
+              "2 cups baby spinach",
+              "1/2 cup shredded cheddar cheese",
+              "4 eggs",
+              "1/4 cup milk",
+              "Salt, to taste",
+              "1 green onion, chopped",
+              "Black pepper, to taste"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/751d5a0418f24d1f9826dfe487809311.jpg",
+            "name": "Quishe Bites"
+          }
+        },
+        {
+          "node": {
+            "cuisines": [
+              "American",
+              "Kid-Friendly"
+            ],
+            "tags": [
+              "15 - 30 MINUTES",
+              "Snack",
+              "Soup",
+              "Fast & Easy"
+            ],
+            "instructions": [
+              "Heat a small pot over medium heat and lightly grease it with cooking spray or a small amount of oil.",
+              "Add the diced potato, diced onion, and diced celery to the pot. Sauté for about 2-3 minutes, stirring occasionally.",
+              "Pour in the low-sodium chicken or vegetable broth and bring the mixture to a boil.",
+              "Reduce the heat to low, cover the pot, and let it simmer for about 15-20 minutes, or until the potatoes are tender.",
+              "Use an immersion blender or a regular blender to puree the soup until it reaches your desired consistency.",
+              "Return the pureed soup to the pot and stir in the low-fat milk.",
+              "Season the soup with salt and black pepper to taste.",
+              "Heat the soup over low heat for an additional 2-3 minutes to warm it through."
+            ],
+            "totalTimeInSeconds": 1800,
+            "ingredientLines": [
+              "1 potato, peeled and diced",
+              "1/4 cup diced onion",
+              "1/4 cup diced celery",
+              "1 cup chicken broth",
+              "1/4 cup milk",
+              "Salt, to taste",
+              "Ground black pepper, to taste"
+            ],
+            "mainImage": "https://storage.googleapis.com/sg-uploads/bf5abc83f38e46f59b93b2f98c175090.jpg",
+            "name": "Cream Of Mashed Potato Soup"
+          }
+        }
+      ]
+    }
+  }
+}

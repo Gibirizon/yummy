@@ -29,22 +29,20 @@ async function getRecipe() {
     recipeInfo = recipeResponse.Ok;
 
     let imageUrl;
-    try {
+    if (recipeInfo.author.length) {
+        // recipe created by user
         const responseImage = await yummy_backend.get_image(recipeName);
-        const responseKey = Object.keys(responseImage)[0];
-        // image added by user from url
-        if (responseKey == "Url") {
-            imageUrl = responseImage.Url;
-        } else if (responseImage.Bytes.length == 0) {
+
+        if (!responseImage.length) {
             // no image found, display default
             imageUrl = "/images/default-recipe.jpg";
         } else {
-            const imageData = new Uint8Array(responseImage.Bytes);
-            const blob = new Blob([imageData], { type: "image/jpeg" });
-            imageUrl = URL.createObjectURL(blob);
+            imageUrl = responseImage;
         }
-    } catch (error) {
-        console.error("Error fetching image:", error);
+    } else {
+        // recipe added from data
+        const cleanedName = recipeName.replace(/[ ,&']/g, "");
+        imageUrl = `/images/recipes_data/${cleanedName}.jpg`;
     }
 
     // store informations in variable

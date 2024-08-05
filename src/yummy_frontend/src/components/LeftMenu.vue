@@ -106,7 +106,7 @@ onBeforeMount(async () => {
         @click="emit('close')"
     ></div>
     <div
-        class="duration-400 left-menu fixed left-0 top-0 z-[130] flex h-screen w-[240px] flex-col items-center gap-8 bg-[#1b263e] p-4 shadow-lg transition-transform"
+        class="duration-400 left-menu fixed left-0 top-0 z-[130] flex h-screen max-h-screen w-[240px] flex-col items-center gap-8 bg-[#1b263e] p-4 shadow-lg transition-transform overflow-y-auto"
         :class="isVisible ? 'translate-x-0' : '-translate-x-full'"
     >
         <h2 class="p-2 font-['Dancing_Script'] text-5xl text-white">Yummy</h2>

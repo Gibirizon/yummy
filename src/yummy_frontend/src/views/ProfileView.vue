@@ -27,7 +27,6 @@ async function getUserIndex() {
         goToHome();
         return;
     }
-    console.log("User index is correct: ", user_index.Ok);
 }
 function goToHome() {
     router.push({ name: "home", query: { canisterId: route.query.canisterId } });

@@ -1,12 +1,11 @@
 extern crate serde;
-use candid::CandidType;
+use candid::{CandidType, Deserialize};
 use ic_cdk::init;
 use ic_stable_structures::memory_manager::{MemoryManager, VirtualMemory};
 use ic_stable_structures::DefaultMemoryImpl;
-use recipes::images::ImageData;
-use recipes::{recipes_initialization, RecipeBrief, RecipeInfo};
+use recipes::{create_recipe, RecipeBrief, RecipeInfo};
+use serde_json::{from_str, Value};
 use std::cell::RefCell;
-use std::time::Duration;
 use user::User;
 
 pub mod recipes;
@@ -20,67 +19,79 @@ thread_local! {
     );
 }
 
+#[derive(CandidType, Deserialize, Clone, Debug)]
+#[serde(rename_all = "camelCase")]
+pub struct RecipeInside {
+    name: String,
+    main_image: String,
+    instructions: Vec<String>,
+    ingredient_lines: Vec<String>,
+    cuisines: Option<Vec<String>>,
+    tags: Vec<String>,
+    total_time_in_seconds: u16,
+}
+#[derive(CandidType, Deserialize, Clone, Debug)]
+pub struct RecipeSingleItem {
+    node: RecipeInside,
+}
+
 #[init]
 fn init() {
-    ic_cdk::println!("Canister initialized. Setting up timer for HTTP call.");
-    setup_for_timer();
-}
+    // ic_cdk::println!("Canister initialized. Setting up timer for HTTP call.");
+    // setup_for_timer();
+    const FILE_CONTENTS: [&str; 5] = [
+        include_str!("../data/data1.json"),
+        include_str!("../data/data2.json"),
+        include_str!("../data/data3.json"),
+        include_str!("../data/data4.json"),
+        include_str!("../data/data5.json"),
+    ];
 
-fn set_timer(query: String, recipes_type: String, secs: u64) {
-    ic_cdk_timers::set_timer(Duration::from_secs(secs), || {
-        ic_cdk::spawn(async {
-            recipes_initialization(query, recipes_type).await;
-        });
-    });
-}
+    for i in 0..5 {
+        let data = FILE_CONTENTS[i];
+        let json: Value = from_str(&data).unwrap();
+        let recipes_info;
+        if i == 0 {
+            recipes_info = json
+                .get("data")
+                .unwrap()
+                .get("popularRecipes")
+                .unwrap()
+                .get("edges")
+                .unwrap();
+        } else {
+            recipes_info = json
+                .get("data")
+                .unwrap()
+                .get("recipesByTag")
+                .unwrap()
+                .get("edges")
+                .unwrap();
+        }
+        let recipes_list: Vec<RecipeSingleItem> =
+            serde_json::from_value(recipes_info.clone()).unwrap();
 
-fn setup_for_timer() {
-    let mut secs: u64 = 5;
-    let query = r#"
-    query {
-        popularRecipes {
-            edges {
-                node {
-                    cuisines
-                    tags
-                    instructions
-                    totalTimeInSeconds
-                    ingredientLines
-                    mainImage
-                    name
-                }
+        for recipe in recipes_list {
+            let new_recipe = RecipeInfo {
+                instructions: recipe.node.instructions,
+                cuisines: recipe.node.cuisines,
+                tags: recipe.node.tags,
+                total_time_in_seconds: recipe.node.total_time_in_seconds,
+                ingredients: recipe.node.ingredient_lines,
+                popular: if i == 0 { true } else { false },
+                author: None,
+            };
+            if i == 0 {
+                ic_cdk::println!(
+                    "Recipe: {}, popular: {}",
+                    recipe.node.name,
+                    new_recipe.popular
+                );
             }
-    }
-  }
-    "#
-    .to_string();
 
-    set_timer(query, "popularRecipes".to_string(), secs);
-    secs += 1;
-    let tags = ["Breakfast", "Dinner", "Dessert", "Snack"];
-    for tag in tags {
-        let query = format!(
-            r#"
-    query {{
-        recipesByTag (tag: "{}") {{
-            edges {{
-                node {{
-                    cuisines
-                    tags
-                    instructions
-                    totalTimeInSeconds
-                    ingredientLines
-                    mainImage
-                    name
-                }}
-            }}
-        }}
-    }}
-"#,
-            tag
-        );
-        set_timer(query, "recipesByTag".to_string(), secs);
-        secs += 1;
+            // RECIPES.with(|m| m.borrow_mut().insert(recipe.node.name, new_recipe));
+            create_recipe(recipe.node.name, new_recipe);
+        }
     }
 }
 

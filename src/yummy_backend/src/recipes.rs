@@ -1,37 +1,13 @@
-use crate::recipes::images::fetch_image;
-use crate::recipes::key::SUGGESTIC_API_KEY;
 use crate::Error;
 use crate::{Memory, MEMORY_MANAGER};
 use candid::{CandidType, Decode, Deserialize, Encode};
-use ic_cdk::api::management_canister::http_request::{
-    http_request, CanisterHttpRequestArgument, HttpHeader, HttpMethod,
-};
 use ic_cdk::{query, update};
 use ic_stable_structures::memory_manager::MemoryId;
 use ic_stable_structures::{storable::Bound, StableBTreeMap, Storable};
-use serde_json::{from_str, Value};
 use std::borrow::Cow;
 use std::cell::RefCell;
-use urlencoding::encode;
 
 pub mod images;
-mod key;
-
-#[derive(CandidType, Deserialize, Clone, Debug)]
-#[serde(rename_all = "camelCase")]
-pub struct RecipeInside {
-    name: String,
-    main_image: String,
-    instructions: Vec<String>,
-    ingredient_lines: Vec<String>,
-    cuisines: Option<Vec<String>>,
-    tags: Vec<String>,
-    total_time_in_seconds: u16,
-}
-#[derive(CandidType, Deserialize, Clone, Debug)]
-pub struct RecipeSingleItem {
-    node: RecipeInside,
-}
 
 #[derive(CandidType, Deserialize, Clone, Debug)]
 pub struct RecipeInfo {
@@ -108,88 +84,8 @@ impl Storable for RecipeInfo {
 }
 
 #[update]
-pub async fn recipes_initialization(query: String, recipes_type: String) {
-    let res = fetch_recipes(query).await;
-    transform_and_store_response(res, recipes_type.as_str()).await;
-}
-
-pub async fn fetch_recipes(query: String) -> String {
-    let encoded_query = encode(&query);
-
-    let url = format!(
-        "https://production.suggestic.com/graphql?query={}",
-        encoded_query
-    );
-    let request_headers = vec![HttpHeader {
-        name: "Authorization".to_string(),
-        value: format!("Token {}", SUGGESTIC_API_KEY),
-    }];
-
-    let request = CanisterHttpRequestArgument {
-        url: url.to_string(),
-        method: HttpMethod::GET,
-        body: None,
-        max_response_bytes: Some(30 * 1024),
-        transform: None,
-        headers: request_headers,
-    };
-
-    let cycles = 230_949_972_000;
-
-    match http_request(request, cycles).await {
-        Ok((response,)) => {
-            let res = String::from_utf8(response.body)
-                .expect("Transformed response is not UTF-8 encoded.");
-            res
-        }
-        Err((r, m)) => {
-            let message =
-                format!("The http_request resulted into error. RejectionCode: {r:?}, Error: {m}");
-
-            ic_cdk::api::print(message.clone());
-            message
-        }
-    }
-}
-
-pub async fn transform_and_store_response(http_response: String, recipes_type: &str) -> () {
-    let json: Value = from_str(&http_response).unwrap();
-    let data = json
-        .get("data")
-        .unwrap()
-        .get(recipes_type)
-        .unwrap()
-        .get("edges")
-        .unwrap();
-    let recipes_list: Vec<RecipeSingleItem> = serde_json::from_value(data.clone()).unwrap();
-
-    for recipe in recipes_list {
-        let image_url = recipe.node.main_image;
-        let image_fetching = fetch_image(&image_url, &recipe.node.name).await;
-        match image_fetching {
-            Ok(_) => {
-                let new_recipe = RecipeInfo {
-                    instructions: recipe.node.instructions,
-                    cuisines: recipe.node.cuisines,
-                    tags: recipe.node.tags,
-                    total_time_in_seconds: recipe.node.total_time_in_seconds,
-                    ingredients: recipe.node.ingredient_lines,
-                    popular: if recipes_type == "popularRecipes" {
-                        true
-                    } else {
-                        false
-                    },
-                    author: None,
-                };
-
-                RECIPES.with(|m| m.borrow_mut().insert(recipe.node.name, new_recipe));
-            }
-            Err(_) => {
-                ic_cdk::api::print(format!("Failed to fetch image"));
-                continue;
-            }
-        }
-    }
+pub fn create_recipe(name: String, recipe: RecipeInfo) {
+    RECIPES.with(|recipes| recipes.borrow_mut().insert(name, recipe));
 }
 
 #[query]
@@ -233,7 +129,7 @@ pub fn take_recipes_of_specific_type(recipes_type: String) -> Vec<RecipeBrief> {
             .iter()
             .filter(|(_, recipe)| {
                 if recipes_type == "Popular" {
-                    recipe.popular
+                    recipe.popular == true
                 } else if recipes_type == "Users" {
                     recipe.author.is_some()
                 } else {

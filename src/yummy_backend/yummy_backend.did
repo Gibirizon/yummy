@@ -8,7 +8,6 @@ type Error = variant {
   RecipeNotFound : record { msg : text };
   UserNotFound : record { msg : text };
 };
-type ImageData = variant { Url : text; Bytes : blob };
 type RecipeBrief = record {
   name : text;
   tags : vec text;
@@ -31,21 +30,21 @@ type Result_3 = variant { Ok : User; Err : Error };
 type Result_4 = variant { Ok : RecipeInfo; Err : Error };
 type User = record { id : principal; recipes : vec text; name : text };
 service : () -> {
-  add_image : (text, ImageData) -> ();
+  add_image : (text, text) -> ();
   add_new_recipe : (text, vec text, vec text, vec text, nat16, text, nat64) -> (
       Result,
     );
+  create_recipe : (text, RecipeInfo) -> ();
   create_user : (text) -> (Result_1);
   delete_recipe : (text, nat64) -> (Result);
   delete_user : () -> (Result);
   get_all_users : () -> (Result_2) query;
-  get_image : (text) -> (ImageData) query;
+  get_image : (text) -> (text) query;
   get_recipes_len : () -> (nat64) query;
   get_user_by_index : (nat64) -> (Result_3) query;
   get_user_index : () -> (Result_1) query;
   get_user_info : () -> (Result_3) query;
   recipe_exists : (text) -> (bool) query;
-  recipes_initialization : (text, text) -> ();
   take_recipe : (text) -> (Result_4) query;
   take_recipes_names : () -> (vec text) query;
   take_recipes_of_specific_type : (text) -> (vec RecipeBrief) query;

@@ -23,6 +23,4 @@ dist/
 
 # environment variables
 .env
-
-# api key
-src/yummy_backend/src/recipes/key.rs
+canister_ids.json

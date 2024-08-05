@@ -1,0 +1,689 @@
+{
+	"data": {
+		"recipesByTag": {
+			"edges": [
+				{
+					"node": {
+						"cuisines": [],
+						"tags": [
+							"HIGH_FIBER",
+							"HIGH-POTASSIUM",
+							"Breakfast",
+							"PROTEIN-DENSE",
+							"UNDER 15 MINUTES",
+							"HIGH-FIBER",
+							"COLD",
+							"Fast & Easy",
+							"ACIDIC FOODS/DRINKS",
+							"TART/SOUR"
+						],
+						"instructions": [
+							"To a mixing bowl, add kiwis, berries and some orange. Drizzle some fresh orange juice on top and toss well to combine. Serve chilled."
+						],
+						"totalTimeInSeconds": 300,
+						"ingredientLines": [
+							"2 kiwis, peeled and sliced",
+							"2 cups strawberries, hulled and sliced",
+							"1 cup fresh raspberries",
+							"1 cup fresh blueberries",
+							"½ cup fresh blackberries",
+							"1 orange, halved and juiced"
+						],
+						"mainImage": "https://storage.googleapis.com/sg-uploads/636e84fdf569425d998a017bf16026c9.jpg",
+						"name": "Kiwi-Berry Salad"
+					}
+				},
+				{
+					"node": {
+						"cuisines": null,
+						"tags": [
+							"Breakfast",
+							"Fast & Easy",
+							"MOIST & SMOOTH",
+							"15 - 30 MINUTES",
+							"VEGETARIAN",
+							"PROTEIN-DENSE",
+							"HIGH-POTASSIUM",
+							"LABOR INTENSIVE",
+							"HIGH-FIBER",
+							"HIGH_FIBER",
+							"best"
+						],
+						"instructions": [
+							"Rinse your pear, and thinly slice it, discarding the core. Melt butter in a saucepan over medium heat.",
+							"Add pears, and cook for 1-2 minutes, stirring occasionally so pears get evenly coated in the butter. Add the honey and stir to coat pears evenly.",
+							"Cook another minute until you see a sort of caramel sauce forming, then sprinkle on the cinnamon, stir to coat pears, and remove pan from the heat.",
+							"Cook oats in milk and water according to package directions. Stir in some honey and cinnamon if desired.",
+							"Add oats to a bowl, top with the pears and walnuts, enjoy immediately!"
+						],
+						"totalTimeInSeconds": 900,
+						"ingredientLines": [
+							"1 ripe pear",
+							"2 tbsp butter",
+							"2 tbsp raw honey",
+							"½ tsp cinnamon",
+							"½ cup oats",
+							"½ cup almond milk",
+							"½ cup water",
+							"2 tbsp walnuts, for topping"
+						],
+						"mainImage": "https://storage.googleapis.com/sg-uploads/24bd6879c6a4473684093b96fff4f91f.jpg",
+						"name": "Caramelized Pear Oatmeal"
+					}
+				},
+				{
+					"node": {
+						"cuisines": null,
+						"tags": [
+							"FULL LIQUIDS",
+							"HIGH_FIBER",
+							"Breakfast",
+							"PROTEIN-DENSE",
+							"UNDER 15 MINUTES",
+							"HIGH-FIBER",
+							"Drinks",
+							"Fast & Easy",
+							"EL Clone",
+							"HIGH-POTASSIUM"
+						],
+						"instructions": [
+							"Add all ingredients to a blender and blend on high until everything is smooth. Serve immediately."
+						],
+						"totalTimeInSeconds": 600,
+						"ingredientLines": [
+							"2 cups almond milk",
+							"1 bananas, chopped",
+							"1/2 tbsp unsweetened dark cocoa powder",
+							"1/4 cup flax seed meal",
+							"2 tbsp peanut butter"
+						],
+						"mainImage": "https://storage.googleapis.com/sg-uploads/839af115eaec48b29b26655e858ded45.jpg",
+						"name": "Dark Chocolate, Peanut Butter And Banana Smoothie"
+					}
+				},
+				{
+					"node": {
+						"cuisines": ["American", "Kid-Friendly"],
+						"tags": ["Lunch", "Dinner", "main course", "main dish", "Breakfast", "Fast & Easy"],
+						"instructions": [
+							"Preheat the oven to 375°F.",
+							"Trim the woody ends from the asparagus spears and cut them into bite-sized pieces.",
+							"Heat olive oil in a skillet over medium heat. Add the asparagus pieces and cook until softened, about 3-4 minutes. Remove from heat and let cool slightly.",
+							"In a mixing bowl, combine the ricotta cheese, egg, grated Parmesan cheese, salt, and pepper. Mix well.",
+							"Roll out the puff pastry sheet on a lightly floured surface into a rectangle.",
+							"Transfer the puff pastry sheet to a baking sheet lined with parchment paper.",
+							"Spread the ricotta mixture evenly over the puff pastry, leaving a border around the edges.",
+							"Arrange the cooked asparagus pieces on top of the ricotta mixture.",
+							"Bake in the preheated oven for 20-25 minutes, or until the pastry is golden brown and the filling is set.",
+							"Remove from the oven and let cool slightly before serving."
+						],
+						"totalTimeInSeconds": 1800,
+						"ingredientLines": [
+							"4 asparagus spears",
+							"1/4 cup ricotta cheese",
+							"1 egg",
+							"1 tbsp grated Parmesan cheese",
+							"Salt, to taste",
+							"Ground black pepper, to taste",
+							"1/2 tbsp olive oil",
+							"1 oz puff pastry"
+						],
+						"mainImage": "https://storage.googleapis.com/sg-uploads/6dabef58317d402db8c44ee4aaae737b.jpg",
+						"name": "Asparagus Tart"
+					}
+				},
+				{
+					"node": {
+						"cuisines": null,
+						"tags": [
+							"CRUNCHY/HARD",
+							"HIGH_FIBER",
+							"LN-vitamind",
+							"Breakfast",
+							"PROTEIN-DENSE",
+							"best",
+							"UNDER 15 MINUTES",
+							"HIGH-FIBER",
+							"Fast & Easy",
+							"ACIDIC FOODS/DRINKS",
+							"TART/SOUR"
+						],
+						"instructions": [
+							"Scoop some yogurt into a bowl.",
+							"Top with favorite granola, almonds and fresh blueberries, sprinkle with ground cinnamon and enjoy."
+						],
+						"totalTimeInSeconds": 300,
+						"ingredientLines": [
+							"1 cup yogurt",
+							"½  cup granola",
+							"½ cup fresh blueberries",
+							"¼ tsp ground cinnamon",
+							"½  oz almonds"
+						],
+						"mainImage": "https://storage.googleapis.com/sg-uploads/24da788189fb456aa649fd6c4325d2fb.jpg",
+						"name": "Blueberry-Granola Yogurt Bowl"
+					}
+				},
+				{
+					"node": {
+						"cuisines": ["World"],
+						"tags": [
+							"ACIDIC FOODS/DRINKS",
+							"EL Clone",
+							"Breakfast",
+							"RH Approved",
+							"MOIST & SMOOTH",
+							"15 - 30 MINUTES",
+							"VEGETARIAN",
+							"best",
+							"PROTEIN-DENSE",
+							"HIGH-POTASSIUM",
+							"VEGAN",
+							"HIGH-FIBER",
+							"HIGH_FIBER",
+							"Fast & Easy"
+						],
+						"instructions": [
+							"In a blender mix together 4 oz blueberries, 1 tbsp chia seeds, almond milk, 1 banana and pea proteins.",
+							"Pour the smoothie in bowls and top with some granola, blueberries, sliced banana and chia seeds."
+						],
+						"totalTimeInSeconds": 900,
+						"ingredientLines": [
+							"2 oz blueberries",
+							"1 tbsp chia seeds",
+							"1 cup almond milk",
+							"1 banana, sliced",
+							"1 oz pea protein powder",
+							"2 tbsp granola"
+						],
+						"mainImage": "https://storage.googleapis.com/sg-uploads/439a73ae2f994ea1be3b329d03aae996.jpg",
+						"name": "Blueberry Smoothie Bowl"
+					}
+				},
+				{
+					"node": {
+						"cuisines": null,
+						"tags": [
+							"Keto-Friendly",
+							"Breakfast",
+							"Fast & Easy",
+							"15 - 30 MINUTES",
+							"PROTEIN-DENSE",
+							"HIGH-POTASSIUM",
+							"HIGH-FIBER",
+							"HIGH_FIBER",
+							"SOFT & TENDER"
+						],
+						"instructions": [
+							"Preheat the oven to 425°F.",
+							"Scoop out a little of the avocado from where the pit was to make room for 1 egg and half of the cheese.",
+							"Place on a baking sheet and crack 1 egg on top of each avocado half.",
+							"Bake in the preheated oven until egg is cooked, 15 to 20 minutes. Season with salt and pepper and garnish with parsley."
+						],
+						"totalTimeInSeconds": 1200,
+						"ingredientLines": [
+							"1 avocado, halved and pitted",
+							"2 eggs",
+							"5 tbsp shredded cheddar cheese",
+							"Salt, to taste",
+							"Ground black pepper, to taste",
+							"1 tbsp chopped parsley"
+						],
+						"mainImage": "https://storage.googleapis.com/sg-uploads/b7b3bc7b414f425eb54f20233991292d.jpg",
+						"name": "Avocado Egg"
+					}
+				},
+				{
+					"node": {
+						"cuisines": null,
+						"tags": [
+							"KETO-FRIENDLY",
+							"VEGETARIAN",
+							"Keto-Friendly",
+							"HIGH-POTASSIUM",
+							"Keto",
+							"Breakfast",
+							"15 - 30 MINUTES",
+							"SOFT & TENDER",
+							"FRIED/GREASY FOODS",
+							"Low-Carb",
+							"best",
+							"Fast & Easy",
+							"PROTEIN-DENSE"
+						],
+						"instructions": [
+							"Heat half of the butter in a small frying pan and fry mushrooms until golden. Add garlic and cook for 1 minute.",
+							"Tip the mushrooms and garlic into a bowl. Scrape out the pan, wipe with kitchen paper and add the remaining butter.",
+							"Whisk eggs with a pinch of salt and pour into the pan. Let the bottom set then draw in the sides so the uncooked egg can flow out and set.",
+							"Scatter the mushrooms on top with a few slices of brie. Fold the omelette and let it sit for a minute so the cheese starts to melt. Serve immediately."
+						],
+						"totalTimeInSeconds": 900,
+						"ingredientLines": [
+							"1 tbsp butter, divided",
+							"5 oz mushrooms, sliced",
+							"2 garlic cloves, minced",
+							"2 eggs",
+							"Salt, to taste",
+							"1 oz brie, sliced"
+						],
+						"mainImage": "https://storage.googleapis.com/sg-uploads/bc9fc2e711164332aa96547c7f99716e.jpg",
+						"name": "Garlic-Mushroom And Brie Omelette"
+					}
+				},
+				{
+					"node": {
+						"cuisines": null,
+						"tags": [
+							"High-Protein",
+							"Breakfast",
+							"DOES NOT DISSOLVE VIA SALIVA",
+							"Fast & Easy",
+							"15 - 30 MINUTES",
+							"best",
+							"PROTEIN-DENSE",
+							"HIGH-POTASSIUM",
+							"LABOR INTENSIVE",
+							"SOFT & TENDER"
+						],
+						"instructions": [
+							"Heat olive oil in a non-stick frying pan. Add bacon and cook until golden brown, for about 5 minutes. transfer to plate and set aside.",
+							"Add buckwheat flour, 3 eggs, almond milk, and salt in the jar of a high-speed blender and blend until smooth. Heat a non-stick pan or crepe pan over medium-high heat.",
+							"Heat a spray of oil in a non-stick frying pan on medium heat. Ladle in ¼ of the batter, and swirl the pan to make a thin crepe covering the base of the pan.",
+							"Crack the remaining eggs, one at a time, into a sieve to remove the excess white. When the sides of the pancake start to set, add an egg.",
+							"Add a lid or baking sheet to the pan leave to cook until the egg white is set but the yolk is still runny, and the galette is golden brown underneath, for about 5 minutes.",
+							"Top the egg with bacon and fold the sides of the pancake in to cover the white, but not the yolk, making a square galette. Garnish with pepper and parsley."
+						],
+						"totalTimeInSeconds": 1200,
+						"ingredientLines": [
+							"1/2 cup buckwheat flour",
+							"6 eggs, divided",
+							"1 cup almond milk",
+							"1 tsp salt",
+							"6 oz bacon, chopped",
+							"2 tbsp olive oil",
+							"Pepper, to taste",
+							"Parsley, to garnish"
+						],
+						"mainImage": "https://storage.googleapis.com/sg-uploads/0675660e3af64a2a823b4d2f040ed85f.jpg",
+						"name": "Buckwheat Crepe Galette With Bacon And Egg"
+					}
+				},
+				{
+					"node": {
+						"cuisines": null,
+						"tags": [
+							"FULL LIQUIDS",
+							"HIGH_FIBER",
+							"HIGH-POTASSIUM",
+							"Breakfast",
+							"PROTEIN-DENSE",
+							"EL Clone",
+							"UNDER 15 MINUTES",
+							"HIGH-FIBER",
+							"Fast & Easy",
+							"ACIDIC FOODS/DRINKS",
+							"TART/SOUR"
+						],
+						"instructions": [
+							"Place yogurt, oranges, banana and chia seeds in blender container. Cover and process until smooth."
+						],
+						"totalTimeInSeconds": 600,
+						"ingredientLines": ["1/3 cup dairy free yogurt", "3 mandarin oranges", "1 banana", "1 tbsp chia seeds"],
+						"mainImage": "https://storage.googleapis.com/sg-uploads/6e460061c73e44b7a7c484d0c18007df.jpg",
+						"name": "Orange, Banana, And Chia Smoothie"
+					}
+				},
+				{
+					"node": {
+						"cuisines": ["American", "Kid-Friendly"],
+						"tags": [
+							"KETO-FRIENDLY",
+							"Breakfast",
+							"15 - 30 MINUTES",
+							"main dish",
+							"STEAMED",
+							"main course",
+							"Fast & Easy",
+							"fingerfood"
+						],
+						"instructions": [
+							"Preheat your oven to 350°F.",
+							"In a bowl, whisk together the eggs, milk, a pinch of salt, and black pepper until well combined.",
+							"Lightly grease a muffin tin or silicone egg bite molds with olive oil cooking spray.",
+							"Place chopped steamed broccoli florets and, if desired, a sprinkle of shredded cheese into the individual compartments of the muffin tin or egg bite molds.",
+							"Pour the egg mixture over the broccoli and cheese in each compartment, filling them about two-thirds full.",
+							"Tap the muffin tin or molds gently on the countertop to remove any air bubbles.",
+							"Place the muffin tin or molds in the preheated oven.",
+							"Bake for approximately 12-15 minutes or until the egg bites are set and slightly puffed.",
+							"Remove the egg bites from the oven and allow them to cool for a few minutes.",
+							"Use a knife or spatula to gently remove the egg bites from the muffin tin or molds."
+						],
+						"totalTimeInSeconds": 1800,
+						"ingredientLines": [
+							"2 eggs",
+							"2 tbsp milk",
+							"Salt, to taste",
+							"Ground black pepper, to taste",
+							"1 cup stemed chopped broccoli",
+							"1/4 cup shredded cheddar cheese"
+						],
+						"mainImage": "https://storage.googleapis.com/sg-uploads/9f6a1567a04d4d9f8ba93c9c4584ddeb.jpg",
+						"name": "Egg Bites"
+					}
+				},
+				{
+					"node": {
+						"cuisines": null,
+						"tags": [
+							"FULL LIQUIDS",
+							"Fast & Easy",
+							"HIGH-POTASSIUM",
+							"Breakfast",
+							"PROTEIN-DENSE",
+							"UNDER 15 MINUTES",
+							"Drinks",
+							"HIGH-FIBER",
+							"HIGH_FIBER",
+							"EL Clone",
+							"TART/SOUR"
+						],
+						"instructions": ["Combine all ingredients in a blender. Blend until smooth. Serve immediately."],
+						"totalTimeInSeconds": 600,
+						"ingredientLines": [
+							"2 cups sliced peaches",
+							"1 cup diced mango",
+							"2 tsp minced fresh ginger",
+							"5 oz yogurt",
+							"2 bananas, sliced",
+							"1 oz unflavored pea protein powder (or other)"
+						],
+						"mainImage": "https://storage.googleapis.com/sg-uploads/10591275361140f5820851b4c7ef6b98.jpg",
+						"name": "Ginger-Peach Smoothie"
+					}
+				},
+				{
+					"node": {
+						"cuisines": null,
+						"tags": [
+							"HIGH_FIBER",
+							"Low-Carb",
+							"SOFT & TENDER",
+							"HIGH-LACTOSE",
+							"DOES NOT DISSOLVE VIA SALIVA",
+							"Breakfast",
+							"best",
+							"PROTEIN-DENSE",
+							"Keto-Friendly",
+							"FRIED/GREASY FOODS",
+							"LABOR INTENSIVE",
+							"UNDER 15 MINUTES",
+							"HIGH-FIBER",
+							"Fast & Easy",
+							"ACIDIC FOODS/DRINKS",
+							"HIGH-POTASSIUM"
+						],
+						"instructions": [
+							"Heat a pan over medium heat and fry bacon to desired crispness. Drain off some of the grease, then fry egg in same pan, about 2 minutes per side.",
+							"Whip feta with a hand mixer or in a blender until light an fluffy.",
+							"Set bacon and egg aside while you prep avocado. Peel avocado skin, and carefully slice the avocado in half width wise.",
+							"Layer with mayonnaise, whipped feta, tomato slice, onion slices, bacon, egg, and the top half of the avocado. Sprinkle with sesame seeds."
+						],
+						"totalTimeInSeconds": 600,
+						"ingredientLines": [
+							"1 ripe avocado",
+							"1 egg",
+							"2 oz bacon, sliced",
+							"1/2 cup feta",
+							"1/4 tomato, sliced",
+							"1 tsp sesame seeds",
+							"1/2 red onion, sliced",
+							"1 tbsp mayonnaise"
+						],
+						"mainImage": "https://storage.googleapis.com/sg-uploads/00c7370990d3403c9cfe8d84d690f225.jpg",
+						"name": "Avocado Burger"
+					}
+				},
+				{
+					"node": {
+						"cuisines": ["Kid-Friendly"],
+						"tags": [
+							"FULL LIQUIDS",
+							"HIGH_FIBER",
+							"Paleo",
+							"Breakfast",
+							"PROTEIN-DENSE",
+							"UNDER 15 MINUTES",
+							"HIGH-FIBER",
+							"Fast & Easy",
+							"EL Clone",
+							"HIGH-POTASSIUM"
+						],
+						"instructions": [
+							"Layer bananas, peach slices, almond butter, and hemp seeds in a blender, pour in water. Cover and blend until smooth."
+						],
+						"totalTimeInSeconds": 600,
+						"ingredientLines": [
+							"2 bananas",
+							"1 cup peach slices",
+							"2 tbsp lamond butter",
+							"1 tbsp hemp seeds",
+							"2 cups water",
+							"2 oz protein powder"
+						],
+						"mainImage": "https://storage.googleapis.com/sg-uploads/83ed10601973400bad62def65b235df6.jpg",
+						"name": "Banana Hemp Seed Smoothie"
+					}
+				},
+				{
+					"node": {
+						"cuisines": ["American", "Kid-Friendly"],
+						"tags": [
+							"MOIST & SMOOTH",
+							"HIGH-POTASSIUM",
+							"ABOVE 30 MINUTES",
+							"LABOR INTENSIVE",
+							"PROTEIN-DENSE",
+							"VEGAN",
+							"Fast & Easy",
+							"ENERGY-DENSE",
+							"Lunch",
+							"Breakfast",
+							"COLD",
+							"HIGH-FIBER",
+							"HIGH_FIBER"
+						],
+						"instructions": [
+							"Heat 1 tablespoon olive oil in a skillet and cook shallot until soft and translucent, about 5 minutes.",
+							"Add hazelnuts and cook until toasted, about 2 minutes. Remove from heat and cool for 10 minutes.",
+							"Meanwhile, bring a pot of lightly salted water to a boil and cook broccoli until softened, about 3 minutes. Drain and rinse under cold water. Drain well.",
+							"Combine shallot-hazelnut mixture, nutritional yeast, broccoli, parsley, and dill in the bowl of a food processor, pulse until blended.",
+							"Pour 2 tablespoons olive oil in slowly, with the processor running, until spread is smooth.",
+							"Add more olive oil if needed. Season with salt, pepper, and nutmeg. Serve with crackers or bread."
+						],
+						"totalTimeInSeconds": 2100,
+						"ingredientLines": [
+							"1 tbsp olive oil",
+							"1/2 shallot, minced",
+							"1/3 cup chopped hazelnut",
+							"2 cup broccoli florets",
+							"1/2 tbsp chopped parsley",
+							"1 tsp chopped dill",
+							"1/4 tsp salt",
+							"1/4 tsp ground nutmeg",
+							"1/4 tsp ground black pepper",
+							"6 oz crackers, vegan",
+							"2 oz nutritional yeast"
+						],
+						"mainImage": "https://storage.googleapis.com/sg-uploads/3a46e182b0b34cad9999d1ac443a4086.jpg",
+						"name": "Broccoli Hazelnut Spread"
+					}
+				},
+				{
+					"node": {
+						"cuisines": null,
+						"tags": [
+							"FULL LIQUIDS",
+							"Fast & Easy",
+							"HIGH-LACTOSE",
+							"Breakfast",
+							"PROTEIN-DENSE",
+							"UNDER 15 MINUTES",
+							"ENERGY-DENSE",
+							"HIGH-FIBER",
+							"HIGH_FIBER",
+							"EL Clone",
+							"HIGH-POTASSIUM"
+						],
+						"instructions": [
+							"Place bananas, milk, peanut butter, honey, and protein powder in a blender, blend until smooth, about 30 seconds."
+						],
+						"totalTimeInSeconds": 300,
+						"ingredientLines": [
+							"4 bananas, sliced",
+							"2 cups milk",
+							"2/3 cup peanut butter",
+							"2 tbsp honey",
+							"4 tbsp vanilla protein powder"
+						],
+						"mainImage": "https://storage.googleapis.com/sg-uploads/1078f47cd32b47199be4a5a53aedf71b.jpg",
+						"name": "Peanut Butter Banana Smoothie"
+					}
+				},
+				{
+					"node": {
+						"cuisines": null,
+						"tags": [
+							"Breakfast",
+							"DOES NOT DISSOLVE VIA SALIVA",
+							"Fast & Easy",
+							"15 - 30 MINUTES",
+							"VEGETARIAN",
+							"TART/SOUR",
+							"HIGH-LACTOSE",
+							"PROTEIN-DENSE",
+							"LABOR INTENSIVE",
+							"sandwiches",
+							"SOFT & TENDER"
+						],
+						"instructions": [
+							"Stir cream cheese, yogurt, chives, dill and pepper together in a small bowl until well blended.",
+							"Spread the mixture evenly on one side of each bread slice. Top 1 slice with cucumber slices, then top with the other bread slice, cream cheese-side down.",
+							"Cut the crusts from the sandwich and cut it in half diagonally. Serve immediately."
+						],
+						"totalTimeInSeconds": 900,
+						"ingredientLines": [
+							"2 oz cream cheese",
+							"3 tbsp low-fat plain Greek yogurt",
+							"1 tbsp chopped chives",
+							"1 tbsp chopped dill",
+							"Freshly ground black pepper, to taste",
+							"2 oz whole-wheat sandwich bread",
+							"⅓ cup thinly sliced English cucumber"
+						],
+						"mainImage": "https://storage.googleapis.com/sg-uploads/46ec935997e34089847f325ebe2e74be.jpg",
+						"name": "Cucumber Sandwich"
+					}
+				},
+				{
+					"node": {
+						"cuisines": null,
+						"tags": [
+							"CRUNCHY/HARD",
+							"Breakfast",
+							"ENERGY-DENSE",
+							"DOES NOT DISSOLVE VIA SALIVA",
+							"15 - 30 MINUTES",
+							"HIGH-LACTOSE",
+							"PROTEIN-DENSE",
+							"HIGH-POTASSIUM",
+							"sandwiches",
+							"ACIDIC FOODS/DRINKS",
+							"Fast & Easy"
+						],
+						"instructions": [
+							"Prepare the bread slices and toast them in a toaster until warm. Top with sour cream and sardines. Sprinkle with olives and parsley before serving."
+						],
+						"totalTimeInSeconds": 900,
+						"ingredientLines": [
+							"5 oz toast",
+							"3 tbsp sour cream",
+							"14 oz sardines",
+							"1 oz green olives, sliced",
+							"1 oz parsley, chopped"
+						],
+						"mainImage": "https://storage.googleapis.com/sg-uploads/ac48f7e44b0c466da4640258cd9a5019.jpg",
+						"name": "Sardine Toasts"
+					}
+				},
+				{
+					"node": {
+						"cuisines": ["American", "Kid-Friendly"],
+						"tags": [
+							"Breakfast",
+							"ENERGY-DENSE",
+							"15 - 30 MINUTES",
+							"VEGETARIAN",
+							"HIGH-LACTOSE",
+							"PROTEIN-DENSE",
+							"DRY FOODS",
+							"Fast & Easy"
+						],
+						"instructions": [
+							"Cut each slice of bread into thirds to make sticks. Cut a piece of parchment paper to fit the bottom of the air fryer basket.",
+							"Preheat air fryer to 360°F.",
+							"Stir together eggs, milk, vanilla extract, cinnamon, and nutmeg in a bowl until well combined.",
+							"Dip each piece of bread into egg mixture, making sure each piece is well submerged.",
+							"Shake each bread stick to remove excess liquid and place in a single layer in the air fryer basket.",
+							"Cook in batches, if necessary, to avoid overcrowding the fryer.",
+							"Cook for 5 minutes, turn bread pieces, and cook for an additional 5 minutes."
+						],
+						"totalTimeInSeconds": 1200,
+						"ingredientLines": [
+							"4 oz toast",
+							"2 eggs, beaten",
+							"1/4 cup milk",
+							"1 tsp vanilla extract",
+							"1 tsp cinnamon",
+							"1/3 tsp ground nutmeg"
+						],
+						"mainImage": "https://storage.googleapis.com/sg-uploads/58fcc3f169d042ed9a7769e04537ca43.jpg",
+						"name": "French Toast Sticks"
+					}
+				},
+				{
+					"node": {
+						"cuisines": ["American", "Kid-Friendly"],
+						"tags": ["main dish", "Breakfast", "main course", "15 - 30 MINUTES", "Fast & Easy"],
+						"instructions": [
+							"Preheat your oven to 350°F.",
+							"In a non-stick skillet over medium heat, sauté the diced bell peppers, onions, and tomatoes until they become tender. Season with a pinch of salt and pepper.",
+							"Remove the cooked vegetables from the skillet and set them aside.",
+							"In the same skillet, using cooking spray, lightly cook the egg whites until they're scrambled and cooked through. Remove from heat.",
+							"Lay out the corn tortillas on a clean surface.",
+							"Divide the cooked vegetables and scrambled egg whites evenly between the tortillas.",
+							"Sprinkle shredded cheese over the fillings.",
+							"Roll up each tortilla tightly to form enchiladas.",
+							"Place the enchiladas seam-side down in an oven-safe dish.",
+							"Top the enchiladas with salsa.",
+							"Bake in the preheated oven for about 10-15 minutes, or until the enchiladas are heated through and the cheese is melted."
+						],
+						"totalTimeInSeconds": 1800,
+						"ingredientLines": [
+							"2 corn tortillas",
+							"2 eggs, whites only",
+							"1/4 cup diced bell peppers",
+							"1/4 cup diced onions",
+							"1/4 cup tomatoes",
+							"1/4 cup shredded cheese",
+							"2 tbsp salsa",
+							"Salt, to taste",
+							"Ground black pepper, to taste"
+						],
+						"mainImage": "https://storage.googleapis.com/sg-uploads/34ce6ee7d44e4793a29c75c333df2132.jpg",
+						"name": "Breakfast Enchiladas"
+					}
+				}
+			]
+		}
+	}
+}

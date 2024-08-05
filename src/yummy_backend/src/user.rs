@@ -1,4 +1,4 @@
-use crate::recipes::images::{add_image, ImageData, IMAGES};
+use crate::recipes::images::{add_image, IMAGES};
 use crate::recipes::{recipe_exists, take_recipe, RecipeBrief, RecipeInfo, RECIPES};
 use crate::Error;
 use crate::{Memory, MEMORY_MANAGER};
@@ -131,7 +131,7 @@ fn delete_user() -> Result<String, Error> {
             .borrow()
             .iter()
             .filter(|(name, _)| user.recipes.contains(name))
-            .collect::<Vec<(String, ImageData)>>();
+            .collect::<Vec<(String, String)>>();
         for (name, _) in user_images {
             images.borrow_mut().remove(&name);
         }
@@ -241,7 +241,7 @@ pub fn add_new_recipe(
     });
 
     if !image_data.is_empty() {
-        add_image(name, ImageData::Url(image_data));
+        add_image(name, image_data);
     }
     Ok("Recipe added successfully".to_string())
 }
@@ -254,34 +254,37 @@ pub fn delete_recipe(name: String, user_index: u64) -> Result<String, Error> {
         });
     }
 
-    // Delete from user recipes
-    USERS.with(|users| -> Result<(), Error> {
-        let users = users.borrow_mut();
-        let mut user = users.get(&user_index).ok_or(Error::UserNotFound {
-            msg: "User not found".to_string(),
-        })?;
+    let user = USERS.with(|users| users.borrow().get(&user_index));
+    match user {
+        Some(mut user) => {
+            if !user.recipes.contains(&name) {
+                return Err(Error::RecipeNotFound {
+                    msg: "Recipe not found for this user".to_string(),
+                });
+            }
+            user.recipes.retain(|recipe_name| recipe_name != &name);
+            ic_cdk::api::print(format!("user {:?} ", user.clone()));
 
-        if !user.recipes.contains(&name) {
-            return Err(Error::RecipeNotFound {
-                msg: "Recipe not found for this user".to_string(),
+            // Delete from user recipes
+            USERS.with(|users| {
+                users.borrow_mut().insert(user_index, user);
             });
+
+            // delete all informations from recipes
+            RECIPES.with(|recipes| {
+                recipes.borrow_mut().remove(&name);
+            });
+
+            // delete image
+            IMAGES.with(|images| {
+                images.borrow_mut().remove(&name);
+            });
+            Ok("Recipe deleted successfully".to_string())
         }
-
-        user.recipes.retain(|recipe_name| recipe_name != &name);
-        Ok(())
-    })?;
-
-    // delete all informations from recipes
-    RECIPES.with(|recipes| {
-        recipes.borrow_mut().remove(&name);
-    });
-
-    // delete image
-    IMAGES.with(|images| {
-        images.borrow_mut().remove(&name);
-    });
-
-    Ok("Recipe deleted successfully".to_string())
+        None => Err(Error::UserNotFound {
+            msg: "User not found".to_string(),
+        }),
+    }
 }
 
 #[query]
