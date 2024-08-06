@@ -1,5 +1,4 @@
-use crate::recipes::images::{add_image, IMAGES};
-use crate::recipes::{recipe_exists, take_recipe, RecipeBrief, RecipeInfo, RECIPES};
+use crate::recipes::delete_recipes_and_images_by_author;
 use crate::Error;
 use crate::{Memory, MEMORY_MANAGER};
 use candid::{CandidType, Decode, Deserialize, Encode, Principal};
@@ -23,18 +22,13 @@ thread_local! {
 
 #[derive(CandidType, Clone, Deserialize, Debug)]
 pub struct User {
-    id: Principal,
-    name: String,
-    pub recipes: Vec<String>,
+    pub id: Principal,
+    pub name: String,
 }
 
 impl User {
     pub fn new(id: Principal, name: String) -> Self {
-        Self {
-            id,
-            name,
-            recipes: Vec::new(),
-        }
+        Self { id, name }
     }
 }
 impl Storable for User {
@@ -91,11 +85,7 @@ fn update_username(index: u64, name: String) -> Result<User, Error> {
                     msg: "The caller is not authorized".to_string(),
                 });
             }
-            let updated_user = User {
-                id: user.id,
-                name,
-                recipes: user.recipes,
-            };
+            let updated_user = User { id: user.id, name };
             USERS.with(|users| {
                 users.borrow_mut().insert(index, updated_user.clone());
             });
@@ -109,41 +99,16 @@ fn update_username(index: u64, name: String) -> Result<User, Error> {
 
 #[update]
 fn delete_user() -> Result<String, Error> {
-    let user = match get_user_info() {
-        Ok(user) => user,
+    let user_index = match get_user_index() {
+        Ok(index) => index,
         Err(err) => return Err(err),
     };
-    // delete all informations about user recipes
-    RECIPES.with(|recipes| {
-        let user_recipes = recipes
-            .borrow()
-            .iter()
-            .filter(|(name, _)| user.recipes.contains(name))
-            .collect::<Vec<(String, RecipeInfo)>>();
-        for (name, _) in user_recipes {
-            recipes.borrow_mut().remove(&name);
-        }
-    });
-
-    // delete images
-    IMAGES.with(|images| {
-        let user_images = images
-            .borrow()
-            .iter()
-            .filter(|(name, _)| user.recipes.contains(name))
-            .collect::<Vec<(String, String)>>();
-        for (name, _) in user_images {
-            images.borrow_mut().remove(&name);
-        }
-    });
+    // delete all user recipes and images
+    delete_recipes_and_images_by_author(user_index);
 
     // delete from user list
     USERS.with(|users| {
-        let index = match get_user_index() {
-            Ok(index) => index,
-            Err(err) => return Err(err),
-        };
-        users.borrow_mut().remove(&index);
+        users.borrow_mut().remove(&user_index);
         Ok("User deleted successfully".to_string())
     })
 }
@@ -170,6 +135,12 @@ fn get_user_index() -> Result<u64, Error> {
             }),
         }
     })
+}
+
+#[query]
+pub fn get_username_by_index(index: u64) -> Option<String> {
+    USERS
+        .with(|users| users.borrow().get(&index).map(|user| user.name.clone()))
 }
 
 #[query]
@@ -204,112 +175,70 @@ fn get_all_users() -> Result<Vec<User>, Error> {
     })
 }
 
-#[update]
-pub fn add_new_recipe(
-    name: String,
-    instructions: Vec<String>,
-    ingredients: Vec<String>,
-    tags: Vec<String>,
-    total_time_minutes: u16,
-    image_data: String,
-    user_index: u64,
-) -> Result<String, Error> {
-    if recipe_exists(name.clone()) {
-        ic_cdk::api::print("Recipe already exists");
-        return Err(Error::RecipeAlreadyExists {
-            msg: "Recipe with this title already exists - change the title".to_string(),
-        });
-    };
+// #[update]
+// pub fn delete_recipe(name: String, user_index: u64) -> Result<String, Error> {
+//     if !recipe_exists(name.clone()) {
+//         return Err(Error::RecipeNotFound {
+//             msg: "Recipe not found".to_string(),
+//         });
+//     }
 
-    let username = USERS.with(|users| {
-        let mut user = users.borrow().get(&user_index).unwrap().clone();
-        user.recipes.push(name.clone());
-        users.borrow_mut().insert(user_index, user.clone());
-        ic_cdk::println!("Recipe added to user");
-        user.name.clone()
-    });
-    let new_recipe = RecipeInfo::new(
-        instructions,
-        ingredients,
-        tags,
-        total_time_minutes * 60 as u16,
-        Some(username),
-    );
+//     let user = USERS.with(|users| users.borrow().get(&user_index));
+//     match user {
+//         Some(mut user) => {
+//             if !user.recipes.contains(&name) {
+//                 return Err(Error::RecipeNotFound {
+//                     msg: "Recipe not found for this user".to_string(),
+//                 });
+//             }
+//             user.recipes.retain(|recipe_name| recipe_name != &name);
+//             ic_cdk::api::print(format!("user {:?} ", user.clone()));
 
-    RECIPES.with(|recipes| {
-        recipes.borrow_mut().insert(name.clone(), new_recipe);
-    });
+//             // Delete from user recipes
+//             USERS.with(|users| {
+//                 users.borrow_mut().insert(user_index, user);
+//             });
 
-    if !image_data.is_empty() {
-        add_image(name, image_data);
-    }
-    Ok("Recipe added successfully".to_string())
-}
+//             // delete all informations from recipes
+//             RECIPES.with(|recipes| {
+//                 recipes.borrow_mut().remove(&name);
+//             });
 
-#[update]
-pub fn delete_recipe(name: String, user_index: u64) -> Result<String, Error> {
-    if !recipe_exists(name.clone()) {
-        return Err(Error::RecipeNotFound {
-            msg: "Recipe not found".to_string(),
-        });
-    }
+//             // delete image
+//             IMAGES.with(|images| {
+//                 images.borrow_mut().remove(&name);
+//             });
+//             Ok("Recipe deleted successfully".to_string())
+//         }
+//         None => Err(Error::UserNotFound {
+//             msg: "User not found".to_string(),
+//         }),
+//     }
+// }
 
-    let user = USERS.with(|users| users.borrow().get(&user_index));
-    match user {
-        Some(mut user) => {
-            if !user.recipes.contains(&name) {
-                return Err(Error::RecipeNotFound {
-                    msg: "Recipe not found for this user".to_string(),
-                });
-            }
-            user.recipes.retain(|recipe_name| recipe_name != &name);
-            ic_cdk::api::print(format!("user {:?} ", user.clone()));
-
-            // Delete from user recipes
-            USERS.with(|users| {
-                users.borrow_mut().insert(user_index, user);
-            });
-
-            // delete all informations from recipes
-            RECIPES.with(|recipes| {
-                recipes.borrow_mut().remove(&name);
-            });
-
-            // delete image
-            IMAGES.with(|images| {
-                images.borrow_mut().remove(&name);
-            });
-            Ok("Recipe deleted successfully".to_string())
-        }
-        None => Err(Error::UserNotFound {
-            msg: "User not found".to_string(),
-        }),
-    }
-}
-
-#[query]
-pub fn take_user_recipes() -> Vec<RecipeBrief> {
-    const TAGS_MAX_LENGTH: usize = 5;
-    USERS.with(|users| {
-        let mut user_recipes = Vec::new();
-        match users.borrow().iter().find(|(_, user)| user.id == caller()) {
-            Some((_, user)) => {
-                for name in &user.recipes {
-                    let recipe = match take_recipe(name.to_string()) {
-                        Ok(recipe) => recipe,
-                        Err(_) => return user_recipes,
-                    };
-                    let first_tags = &recipe.tags[..TAGS_MAX_LENGTH.min(recipe.tags.len())];
-                    user_recipes.push(RecipeBrief::new(
-                        name.to_string(),
-                        first_tags.to_vec(),
-                        recipe.total_time_in_seconds / 60,
-                        Some(user.name.clone()),
-                    ));
-                }
-            }
-            None => return user_recipes,
-        };
-        user_recipes
-    })
-}
+// #[query]
+// pub fn take_user_recipes() -> Vec<RecipeBrief> {
+//     const TAGS_MAX_LENGTH: usize = 5;
+//     USERS.with(|users| {
+//         let mut user_recipes = Vec::new();
+//         match users.borrow().iter().find(|(_, user)| user.id == caller()) {
+//             Some((_, user)) => {
+//                 for name in &user.recipes {
+//                     let recipe = match take_recipe(name.to_string()) {
+//                         Ok(recipe) => recipe,
+//                         Err(_) => return user_recipes,
+//                     };
+//                     let first_tags = &recipe.tags[..TAGS_MAX_LENGTH.min(recipe.tags.len())];
+//                     user_recipes.push(RecipeBrief::new(
+//                         name.to_string(),
+//                         first_tags.to_vec(),
+//                         recipe.total_time_in_seconds / 60,
+//                         Some(user.name.clone()),
+//                     ));
+//                 }
+//             }
+//             None => return user_recipes,
+//         };
+//         user_recipes
+//     })
+// }

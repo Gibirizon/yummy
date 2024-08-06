@@ -12,6 +12,22 @@ const title = ref("");
 const instructions = ref([]);
 const ingredients = ref([]);
 const prepTime = ref(0);
+const availableCuisines = [
+    "American",
+    "Brazilian",
+    "Asian",
+    "British",
+    "Chinese",
+    "French",
+    "Greek",
+    "Korean",
+    "Mexican",
+    "Portuguese",
+    "Spanish",
+    "Polish",
+    "Swedish",
+];
+const selectedCuisines = ref([]);
 const availableTags = [
     "Vegetarian",
     "Vegan",
@@ -70,6 +86,14 @@ function toggleTag(tag) {
     }
 }
 
+function toggleCuisine(cuisine) {
+    const index = selectedCuisines.value.indexOf(cuisine);
+    if (index === -1) {
+        selectedCuisines.value.push(cuisine);
+    } else {
+        selectedCuisines.value.splice(index, 1);
+    }
+}
 function handleImageUpload(event) {
     const file = event.target.files[0];
     if (!file) return;
@@ -121,15 +145,16 @@ async function submitRecipe() {
         user_index = user_index.Ok;
     }
 
-    let response = await yummy_backend.add_new_recipe(
-        title.value,
-        instructions.value,
-        ingredients.value,
-        selectedTags.value,
-        prepTime.value,
-        uploadedImage.value,
-        user_index
-    );
+    let response = await yummy_backend.add_recipe({
+        name: title.value,
+        instructions: instructions.value,
+        ingredients: ingredients.value,
+        tags: selectedTags.value,
+        cuisines: selectedCuisines.value,
+        total_time_in_seconds: prepTime.value * 60,
+        image: uploadedImage.value,
+        author_id: user_index,
+    });
     if (response.Err) {
         createErrorFromObject(response.Err);
         title.value = "";
@@ -142,6 +167,7 @@ async function submitRecipe() {
     // // Reset title of form after submission
     title.value = "";
     selectedTags.value = [];
+    selectedCuisines.value = [];
     instructions.value = [];
     ingredients.value = [];
     prepTime.value = 0;
@@ -325,8 +351,8 @@ const closeMessage = () => {
                         <label class="mb-2 block text-lg font-medium text-gray-300">Tags</label>
                         <div class="flex flex-wrap justify-center gap-3">
                             <button
-                                v-for="tag in availableTags"
-                                :key="tag"
+                                v-for="(tag, index) in availableTags"
+                                :key="index"
                                 @click.prevent="toggleTag(tag)"
                                 :class="[
                                     'rounded-full px-4 py-2 text-lg font-medium',
@@ -336,6 +362,25 @@ const closeMessage = () => {
                                 ]"
                             >
                                 {{ tag }}
+                            </button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="mb-2 block text-lg font-medium text-gray-300">Cuisines</label>
+                        <div class="flex flex-wrap justify-center gap-3">
+                            <button
+                                v-for="(cuisine, index) in availableCuisines"
+                                :key="index"
+                                @click.prevent="toggleCuisine(cuisine)"
+                                :class="[
+                                    'rounded-full px-4 py-2 text-lg font-medium',
+                                    selectedCuisines.includes(cuisine)
+                                        ? 'bg-indigo-600 text-white'
+                                        : 'bg-gray-600 text-gray-300 hover:bg-gray-500',
+                                ]"
+                            >
+                                {{ cuisine }}
                             </button>
                         </div>
                     </div>

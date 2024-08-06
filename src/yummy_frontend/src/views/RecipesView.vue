@@ -93,7 +93,14 @@ async function getRecipeData() {
             router.push({ name: "home", query: { canisterId: route.query.canisterId } });
             return;
         }
-        all_recipes = await retryICCall(() => whoamiActor.value.take_user_recipes());
+        let user_index = await retryICCall(() => whoamiActor.value.get_user_index());
+        if (user_index.Err) {
+            createMessage(user_index.Err.UserNotFound.msg, "error");
+            return;
+        }
+        all_recipes = await yummy_backend.take_recipes_by_author(user_index.Ok);
+    } else if (currentType.value === "users") {
+        all_recipes = await yummy_backend.take_user_recipes_with_author_names();
     } else {
         all_recipes = await yummy_backend.take_recipes_of_specific_type(
             currentType.value.charAt(0).toUpperCase() + currentType.value.slice(1)
@@ -140,13 +147,8 @@ async function confirmDelete() {
         createMessage("Not logged in", "error");
         return;
     }
-    const indexResponse = await whoamiActor.value.get_user_index();
-    if (indexResponse.Err) {
-        createMessage(indexResponse.Err.UserNotFound.msg, "warning");
-        return;
-    }
 
-    let deleteResponse = await yummy_backend.delete_recipe(recipeNameToDelete.value, indexResponse.Ok);
+    let deleteResponse = await yummy_backend.delete_recipe(recipeNameToDelete.value);
     if (deleteResponse.Err) {
         createMessage(deleteResponse.Err.RecipeNotFound.msg, "warning");
         return;

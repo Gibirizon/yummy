@@ -1,9 +1,11 @@
+use crate::user::get_username_by_index;
 use crate::Error;
 use crate::{Memory, MEMORY_MANAGER};
 use candid::{CandidType, Decode, Deserialize, Encode};
 use ic_cdk::{query, update};
 use ic_stable_structures::memory_manager::MemoryId;
 use ic_stable_structures::{storable::Bound, StableBTreeMap, Storable};
+use images::{add_image, IMAGES};
 use std::borrow::Cow;
 use std::cell::RefCell;
 
@@ -13,11 +15,12 @@ pub mod images;
 pub struct RecipeInfo {
     pub instructions: Vec<String>,
     pub ingredients: Vec<String>,
-    pub cuisines: Option<Vec<String>>,
     pub tags: Vec<String>,
+    pub cuisines: Vec<String>,
     pub total_time_in_seconds: u16,
     pub popular: bool,
-    pub author: Option<String>,
+    pub author_id: Option<u64>,
+    pub likes: Vec<u64>,
 }
 
 impl RecipeInfo {
@@ -25,30 +28,33 @@ impl RecipeInfo {
         instructions: Vec<String>,
         ingredients: Vec<String>,
         tags: Vec<String>,
+        cuisines: Vec<String>,
         total_time_in_seconds: u16,
-        author: Option<String>,
+        popular: bool,
+        author_id: Option<u64>,
     ) -> Self {
         Self {
             instructions,
             ingredients,
-            cuisines: None,
             tags,
+            cuisines,
             total_time_in_seconds,
-            popular: false,
-            author,
+            popular,
+            author_id,
+            likes: Vec::new(),
         }
     }
 }
 
 #[derive(CandidType, Deserialize, Clone, Debug)]
-pub struct RecipeBrief {
+pub struct RecipeBriefResponse {
     name: String,
     tags: Vec<String>,
     total_time: u16,
     author: Option<String>,
 }
 
-impl RecipeBrief {
+impl RecipeBriefResponse {
     pub fn new(name: String, tags: Vec<String>, total_time: u16, author: Option<String>) -> Self {
         Self {
             name,
@@ -57,6 +63,18 @@ impl RecipeBrief {
             author,
         }
     }
+}
+
+#[derive(CandidType, Deserialize, Clone, Debug)]
+pub struct RecipePayload {
+    name: String,
+    instructions: Vec<String>,
+    ingredients: Vec<String>,
+    tags: Vec<String>,
+    cuisines: Vec<String>,
+    total_time_in_seconds: u16,
+    image: String,
+    author_id: u64,
 }
 
 thread_local! {
@@ -82,11 +100,7 @@ impl Storable for RecipeInfo {
         is_fixed_size: false,
     };
 }
-
-#[update]
-pub fn create_recipe(name: String, recipe: RecipeInfo) {
-    RECIPES.with(|recipes| recipes.borrow_mut().insert(name, recipe));
-}
+const TAGS_MAX_LENGTH: usize = 5;
 
 #[query]
 pub fn recipe_exists(name: String) -> bool {
@@ -94,12 +108,20 @@ pub fn recipe_exists(name: String) -> bool {
 }
 
 #[query]
-pub fn take_recipe(name: String) -> Result<RecipeInfo, Error> {
-    RECIPES.with(|recipes| match recipes.borrow().get(&name) {
-        Some(recipe) => Ok(recipe),
-        None => Err(Error::RecipeNotFound {
-            msg: "Recipe not found".to_string(),
-        }),
+pub fn take_recipe(name: String) -> Result<(RecipeInfo, Option<String>), Error> {
+    RECIPES.with(|recipes| {
+        match recipes.borrow().get(&name).map(|recipe| {
+            let author_name = recipe
+                .author_id
+                .and_then(|author_id| get_username_by_index(author_id));
+            (recipe.clone(), author_name)
+        }) {
+            Some((recipe, author_name)) => Ok((recipe, author_name)),
+            None => Err(Error::RecipeNotFound {
+                msg: "Recipe not found".to_string(),
+            }),
+
+        }
     })
 }
 
@@ -121,31 +143,142 @@ pub fn take_recipes_names() -> Vec<String> {
 }
 
 #[query]
-pub fn take_recipes_of_specific_type(recipes_type: String) -> Vec<RecipeBrief> {
+pub fn take_recipes_of_specific_type(recipes_type: String) -> Vec<RecipeBriefResponse> {
     RECIPES.with(|recipes| {
-        const TAGS_MAX_LENGTH: usize = 5;
         let filtered_recipes = recipes
             .borrow()
             .iter()
             .filter(|(_, recipe)| {
                 if recipes_type == "Popular" {
                     recipe.popular == true
-                } else if recipes_type == "Users" {
-                    recipe.author.is_some()
                 } else {
                     recipe.tags.iter().any(|tag| tag == &recipes_type)
                 }
             })
             .map(|(name, recipe)| {
-                let first_tags = &recipe.tags[..TAGS_MAX_LENGTH.min(recipe.tags.len())];
-                RecipeBrief::new(
-                    name.clone(),
-                    first_tags.to_vec(),
-                    recipe.total_time_in_seconds / 60,
-                    recipe.author,
-                )
+                let author_name = recipe
+                    .author_id
+                    .and_then(|author_id| get_username_by_index(author_id));
+                transform_recipe_to_brief_response(name, recipe, author_name)
             })
             .collect();
         filtered_recipes
+    })
+}
+
+fn transform_recipe_to_brief_response(
+    name: String,
+    recipe: RecipeInfo,
+    author_name: Option<String>,
+) -> RecipeBriefResponse {
+    let first_tags = &recipe.tags[..TAGS_MAX_LENGTH.min(recipe.tags.len())];
+    RecipeBriefResponse::new(
+        name.clone(),
+        first_tags.to_vec(),
+        recipe.total_time_in_seconds / 60,
+        author_name,
+    )
+}
+
+#[query]
+pub fn take_user_recipes_with_author_names() -> Vec<RecipeBriefResponse> {
+    RECIPES.with(|recipes| {
+        recipes
+            .borrow()
+            .iter()
+            .filter_map(|(name, recipe)| {
+                recipe.author_id.map(|author_id| {
+                    let author_name = get_username_by_index(author_id);
+                    transform_recipe_to_brief_response(name, recipe, author_name)
+                })
+            })
+            .collect()
+    })
+}
+
+#[query]
+pub fn take_recipes_by_author(author_id: u64) -> Vec<RecipeBriefResponse> {
+    RECIPES.with(|recipes| {
+        recipes
+            .borrow()
+            .iter()
+            .filter(|(_, recipe)| recipe.author_id == Some(author_id))
+            .map(|(name, recipe)| {
+                let author_name = get_username_by_index(author_id);
+                transform_recipe_to_brief_response(name, recipe, author_name)
+            })
+            .collect()
+    })
+}
+
+#[update]
+pub fn add_recipe(payload: RecipePayload) -> Result<String, Error> {
+    if recipe_exists(payload.name.clone()) {
+        ic_cdk::api::print("Recipe already exists");
+        return Err(Error::RecipeAlreadyExists {
+            msg: "Recipe with this title already exists - change the title".to_string(),
+        });
+    };
+
+    let new_recipe = RecipeInfo::new(
+        payload.instructions,
+        payload.ingredients,
+        payload.tags,
+        payload.cuisines,
+        payload.total_time_in_seconds,
+        false,
+        Some(payload.author_id),
+    );
+
+    RECIPES.with(|recipes| {
+        recipes
+            .borrow_mut()
+            .insert(payload.name.clone(), new_recipe);
+    });
+
+    if !payload.image.is_empty() {
+        add_image(payload.name, payload.image);
+    }
+    Ok("Recipe added successfully".to_string())
+}
+
+#[update]
+pub fn delete_recipe(name: String) -> Result<String, Error> {
+    if !recipe_exists(name.clone()) {
+        return Err(Error::RecipeNotFound {
+            msg: "Recipe not found".to_string(),
+        });
+    }
+
+    // delete all informations from recipes
+    RECIPES.with(|recipes| {
+        recipes.borrow_mut().remove(&name);
+    });
+
+    // delete image
+    IMAGES.with(|images| {
+        images.borrow_mut().remove(&name);
+    });
+    Ok("Recipe deleted successfully".to_string())
+}
+
+#[update]
+pub fn delete_recipes_and_images_by_author(author_id: u64) {
+    RECIPES.with(|recipes| {
+        let mut recipes = recipes.borrow_mut();
+        let keys_to_remove: Vec<String> = recipes
+            .iter()
+            .filter(|(_, recipe)| recipe.author_id == Some(author_id))
+            .map(|(key, _)| key.clone())
+            .collect();
+
+        for key in &keys_to_remove {
+            recipes.remove(key);
+
+            // delete also image
+            IMAGES.with(|images| {
+                images.borrow_mut().remove(key);
+            });
+        }
     })
 }

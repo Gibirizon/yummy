@@ -8,7 +8,7 @@ type Error = variant {
   RecipeNotFound : record { msg : text };
   UserNotFound : record { msg : text };
 };
-type RecipeBrief = record {
+type RecipeBriefResponse = record {
   name : text;
   tags : vec text;
   author : opt text;
@@ -19,24 +19,33 @@ type RecipeInfo = record {
   tags : vec text;
   popular : bool;
   instructions : vec text;
-  author : opt text;
-  cuisines : opt vec text;
+  likes : vec nat64;
+  cuisines : vec text;
+  author_id : opt nat64;
+  ingredients : vec text;
+};
+type RecipePayload = record {
+  total_time_in_seconds : nat16;
+  name : text;
+  tags : vec text;
+  instructions : vec text;
+  cuisines : vec text;
+  author_id : nat64;
+  image : text;
   ingredients : vec text;
 };
 type Result = variant { Ok : text; Err : Error };
 type Result_1 = variant { Ok : nat64; Err : Error };
 type Result_2 = variant { Ok : vec User; Err : Error };
 type Result_3 = variant { Ok : User; Err : Error };
-type Result_4 = variant { Ok : RecipeInfo; Err : Error };
-type User = record { id : principal; recipes : vec text; name : text };
+type Result_4 = variant { Ok : record { RecipeInfo; opt text }; Err : Error };
+type User = record { id : principal; name : text };
 service : () -> {
   add_image : (text, text) -> ();
-  add_new_recipe : (text, vec text, vec text, vec text, nat16, text, nat64) -> (
-      Result,
-    );
-  create_recipe : (text, RecipeInfo) -> ();
+  add_recipe : (RecipePayload) -> (Result);
   create_user : (text) -> (Result_1);
-  delete_recipe : (text, nat64) -> (Result);
+  delete_recipe : (text) -> (Result);
+  delete_recipes_and_images_by_author : (nat64) -> ();
   delete_user : () -> (Result);
   get_all_users : () -> (Result_2) query;
   get_image : (text) -> (text) query;
@@ -44,10 +53,12 @@ service : () -> {
   get_user_by_index : (nat64) -> (Result_3) query;
   get_user_index : () -> (Result_1) query;
   get_user_info : () -> (Result_3) query;
+  get_username_by_index : (nat64) -> (opt text) query;
   recipe_exists : (text) -> (bool) query;
   take_recipe : (text) -> (Result_4) query;
+  take_recipes_by_author : (nat64) -> (vec RecipeBriefResponse) query;
   take_recipes_names : () -> (vec text) query;
-  take_recipes_of_specific_type : (text) -> (vec RecipeBrief) query;
-  take_user_recipes : () -> (vec RecipeBrief) query;
+  take_recipes_of_specific_type : (text) -> (vec RecipeBriefResponse) query;
+  take_user_recipes_with_author_names : () -> (vec RecipeBriefResponse) query;
   update_username : (nat64, text) -> (Result_3);
 }

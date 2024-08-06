@@ -3,7 +3,7 @@ use candid::{CandidType, Deserialize};
 use ic_cdk::init;
 use ic_stable_structures::memory_manager::{MemoryManager, VirtualMemory};
 use ic_stable_structures::DefaultMemoryImpl;
-use recipes::{create_recipe, RecipeBrief, RecipeInfo};
+use recipes::{RecipeBriefResponse, RecipeInfo, RecipePayload, RECIPES};
 use serde_json::{from_str, Value};
 use std::cell::RefCell;
 use user::User;
@@ -37,8 +37,6 @@ pub struct RecipeSingleItem {
 
 #[init]
 fn init() {
-    // ic_cdk::println!("Canister initialized. Setting up timer for HTTP call.");
-    // setup_for_timer();
     const FILE_CONTENTS: [&str; 5] = [
         include_str!("../data/data1.json"),
         include_str!("../data/data2.json"),
@@ -72,15 +70,20 @@ fn init() {
             serde_json::from_value(recipes_info.clone()).unwrap();
 
         for recipe in recipes_list {
-            let new_recipe = RecipeInfo {
-                instructions: recipe.node.instructions,
-                cuisines: recipe.node.cuisines,
-                tags: recipe.node.tags,
-                total_time_in_seconds: recipe.node.total_time_in_seconds,
-                ingredients: recipe.node.ingredient_lines,
-                popular: if i == 0 { true } else { false },
-                author: None,
-            };
+            ic_cdk::api::print(format!("recipes cuisines: {:#?}", recipe.node.cuisines));
+            let new_recipe = RecipeInfo::new(
+                recipe.node.instructions,
+                recipe.node.ingredient_lines,
+                recipe.node.tags,
+                if recipe.node.cuisines.is_some() {
+                    recipe.node.cuisines.unwrap()
+                } else {
+                    Vec::new()
+                },
+                recipe.node.total_time_in_seconds,
+                if i == 0 { true } else { false },
+                None,
+            );
             if i == 0 {
                 ic_cdk::println!(
                     "Recipe: {}, popular: {}",
@@ -89,8 +92,7 @@ fn init() {
                 );
             }
 
-            // RECIPES.with(|m| m.borrow_mut().insert(recipe.node.name, new_recipe));
-            create_recipe(recipe.node.name, new_recipe);
+            RECIPES.with(|recipes| recipes.borrow_mut().insert(recipe.node.name, new_recipe));
         }
     }
 }

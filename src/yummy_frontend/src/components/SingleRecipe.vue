@@ -1,8 +1,9 @@
+// TODO - add delete button
 <script setup>
 import { ref, computed, onBeforeMount, watch } from "vue";
 import Message from "./Message.vue";
 import { useRoute } from "vue-router";
-import { Clock, ChefHat, Tag, ChevronDown, ChevronUp, Utensils, List } from "lucide-vue-next";
+import { User, Clock, ChefHat, Tag, ChevronDown, ChevronUp, Utensils, List } from "lucide-vue-next";
 import { yummy_backend } from "declarations/yummy_backend/index";
 
 const route = useRoute();
@@ -26,10 +27,11 @@ async function getRecipe() {
         return;
     }
 
-    recipeInfo = recipeResponse.Ok;
+    console.log("Recipe: ", recipeResponse.Ok);
+    recipeInfo = recipeResponse.Ok[0];
 
     let imageUrl;
-    if (recipeInfo.author.length) {
+    if (recipeInfo.author_id.length) {
         // recipe created by user
         const responseImage = await yummy_backend.get_image(recipeName);
 
@@ -53,19 +55,13 @@ async function getRecipe() {
         ingredients: recipeInfo.ingredients,
         tags: recipeInfo.tags,
         prepTime: recipeInfo.total_time_in_seconds / 60,
-        cuisines: recipeInfo.cuisines[0] ? recipeInfo.cuisines[0] : [],
+        cuisines: recipeInfo.cuisines,
+        author: recipeResponse.Ok[1].length ? recipeResponse.Ok[1][0] : "",
     };
 }
 
-const recipe = ref({
-    name: "",
-    image: "",
-    instructions: [],
-    ingredients: [],
-    tags: [],
-    prepTime: 0,
-    cuisines: [],
-});
+const recipe = ref(null);
+const author = ref(null);
 
 const showFullInstructions = ref(false);
 const showFullIngredients = ref(false);
@@ -107,13 +103,19 @@ onBeforeMount(async () => {
     <Transition name="slide">
         <Message v-if="showMessage" :text="messageText" :type="messageType" @close="closeMessage" />
     </Transition>
-    <div class="min-h-screen w-full bg-gray-800 p-6 text-gray-100 md:p-12">
+    <div v-if="recipe" class="min-h-screen w-full bg-gray-800 p-6 text-gray-100 md:p-12">
         <div class="mx-auto max-w-4xl overflow-hidden rounded-3xl bg-gray-700 shadow-xl">
             <img :src="recipe.image" :alt="recipe.name" class="h-[400px] w-full object-cover" />
             <div class="p-8 md:p-10">
                 <h1 class="mb-6 text-4xl font-bold text-indigo-300 md:text-5xl" v-if="recipe.name.length > 0">
                     {{ recipe.name }}
                 </h1>
+                <div class="mb-8 flex flex-wrap items-center gap-6" v-if="recipe.author !== ''">
+                    <div class="flex items-center">
+                        <User class="mr-3 h-7 w-7 text-indigo-400" />
+                        <span class="text-xl">Created by {{ recipe.author }}</span>
+                    </div>
+                </div>
 
                 <div class="mb-8 flex flex-wrap items-center gap-6" v-if="recipe.prepTime > 0">
                     <div class="flex items-center">
