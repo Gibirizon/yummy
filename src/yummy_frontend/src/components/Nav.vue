@@ -1,5 +1,4 @@
 <script setup>
-import { ref, onMounted, onUnmounted } from "vue";
 import { Menu, Search } from "lucide-vue-next";
 
 const emit = defineEmits(["show-menu", "toggle-search"]);

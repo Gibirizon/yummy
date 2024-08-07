@@ -43,7 +43,7 @@ onUnmounted(() => {
         <div class="main-container flex w-full flex-row">
             <LeftMenu :isVisible="isLeftMenuVisible" @toggle-search="toggleSearch" @close="isLeftMenuVisible = false" />
             <div
-                class="relative flex w-full flex-1 flex-col items-center overflow-y-auto overflow-x-hidden pt-[80px] contain-content lg:pt-0"
+                class="relative flex w-full flex-1 flex-col items-center overflow-y-auto overflow-x-hidden pt-[80px] lg:pt-0"
             >
                 <Nav class="lg:hidden" @toggle-search="toggleSearch" @show-menu="isLeftMenuVisible = true" />
                 <main class="relative w-full bg-gray-800">

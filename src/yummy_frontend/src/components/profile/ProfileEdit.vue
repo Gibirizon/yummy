@@ -52,21 +52,20 @@ async function confirmDel() {
             <div class="flex w-full max-w-2xl flex-col gap-4">
                 <h1 class="mb-8 text-center text-4xl font-bold">Edit Profile</h1>
                 <div class="mb-8 rounded-lg bg-gray-800 px-8 py-10 shadow-lg">
-                    <div class="mb-8">
-                        <form @submit.prevent="saveChanges">
-                            <label class="mb-4 block text-xl font-semibold" for="username"> Username </label>
-                            <input
-                                v-model="newUsername"
-                                class="w-full rounded-lg bg-gray-700 px-6 py-4 text-xl leading-tight text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                id="username"
-                                type="text"
-                                placeholder="Enter new username"
-                            />
-                        </form>
-                    </div>
-                    <div class="flex flex-col space-y-4">
+                    <form @submit.prevent="saveChanges" class="flex flex-col gap-4">
+                        <label class="mb-4 block text-xl font-semibold" for="username"> Username </label>
+                        <input
+                            type="text"
+                            required
+                            maxlength="30"
+                            minlength="1"
+                            class="w-full rounded-lg bg-gray-700 px-6 py-4 text-xl leading-tight text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            id="username"
+                            placeholder="Enter new username"
+                            v-model="newUsername"
+                        />
                         <button
-                            @click="saveChanges"
+                            type="submit"
                             class="w-full transform rounded-lg bg-green-700 px-6 py-4 text-xl font-bold text-white transition duration-300 ease-in-out hover:scale-105 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
                         >
                             Save Changes
@@ -77,7 +76,7 @@ async function confirmDel() {
                         >
                             Cancel
                         </button>
-                    </div>
+                    </form>
                 </div>
                 <button
                     @click="showDeleteConfirmation = true"

@@ -3,10 +3,9 @@ import { Search } from "lucide-vue-next";
 import { useMessageStore } from "../store/message";
 import LoggedOut from "./login/LoggedOut.vue";
 import { LogIn, LogOut } from "lucide-vue-next";
-import Message from "./Message.vue";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "./../store/auth";
-import { ref, computed, onBeforeMount } from "vue";
+import { ref, computed, onBeforeMount, watch } from "vue";
 import { RouterLink } from "vue-router";
 import { useRouter, useRoute } from "vue-router";
 import { retryICCall } from "../retry/icRetry";
@@ -34,6 +33,13 @@ const { retryCall } = retryICCall();
 const authStore = useAuthStore();
 const { isReady, isAuthenticated, whoamiActor } = storeToRefs(authStore);
 
+watch(isAuthenticated, async () => {
+    console.log("isAuthenticated", isAuthenticated.value);
+    if (isAuthenticated.value && !loggingProcess.value) {
+        await updateLoginStatus();
+    }
+});
+
 async function signUserOut() {
     user_index.value = 0;
     await authStore.logout();
@@ -47,10 +53,10 @@ function LoggedIn(index) {
 }
 
 async function updateLoginStatus() {
-    if (!isAuthenticated.value || !whoamiActor.value) {
-        return;
-    }
     try {
+        if (!whoamiActor.value) {
+            return;
+        }
         let indexResponse = await retryCall(() => whoamiActor.value.get_user_index());
         if (indexResponse.Err) {
             console.log("Error: ", indexResponse.Err);
@@ -60,8 +66,9 @@ async function updateLoginStatus() {
         }
         user_index.value = indexResponse.Ok ? indexResponse.Ok : 0;
     } catch (error) {
+        console.log("Error: ", error);
         await signUserOut();
-        messageStore.showMessage("Problems with identifying - login one more time", "error");
+        messageStore.showMessage("Problems with authentication, login one more time", "error");
     }
 }
 function goToNewRecipe() {
@@ -84,10 +91,6 @@ function toggleDropdown(dropdown) {
 function isDropdownOpen(dropdown) {
     return openDropdowns.value.includes(dropdown);
 }
-
-onBeforeMount(async () => {
-    setTimeout(async () => await updateLoginStatus(), 200);
-});
 </script>
 <template>
     <div

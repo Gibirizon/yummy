@@ -13,7 +13,7 @@
 <script setup>
 import { useDelete } from "../composables/delete";
 import DeleteConfirm from "../components/DeleteConfirm.vue";
-import { ref, onMounted, computed, watch } from "vue";
+import { ref, onBeforeMount, computed, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
 import RecipePage from "../components/recipe/RecipePage.vue";
@@ -70,14 +70,9 @@ const ImagesAndPageTitles = {
 };
 
 watch(currentType, async () => {
+    console.log("currentType: ", currentType.value);
     showDeleteConfirmation.value = false;
     await getRecipeData();
-});
-
-watch(isAuthenticated, async () => {
-    if (currentType.value === "yours") {
-        await getRecipeData();
-    }
 });
 
 async function getRecipeData() {
@@ -97,6 +92,7 @@ async function getRecipeData() {
             return;
         }
         all_recipes = await yummy_backend.take_recipes_by_author(user_index.Ok);
+        console.log("user recipes: ", all_recipes);
     } else if (currentType.value === "users") {
         all_recipes = await yummy_backend.take_user_recipes_with_author_names();
     } else {
@@ -145,7 +141,8 @@ async function deleteRecipe(name) {
     recipeNameToDelete.value = name;
 }
 
-onMounted(async () => {
+onBeforeMount(async () => {
+    console.log("recipes data: ", recipesData.value);
     setTimeout(async () => {
         await getRecipeData();
     }, 100);

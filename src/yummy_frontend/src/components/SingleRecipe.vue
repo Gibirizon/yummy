@@ -29,8 +29,7 @@ watch(
 
 watch(isAuthenticated, async () => {
     console.log("isAuthenticated: ", isAuthenticated.value);
-    console.log(recipe.value.author_id);
-    if (isAuthenticated.value && recipe.value.author_id) {
+    if (isAuthenticated.value && recipe.value && recipe.value.author_id) {
         console.log("Checking if recipe belongs to user");
         await checkDoesRecipeBelongsToUser(recipe.value.author_id);
     }

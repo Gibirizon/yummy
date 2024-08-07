@@ -108,9 +108,7 @@ export const useAuthStore = () => {
     });
     const s = innerStore();
     if (s.initialisation == true) {
-        s.init().then(() => {
-            return s;
-        });
+        s.init();
     }
     return s;
 };

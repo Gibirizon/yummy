@@ -24,14 +24,16 @@ export function retryICCall() {
             } catch (error) {
                 if (error.message.includes("Invalid certificate: Signature verification failed")) {
                     retries++;
-                    if (retries >= maxRetries) throw error;
+                    if (retries >= maxRetries) {
+                        throw error;
+                    }
                     console.log(
                         `Retry authentication attempt ${retries} after ${initialDelay * Math.pow(2, retries - 1)}ms`
                     );
                     await new Promise((resolve) => setTimeout(resolve, initialDelay * Math.pow(2, retries - 1)));
                 } else {
                     console.log(error);
-                    // throw error; // If it's a different error, throw immediately
+                    throw error; // If it's a different error, throw immediately
                 }
             }
         }

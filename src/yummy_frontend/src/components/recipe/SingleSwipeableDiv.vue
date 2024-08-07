@@ -10,7 +10,6 @@ const props = defineProps({
     },
 });
 
-const cardRef = ref(null);
 const carouselRef = ref(null);
 const currentOffset = ref(0);
 const containerWidth = ref(0);
@@ -20,6 +19,7 @@ let currentX = 0;
 let temporaryX = 0;
 let startOffset = 0;
 let itemWidth = 300;
+let multiplier = 1.3;
 
 const totalWidth = computed(() => props.recipes.length * itemWidth);
 const maxOffset = computed(() => Math.max(0, totalWidth.value - containerWidth.value));
@@ -37,10 +37,8 @@ function onTouchStart(e) {
 function onTouchMove(e) {
     currentX = e.touches[0].clientX;
     const temporaryDiff = temporaryX - currentX;
-    if (Math.abs(temporaryDiff) > 3) {
-        const diff = startX - currentX;
-        const newOffset = startOffset + diff;
-        currentOffset.value = Math.max(0, Math.min(newOffset, maxOffset.value));
+    if (Math.abs(temporaryDiff) > 1) {
+        currentOffset.value = Math.max(0, Math.min(currentOffset.value + temporaryDiff, maxOffset.value));
         temporaryX = currentX;
     }
 }
@@ -48,18 +46,14 @@ function onTouchMove(e) {
 function onTouchEnd() {
     const diff = startX - currentX;
     currentOffset.value = startOffset;
-    if (Math.abs(diff) > 50) {
-        if (diff > 0) {
-            moveCarousel(1);
-        } else {
-            moveCarousel(-1);
-        }
+    if (Math.abs(diff) > window.innerWidth / 5) {
+        moveCarousel(diff / (window.innerWidth / 5));
     }
 }
 
 function moveCarousel(direction) {
     const visibleItems = Math.floor(containerWidth.value / itemWidth);
-    const moveAmount = direction * ((visibleItems * itemWidth) / 2);
+    const moveAmount = direction * ((visibleItems * itemWidth) / multiplier);
     let newOffset = currentOffset.value + moveAmount;
 
     // Ensure the last item is fully visible when moving forward
@@ -78,10 +72,12 @@ const onItemClick = (item) => {
 };
 
 function getContainerWidth() {
-    if (window.innerWidth < 768) {
+    if (window.innerWidth < 1024) {
         itemWidth = 300;
+        multiplier = 1.3;
     } else {
         itemWidth = 400;
+        multiplier = 1.5;
     }
     containerWidth.value = carouselRef.value.offsetWidth;
 }
@@ -97,10 +93,10 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <div class="relative mx-auto mb-[80px] mt-[30px] overflow-hidden px-4">
+    <div class="relative mx-auto mb-[80px] mt-[30px] overflow-hidden px-2 sm:px-4">
         <div
             ref="carouselRef"
-            class="flex transition-transform duration-300 ease-in-out"
+            class="flex w-full transition-transform duration-200 ease-in-out"
             :style="{ transform: `translateX(${-currentOffset}px)` }"
             @touchstart="onTouchStart"
             @touchmove="onTouchMove"
@@ -110,7 +106,7 @@ onUnmounted(() => {
                 v-for="(recipe, index) in recipes"
                 v-if="recipes"
                 :key="index"
-                class="w-[300px] flex-shrink-0 cursor-pointer p-2 md:w-[400px]"
+                class="w-[300px] flex-shrink-0 cursor-pointer p-2 lg:w-[400px]"
                 @click="onItemClick(recipe)"
             >
                 <div class="flex h-full flex-col">

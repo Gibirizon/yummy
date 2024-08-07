@@ -1,8 +1,8 @@
 <script setup>
-import { ref, computed, onBeforeMount, watch, onMounted, watchEffect } from "vue";
+import { ref, computed, onBeforeMount, watch, onMounted, watchEffect, nextTick } from "vue";
 import { yummy_backend } from "declarations/yummy_backend/index";
 import { useRoute, useRouter } from "vue-router";
-import { Search, X, ChevronRight } from "lucide-vue-next";
+import { Search, X, ChevronRight, ArrowUp, ArrowDown, CornerDownLeft } from "lucide-vue-next";
 
 const props = defineProps({
     isVisible: {
@@ -27,12 +27,14 @@ const route = useRoute();
 const searchInput = ref(null);
 const searchQuery = ref("");
 const selectedIndex = ref(-1);
+const recipeListRef = ref(null);
 
 // Example recipes list - replace with your actual data
 const allRecipesNames = ref([]);
 
 const filteredRecipes = computed(function () {
     if (!searchQuery.value) return [];
+    selectedIndex.value = -1;
     const lowercaseQuery = searchQuery.value.toLowerCase();
     return allRecipesNames.value.filter((name) => {
         return name.toLowerCase().includes(lowercaseQuery);
@@ -53,13 +55,26 @@ function handleKeydown(event) {
     if (event.key === "ArrowDown") {
         event.preventDefault();
         selectedIndex.value = (selectedIndex.value + 1) % filteredRecipes.value.length;
+        scrollToSelected();
     } else if (event.key === "ArrowUp") {
         event.preventDefault();
         selectedIndex.value = (selectedIndex.value - 1 + filteredRecipes.value.length) % filteredRecipes.value.length;
+        scrollToSelected();
     } else if (event.key === "Enter" && selectedIndex.value !== -1) {
         const selectedRecipe = filteredRecipes.value[selectedIndex.value];
         selectRecipe(selectedRecipe);
     }
+}
+
+function scrollToSelected() {
+    nextTick(() => {
+        console.log("recipeListRef: ", recipeListRef.value.children);
+        const selectedElement = recipeListRef.value.children[selectedIndex.value];
+        console.log(selectedElement);
+        if (selectedElement) {
+            selectedElement.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        }
+    });
 }
 
 function selectRecipe(name) {
@@ -109,7 +124,11 @@ watchEffect(() => {
                         autofocus
                     />
                 </div>
-                <ul v-if="filteredRecipes.length > 0" class="mt-6 max-h-[60vh] space-y-4 overflow-y-auto">
+                <ul
+                    v-if="filteredRecipes.length > 0"
+                    ref="recipeListRef"
+                    class="mt-6 max-h-[60vh] space-y-4 overflow-y-auto"
+                >
                     <li
                         v-for="(name, index) in filteredRecipes"
                         :key="index"
@@ -124,6 +143,20 @@ watchEffect(() => {
                     </li>
                 </ul>
                 <div v-else-if="searchQuery" class="mt-4 text-center text-gray-400">No recipes found</div>
+                <div
+                    v-if="filteredRecipes.length > 0"
+                    class="mt-4 flex items-center justify-center space-x-4 text-gray-400"
+                >
+                    <div class="flex items-center">
+                        <ArrowUp class="mr-1 h-4 w-4" />
+                        <ArrowDown class="mr-1 h-4 w-4" />
+                        <span>Navigate</span>
+                    </div>
+                    <div class="flex items-center">
+                        <CornerDownLeft class="mr-1 h-4 w-4" />
+                        <span>Select</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
