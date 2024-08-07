@@ -24,9 +24,12 @@ async function createNewUser() {
                         />
                         <input
                             type="text"
+                            required
+                            minlength="1"
                             name="username"
                             placeholder="Username"
                             v-model="username"
+                            maxlength="30"
                             class="w-full rounded-lg border-2 border-gray-600 bg-gray-700 p-3 pl-10 text-sm text-white placeholder-gray-400 shadow-sm outline-none transition-colors focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
                         />
                     </div>

@@ -1,18 +1,40 @@
 // TODO - add delete button
 <script setup>
 import { ref, computed, onBeforeMount, watch } from "vue";
-import Message from "./Message.vue";
-import { useRoute } from "vue-router";
-import { User, Clock, ChefHat, Tag, ChevronDown, ChevronUp, Utensils, List } from "lucide-vue-next";
+import { useRoute, useRouter } from "vue-router";
+import { Trash2, User, Clock, ChefHat, Tag, ChevronDown, ChevronUp, Utensils, List } from "lucide-vue-next";
 import { yummy_backend } from "declarations/yummy_backend/index";
+import { useAuthStore } from "../store/auth";
+import { storeToRefs } from "pinia";
+import { useMessageStore } from "../store/message";
+import DeleteConfirm from "./DeleteConfirm.vue";
+import { useDelete } from "../composables/delete";
 
+const { showDeleteConfirmation, confirmDelete } = useDelete();
+const authStore = useAuthStore();
+const { isAuthenticated, whoamiActor } = storeToRefs(authStore);
+const recipe = ref(null);
+const isRecipeOwner = ref(false);
+const showFullInstructions = ref(false);
+const showFullIngredients = ref(false);
+const messageStore = useMessageStore();
 const route = useRoute();
+const router = useRouter();
 watch(
     () => route.params,
     async () => {
         await getRecipe();
     }
 );
+
+watch(isAuthenticated, async () => {
+    console.log("isAuthenticated: ", isAuthenticated.value);
+    console.log(recipe.value.author_id);
+    if (isAuthenticated.value && recipe.value.author_id) {
+        console.log("Checking if recipe belongs to user");
+        await checkDoesRecipeBelongsToUser(recipe.value.author_id);
+    }
+});
 
 async function getRecipe() {
     const recipeName = decodeURIComponent(route.params.name);
@@ -23,7 +45,7 @@ async function getRecipe() {
     // no recipe found
     if (recipeResponse.Err) {
         console.log(recipeResponse.Err);
-        createMessage(recipeResponse.Err.RecipeNotFound.msg, "error");
+        messageStore.showMessage(recipeResponse.Err.RecipeNotFound.msg, "error");
         return;
     }
 
@@ -57,15 +79,31 @@ async function getRecipe() {
         prepTime: recipeInfo.total_time_in_seconds / 60,
         cuisines: recipeInfo.cuisines,
         author: recipeResponse.Ok[1].length ? recipeResponse.Ok[1][0] : "",
+        author_id: recipeInfo.author_id.length ? recipeInfo.author_id[0] : 0,
     };
+
+    if (recipeInfo.author_id.length) {
+        checkDoesRecipeBelongsToUser(recipeInfo.author_id[0]);
+    }
 }
 
-const recipe = ref(null);
-const author = ref(null);
+async function checkDoesRecipeBelongsToUser(author_id) {
+    if (!isAuthenticated.value) {
+        return;
+    }
+    const responseIndex = await whoamiActor.value.get_user_index();
+    if (responseIndex.Err) {
+        return;
+    }
+    if (responseIndex.Ok === author_id) {
+        isRecipeOwner.value = true;
+    }
+}
 
-const showFullInstructions = ref(false);
-const showFullIngredients = ref(false);
-
+async function confirmDel() {
+    await confirmDelete(() => yummy_backend.delete_recipe(recipe.value.name));
+    router.push({ name: "home", query: { canisterId: route.query.canisterId } });
+}
 const toggleInstructions = () => {
     showFullInstructions.value = !showFullInstructions.value;
 };
@@ -82,29 +120,22 @@ const displayedIngredients = computed(() =>
     showFullIngredients.value ? recipe.value.ingredients : recipe.value.ingredients.slice(0, 3)
 );
 
-const showMessage = ref(false);
-const messageText = ref("");
-const messageType = ref("");
-function createMessage(msg, type) {
-    messageText.value = msg;
-    messageType.value = type;
-    showMessage.value = true;
-}
-function closeMessage() {
-    showMessage.value = false;
-}
-
 onBeforeMount(async () => {
     await getRecipe();
 });
 </script>
 
 <template>
-    <Transition name="slide">
-        <Message v-if="showMessage" :text="messageText" :type="messageType" @close="closeMessage" />
-    </Transition>
+    <DeleteConfirm v-if="showDeleteConfirmation" @close="showDeleteConfirmation = false" @confirm="confirmDel" />
     <div v-if="recipe" class="min-h-screen w-full bg-gray-800 p-6 text-gray-100 md:p-12">
-        <div class="mx-auto max-w-4xl overflow-hidden rounded-3xl bg-gray-700 shadow-xl">
+        <div class="relative mx-auto max-w-4xl overflow-hidden rounded-3xl bg-gray-700 shadow-xl">
+            <button
+                v-if="isRecipeOwner"
+                @click.stop="showDeleteConfirmation = true"
+                class="absolute right-4 top-5 rounded-full bg-red-500 p-2 transition-colors duration-200 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400"
+            >
+                <Trash2 class="h-6 w-6 text-white" />
+            </button>
             <img :src="recipe.image" :alt="recipe.name" class="h-[400px] w-full object-cover" />
             <div class="p-8 md:p-10">
                 <h1 class="mb-6 text-4xl font-bold text-indigo-300 md:text-5xl" v-if="recipe.name.length > 0">

@@ -1,5 +1,6 @@
 <script setup>
 import { Search } from "lucide-vue-next";
+import { useMessageStore } from "../store/message";
 import LoggedOut from "./login/LoggedOut.vue";
 import { LogIn, LogOut } from "lucide-vue-next";
 import Message from "./Message.vue";
@@ -27,27 +28,22 @@ const openDropdowns = ref([]);
 
 const user_index = ref(0);
 const loggingProcess = ref(false);
-const showMessage = ref(false);
-const messageText = ref("");
-const messageType = ref("");
 
+const messageStore = useMessageStore();
+const { retryCall } = retryICCall();
 const authStore = useAuthStore();
 const { isReady, isAuthenticated, whoamiActor } = storeToRefs(authStore);
 
 async function signUserOut() {
     user_index.value = 0;
     await authStore.logout();
+    router.push({ name: "home", query: { canisterId: canisterId.value } });
 }
 
-function createMessage(msg, type) {
-    messageText.value = msg;
-    messageType.value = type;
-    showMessage.value = true;
-}
 function LoggedIn(index) {
     loggingProcess.value = false;
     user_index.value = index;
-    createMessage("Logged in successfully", "success");
+    messageStore.showMessage("Logged in successfully", "success", 10000);
 }
 
 async function updateLoginStatus() {
@@ -55,24 +51,21 @@ async function updateLoginStatus() {
         return;
     }
     try {
-        let indexResponse = await retryICCall(() => whoamiActor.value.get_user_index());
+        let indexResponse = await retryCall(() => whoamiActor.value.get_user_index());
         if (indexResponse.Err) {
             console.log("Error: ", indexResponse.Err);
-            createMessage("You don't have account", "warning");
-            signUserOut();
+            messageStore.showMessage("You don't have account", "warning");
+            await signUserOut();
             return;
         }
         user_index.value = indexResponse.Ok ? indexResponse.Ok : 0;
     } catch (error) {
         await signUserOut();
-        createMessage("Problems with identifying - login one more time", "error");
+        messageStore.showMessage("Problems with identifying - login one more time", "error");
     }
 }
 function goToNewRecipe() {
     router.push({ name: "new-recipe", query: { canisterId: canisterId.value } });
-}
-function closeMessage() {
-    showMessage.value = false;
 }
 
 function toggleSearch() {
@@ -93,20 +86,17 @@ function isDropdownOpen(dropdown) {
 }
 
 onBeforeMount(async () => {
-    setTimeout(async () => await updateLoginStatus(), 100);
+    setTimeout(async () => await updateLoginStatus(), 200);
 });
 </script>
 <template>
-    <Transition name="slide">
-        <Message v-if="showMessage" :text="messageText" :type="messageType" @close="closeMessage" />
-    </Transition>
     <div
         v-if="isVisible"
         class="mobile-view fixed z-[120] h-full w-full bg-black/40 opacity-100"
         @click="emit('close')"
     ></div>
     <div
-        class="duration-400 left-menu fixed left-0 top-0 z-[130] flex h-screen max-h-screen w-[240px] flex-col items-center gap-8 bg-[#1b263e] p-4 shadow-lg transition-transform overflow-y-auto"
+        class="duration-400 fixed left-0 top-0 z-[130] flex h-screen max-h-screen w-[240px] flex-col items-center gap-8 overflow-y-auto bg-[#1b263e] p-4 shadow-lg transition-transform lg:sticky lg:translate-x-0"
         :class="isVisible ? 'translate-x-0' : '-translate-x-full'"
     >
         <h2 class="p-2 font-['Dancing_Script'] text-5xl text-white">Yummy</h2>
@@ -403,11 +393,3 @@ onBeforeMount(async () => {
     </div>
     <LoggedOut @logged-in="LoggedIn" @close="loggingProcess = false" v-if="loggingProcess" />
 </template>
-
-<style scoped>
-@media screen and (min-width: 992px) {
-    .left-menu {
-        @apply sticky translate-x-0;
-    }
-}
-</style>

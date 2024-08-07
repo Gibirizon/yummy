@@ -1,8 +1,5 @@
 <template>
-    <Transition name="slide">
-        <Message v-if="showMessage" :text="messageText" :type="messageType" @close="closeMessage" />
-    </Transition>
-    <DeleteConfirm v-if="showDeleteConfirmation" @close="closeDeleteConfirmation" @confirm="confirmDelete" />
+    <DeleteConfirm v-if="showDeleteConfirmation" @close="showDeleteConfirmation = false" @confirm="confirmDel" />
     <div>
         <RecipePage
             :hero-image="ImagesAndPageTitles[currentType].image"
@@ -14,26 +11,26 @@
 </template>
 
 <script setup>
+import { useDelete } from "../composables/delete";
 import DeleteConfirm from "../components/DeleteConfirm.vue";
 import { ref, onMounted, computed, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { storeToRefs } from "pinia";
 import RecipePage from "../components/recipe/RecipePage.vue";
-import Message from "../components/Message.vue";
 import { yummy_backend } from "declarations/yummy_backend/index";
 import { useAuthStore } from "../store/auth";
 import { retryICCall } from "../retry/icRetry";
+import { useMessageStore } from "../store/message";
 
 const route = useRoute();
 const router = useRouter();
 const authStore = useAuthStore();
 const { isAuthenticated, whoamiActor } = storeToRefs(authStore);
 const recipesData = ref([]);
-const showMessage = ref(false);
-const messageText = ref("");
-const messageType = ref("");
-const showDeleteConfirmation = ref(false);
+const messageStore = useMessageStore();
 const recipeNameToDelete = ref("");
+const { retryCall } = retryICCall();
+const { showDeleteConfirmation, confirmDelete } = useDelete();
 
 // Compute the current route name or its parent for nested routes
 const currentType = computed(() => {
@@ -73,6 +70,7 @@ const ImagesAndPageTitles = {
 };
 
 watch(currentType, async () => {
+    showDeleteConfirmation.value = false;
     await getRecipeData();
 });
 
@@ -93,9 +91,9 @@ async function getRecipeData() {
             router.push({ name: "home", query: { canisterId: route.query.canisterId } });
             return;
         }
-        let user_index = await retryICCall(() => whoamiActor.value.get_user_index());
+        let user_index = await retryCall(() => whoamiActor.value.get_user_index());
         if (user_index.Err) {
-            createMessage(user_index.Err.UserNotFound.msg, "error");
+            messageStore.showMessage(user_index.Err.UserNotFound.msg, "error");
             return;
         }
         all_recipes = await yummy_backend.take_recipes_by_author(user_index.Ok);
@@ -136,25 +134,8 @@ async function getRecipeData() {
     }
 }
 
-function closeDeleteConfirmation() {
-    showDeleteConfirmation.value = false;
-}
-
-async function confirmDelete() {
-    createMessage("Deleting recipe...", "warning");
-    closeDeleteConfirmation();
-    if (!isAuthenticated.value) {
-        createMessage("Not logged in", "error");
-        return;
-    }
-
-    let deleteResponse = await yummy_backend.delete_recipe(recipeNameToDelete.value);
-    if (deleteResponse.Err) {
-        createMessage(deleteResponse.Err.RecipeNotFound.msg, "warning");
-        return;
-    }
-
-    createMessage(deleteResponse.Ok, "success");
+async function confirmDel() {
+    await confirmDelete(() => yummy_backend.delete_recipe(recipeNameToDelete.value));
     recipeNameToDelete.value = "";
     await getRecipeData(currentType.value);
 }
@@ -162,16 +143,6 @@ async function confirmDelete() {
 async function deleteRecipe(name) {
     showDeleteConfirmation.value = true;
     recipeNameToDelete.value = name;
-}
-
-function createMessage(msg, type) {
-    messageText.value = msg;
-    messageType.value = type;
-    showMessage.value = true;
-}
-
-function closeMessage() {
-    showMessage.value = false;
 }
 
 onMounted(async () => {

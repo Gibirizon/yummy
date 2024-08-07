@@ -18,24 +18,20 @@
 }
 
 .slide-enter-active {
-    @apply transform transition duration-300 ease-out;
+    @apply transform transition duration-[400] ease-out;
 }
 .slide-enter-from {
-    @apply translate-x-[-50%] opacity-0;
+    @apply translate-x-[-100%] opacity-0;
 }
 .slide-enter-to {
     @apply translate-x-0 opacity-100;
 }
 .slide-leave-active {
-    @apply transform transition duration-300 ease-in;
+    @apply transform transition duration-[400] ease-in;
 }
 .slide-leave-from {
     @apply translate-x-0 opacity-100;
 }
 .slide-leave-to {
-    @apply translate-x-[50%] opacity-0;
-}
-
-.contain {
-    contain: content;
+    @apply translate-x-[100%] opacity-0;
 }

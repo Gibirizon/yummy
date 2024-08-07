@@ -3,17 +3,15 @@ import Username from "./Username.vue";
 import { X } from "lucide-vue-next";
 import { useAuthStore } from "./../../store/auth";
 import { ref } from "vue";
-import Message from "../Message.vue";
 import { storeToRefs } from "pinia";
+import { useMessageStore } from "../../store/message";
 const emit = defineEmits(["close", "logged-in"]);
 
 const signMethod = ref("Sign in");
 
+const messageStore = useMessageStore();
 const authStore = useAuthStore();
 const { whoamiActor } = storeToRefs(authStore);
-const showMessage = ref(false);
-const messageText = ref("");
-const messageType = ref("");
 const signProcess = ref(true);
 
 function changeSignMethod() {
@@ -30,12 +28,12 @@ async function SignIn() {
 
         // Login successful, perform next actions
         if (!whoamiActor.value) {
-            createMessage("Login failed - please try again", "warning");
+            messageStore.showMessage("Login failed - please try again", "warning", 10000);
             return;
         }
         let user_index = await whoamiActor.value.get_user_index();
         if (user_index.Err) {
-            createMessage("You have signed up - set your username", "info");
+            messageStore.showMessage("You have signed up - set your username", "info", 10000);
             signProcess.value = false;
             return;
         }
@@ -43,41 +41,30 @@ async function SignIn() {
     } catch (err) {
         // Handle login error
         console.error("Login error:", err);
-        createMessage("Login failed - please try again", "error");
+        messageStore.showMessage("Login failed - please try again", "error", 10000);
     }
 }
 
 async function creatingNewUser(username) {
     if (!whoamiActor.value) {
         signProcess.value = true;
-        createMessage("Login failed - please try again", "warning");
+        messageStore.showMessage("Login failed - please try again", "warning");
         return;
     }
-    createMessage("Creating new user...", "info");
+    messageStore.showMessage("Creating new user...", "info");
     let new_user_index = await whoamiActor.value.create_user(username);
     signProcess.value = true;
     if (new_user_index.Err) {
-        createMessage("You already have an account - logging in...", "info");
+        messageStore.showMessage("You already have an account - logging in...", "info");
         let user_index = await whoamiActor.value.get_user_index();
         emit("logged-in", user_index.Ok);
         return;
     }
     emit("logged-in", new_user_index.Ok);
 }
-function createMessage(text, type) {
-    messageText.value = text;
-    messageType.value = type;
-    showMessage.value = true;
-}
-const closeMessage = () => {
-    showMessage.value = false;
-};
 </script>
 <template>
     <div class="fixed left-0 top-0 z-[200] h-full w-full bg-transparent backdrop-blur-sm"></div>
-    <Transition name="slide">
-        <Message v-if="showMessage" :text="messageText" :type="messageType" @close="closeMessage" />
-    </Transition>
     <div v-if="signProcess" class="sing-in-box fixed bottom-0 z-[210] w-full rounded-t-3xl bg-[#1b1c21]">
         <button
             @click="emit('close')"

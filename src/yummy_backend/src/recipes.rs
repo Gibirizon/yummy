@@ -120,7 +120,6 @@ pub fn take_recipe(name: String) -> Result<(RecipeInfo, Option<String>), Error> 
             None => Err(Error::RecipeNotFound {
                 msg: "Recipe not found".to_string(),
             }),
-
         }
     })
 }

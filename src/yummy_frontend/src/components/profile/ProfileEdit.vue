@@ -3,27 +3,25 @@ import { ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "./../../store/auth";
-import Message from "../Message.vue";
 import DeleteConfirm from "../DeleteConfirm.vue";
+import { useMessageStore } from "../../store/message";
+import { useDelete } from "../../composables/delete";
 
 const emit = defineEmits(["go-to-home"]);
+const messageStore = useMessageStore();
 const authStore = useAuthStore();
-const { isAuthenticated, whoamiActor } = storeToRefs(authStore);
+const { whoamiActor } = storeToRefs(authStore);
+const { showDeleteConfirmation, confirmDelete } = useDelete();
 
 const router = useRouter();
 const route = useRoute();
 const newUsername = ref(""); // Initialize with current username
 const id_from_route = BigInt(route.params.id);
 
-const showMessage = ref(false);
-const messageText = ref("");
-const messageType = ref("");
-
-const showDeleteConfirmation = ref(false);
-
 async function saveChanges() {
-    createMessage("Saving changes...", "info");
+    messageStore.showMessage("Saving changes...", "info");
     await whoamiActor.value.update_username(id_from_route, newUsername.value);
+    messageStore.hideMessage();
     goToInfo();
 }
 
@@ -39,37 +37,15 @@ function cancelChanges() {
     emit("go-to-home");
 }
 
-function createMessage(msg, type) {
-    messageText.value = msg;
-    messageType.value = type;
-    showMessage.value = true;
-}
-function closeMessage() {
-    showMessage.value = false;
-}
-
-function closeDeleteConfirmation() {
-    showDeleteConfirmation.value = false;
-}
-
-async function confirmDelete() {
-    createMessage("Deleting user...", "warning");
-    closeDeleteConfirmation();
-    if (!isAuthenticated.value) {
-        createMessage("Not logged in", "error");
-        return;
-    }
-    await whoamiActor.value.delete_user();
+async function confirmDel() {
+    await confirmDelete(() => whoamiActor.value.delete_user());
     await authStore.logout();
     emit("go-to-home");
 }
 </script>
 
 <template>
-    <div class="relative contain-content">
-        <Transition name="slide">
-            <Message v-if="showMessage" :text="messageText" :type="messageType" @close="closeMessage" />
-        </Transition>
+    <div class="relative">
         <div
             class="profile-edit flex min-h-screen w-full flex-col items-center justify-center bg-gray-900 p-8 text-white"
         >
@@ -125,6 +101,6 @@ async function confirmDelete() {
                 </button>
             </div>
         </div>
-        <DeleteConfirm v-if="showDeleteConfirmation" @close="closeDeleteConfirmation" @confirm="confirmDelete" />
+        <DeleteConfirm v-if="showDeleteConfirmation" @close="showDeleteConfirmation = false" @confirm="confirmDel" />
     </div>
 </template>

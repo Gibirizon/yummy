@@ -3,8 +3,9 @@ import { yummy_backend } from "declarations/yummy_backend/index";
 import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "./../store/auth";
-import Message from "../components/Message.vue";
+import { useMessageStore } from "../store/message";
 
+const messageStore = useMessageStore();
 const authStore = useAuthStore();
 const { whoamiActor } = storeToRefs(authStore);
 
@@ -100,7 +101,7 @@ function handleImageUpload(event) {
 
     // check file size
     if (file.size > 1024 * 1024) {
-        createMessage("File size exceeds limit (1MB)", "warning");
+        messageStore.showMessage("File size exceeds limit (1MB)", "warning");
         event.target.value = "";
         return;
     }
@@ -111,35 +112,27 @@ function handleImageUpload(event) {
     };
     reader.readAsDataURL(file);
 }
-const showMessage = ref(false);
-const messageText = ref("");
-const messageType = ref("");
 
 function createErrorFromObject(response) {
     let error_key = Object.keys(response)[0];
     let msg = response[error_key].msg;
-    createMessage(msg, "error");
-}
-function createMessage(msg, type) {
-    messageText.value = msg;
-    messageType.value = type;
-    showMessage.value = true;
+    messageStore.showMessage(msg, "error");
 }
 async function submitRecipe() {
-    createMessage("Creating recipe...", "info");
+    messageStore.showMessage("Creating recipe...", "info");
     // check is user authorized to create recipe
     if (!whoamiActor.value) {
-        createMessage("You are not logged in. Please log in first.", "warning");
+        messageStore.showMessage("You are not logged in. Please log in first.", "warning");
         return;
     }
     // validate for empty fields
     if (!instructions.value.length || !ingredients.value.length || !selectedTags.value.length) {
-        createMessage("Recipe should have at least one instruction, one ingredient, and one tag", "warning");
+        messageStore.showMessage("Recipe should have at least one instruction, one ingredient, and one tag", "warning");
         return;
     }
     let user_index = await whoamiActor.value.get_user_index();
     if (user_index.Err) {
-        createMessage(user_index.Err);
+        messageStore.showMessage(user_index.Err);
         return;
     } else {
         user_index = user_index.Ok;
@@ -160,10 +153,8 @@ async function submitRecipe() {
         title.value = "";
         return;
     }
+    messageStore.hideMessage();
 
-    messageText.value = response.Ok;
-    messageType.value = "success";
-    showMessage.value = true;
     // // Reset title of form after submission
     title.value = "";
     selectedTags.value = [];
@@ -174,16 +165,10 @@ async function submitRecipe() {
     uploadedImage.value = "";
     document.getElementById("image").value = "";
 }
-const closeMessage = () => {
-    showMessage.value = false;
-};
 </script>
 
 <template>
     <div class="relative">
-        <Transition name="slide">
-            <Message v-if="showMessage" :text="messageText" :type="messageType" @close="closeMessage" />
-        </Transition>
         <div class="flex min-h-screen w-full items-center justify-center bg-gray-800 p-4 text-gray-100">
             <div class="w-full max-w-3xl rounded-lg bg-gray-700 p-8 shadow-xl">
                 <h1 class="mb-8 text-center text-3xl font-bold text-indigo-300">Add New Recipe</h1>

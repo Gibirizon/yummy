@@ -53,10 +53,10 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <div class="fixed left-[50%] top-0 z-[500] flex -translate-x-[50%] items-start justify-center p-6">
+    <div class="fixed top-0 z-[500] flex items-start justify-center p-6 lg:left-[120px]">
         <div
             :class="[
-                'pointer-events-auto flex w-full max-w-lg rounded-lg shadow-lg ring-1 ring-black ring-opacity-5',
+                'pointer-events-auto flex w-[70%] max-w-sm rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 sm:w-2/5 lg:max-w-md',
                 typeClasses[props.type],
             ]"
         >

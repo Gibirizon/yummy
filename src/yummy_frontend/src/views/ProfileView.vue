@@ -7,22 +7,17 @@ import { retryICCall } from "../retry/icRetry";
 
 const router = useRouter();
 const route = useRoute();
+const { retryCall } = retryICCall();
 const authStore = useAuthStore();
 const { isAuthenticated, whoamiActor } = storeToRefs(authStore);
 const id_route = BigInt(route.params.id);
-
-watch(isAuthenticated, () => {
-    if (!isAuthenticated.value) {
-        goToHome();
-    }
-});
 
 async function getUserIndex() {
     if (!isAuthenticated.value) {
         goToHome();
         return;
     }
-    let user_index = await retryICCall(() => whoamiActor.value.get_user_index());
+    let user_index = await retryCall(() => whoamiActor.value.get_user_index());
     if (!user_index || !user_index.Ok || user_index.Ok !== id_route) {
         goToHome();
         return;
