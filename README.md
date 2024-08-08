@@ -4,23 +4,64 @@ Yummy is a modern web application designed for searching and sharing recipes. It
 
 ## Screenshots
 
+### Home Page
+
 <img src="./.screenshots/home_page.png" width="100%" align="center" alt="Home Page"/>
+
+### Recipes
+
+You can scroll through lots of recipes and click on them to see full description.
+
 <img src="./.screenshots/recipe_example.png" width="100%" align="center" alt="Example of a recipe"/>
+<img src="./.screenshots/breakfast.png" width="100%" align="center" alt="Breakfast recipes"/>
+
+### Adding new recipes
+
+After logging with Internet Identity you can share your recipes with other users.
+
+<img src="./.screenshots/new_recipe.png" width="100%" align="center" alt="Creating new recipe"/>
+
+### Searching system
+
+The user can search through all recipes. After entering some search query you can navigate through options with arrows and choose one of the options by cicking enter.
+
+<img src="./.screenshots/searching.png" width="100%" align="center" alt="Searching view"/>
+
+### Mobile view
+
+The website is fully responsive and interactive so you can also use it on your phone.
+
+<img src="./.screenshots/mobile_home.png" width="49%" align="left" alt="Mobile home page"/>
+<img src="./.screenshots/mobile_dessert.png" width="49%" align="left" alt="Mobile dessert page"/>
 
 ## Features
 
-- **Recipe Sharing:** Discover and share a variety of recipes with the community.
 - **User-Friendly UI:** Intuitive, responsive, and easy-to-use interface for a seamless user experience.
-- **Internet Identity Login:** Securely log in using your Internet Identity, providing a seamless and secure authentication experience.
+- **Authentication with Internet Identity** Securely log in using your Internet Identity, providing a seamless and secure authentication experience.
 - **Internet Computer Integration:** Utilizes the Internet Computer network for a scalable, decentralized infrastructure.
+- **Storing images and data on ICP** When adding recipes, users can select an image to show the dish after preparation. All recipes are stored on the blockchain.
+- **Searching sytem** User can search through all recipes by names after pressing ctrl + k or clicking a button.
+- **Recipe Sharing - creating recipes** Discover and share a variety of recipes with the community.
+- **Displaying every single recipe** When you click on a recipe, you can view its full description.
+- **Deleting recipes** You can always remove the recipe if you are not happy with it.
 
-## Technologies
+## Future features 📌
+
+- **Expanding the search system** - enable searching by tags and preparation time
+- **Adding user feedback** - ability to add comments to recipes
+- **Recipes likes** - add possibility to like a recipe
+- **Extension of information about user**
+- **Ability to edit recipe after adding**
+
+## Technologies 🛠️
 
 - **[Rust 🦀](https://github.com/rust-lang/rust)** for backend
 - **[Vue.js](https://github.com/vuejs/core)** for frontend
+- \*\*[Vue Router](https://github.com/vuejs/router) for multiple pages
 - **[Pinia 🍍](https://github.com/vuejs/pinia)** for state management
 - **[TailwindCSS 🍃](https://github.com/tailwindlabs/tailwindcss)** for styling
 - **[DfinityCDK](https://github.com/dfinity/cdk-rs)** for compiling to the Internet Computer
+- **[Stable structures](https://github.com/dfinity/stable-structures)** for storing data that persist across upgrades.
 
 ## Getting Started
 
@@ -56,8 +97,6 @@ Yummy is a modern web application designed for searching and sharing recipes. It
    ```sh
    dfx deploy
    ```
-
-   If you want to see sample recipes after launch, you need to use your api token from [Suggestic](https://www.suggestic.com).
 
 5. **Run the Development Server:**
 
