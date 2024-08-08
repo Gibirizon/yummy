@@ -19,20 +19,20 @@ You can scroll through lots of recipes and click on them to see full description
 
 After logging with Internet Identity you can share your recipes with other users.
 
-<img src="./.screenshots/new_recipe.png" width="100%" align="center" alt="Creating new recipe"/>
+<img src="./.screenshots/new_recipe.png" height="400" align="center" alt="Creating new recipe"/>
 
 ### Searching system
 
 The user can search through all recipes. After entering some search query you can navigate through options with arrows and choose one of the options by cicking enter.
 
-<img src="./.screenshots/searching.png" width="100%" align="center" alt="Searching view"/>
+<img src="./.screenshots/searching.png" height="500" align="center" alt="Searching view"/>
 
 ### Mobile view
 
 The website is fully responsive and interactive so you can also use it on your phone.
 
-<img src="./.screenshots/mobile_home.png" width="49%" align="left" alt="Mobile home page"/>
-<img src="./.screenshots/mobile_dessert.png" width="49%" align="left" alt="Mobile dessert page"/>
+<img src="./.screenshots/mobile_home.jpg" width="49%" align="left" alt="Mobile home page"/>
+<img src="./.screenshots/mobile_dessert.jpg" width="49%" align="left" alt="Mobile dessert page"/>
 
 ## Features
 
