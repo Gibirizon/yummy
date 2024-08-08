@@ -93,7 +93,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <div class="relative mx-auto mb-[80px] mt-[30px] overflow-hidden px-2 sm:px-4">
+    <div class="relative mx-auto mb-[40px] mt-[15px] overflow-hidden px-2 sm:mb-[80px] sm:mt-[30px] sm:px-4">
         <div
             ref="carouselRef"
             class="flex w-full transition-transform duration-200 ease-in-out"

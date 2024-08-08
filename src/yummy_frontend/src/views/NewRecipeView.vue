@@ -154,6 +154,7 @@ async function submitRecipe() {
         return;
     }
     messageStore.hideMessage();
+    messageStore.showMessage("Recipe created successfully", "success");
 
     // // Reset title of form after submission
     title.value = "";

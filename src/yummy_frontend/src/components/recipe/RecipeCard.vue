@@ -4,18 +4,18 @@
         tabindex="0"
         @click="handleCardClick"
     >
-        <img :src="recipe.image" :alt="recipe.name" class="h-[300px] w-full object-cover" />
+        <img :src="recipe.image" :alt="recipe.name" class="h-[200px] w-full object-cover sm:h-[250px] md:h-[300px]" />
         <div class="p-4">
-            <h3 class="mb-2 text-xl font-semibold text-white">{{ recipe.name }}</h3>
+            <h3 class="mb-2 text-[18px] font-semibold text-white sm:text-xl">{{ recipe.name }}</h3>
             <div class="mb-2 flex items-center text-gray-300">
                 <Clock class="mr-1 h-4 w-4" />
-                <span>{{ recipe.time }} mins</span>
+                <span class="text-sm sm:text-[16px]">{{ recipe.time }} mins</span>
             </div>
             <div v-if="recipe.tags && recipe.tags.length > 0" class="mb-2 flex flex-wrap">
                 <span
                     v-for="tag in recipe.tags"
                     :key="tag"
-                    class="duration-400 mb-2 mr-2 rounded-full bg-gray-500 px-2 py-1 text-sm text-gray-200 transition-colors hover:bg-gray-400 hover:text-gray-800"
+                    class="duration-400 mb-2 mr-2 rounded-full bg-gray-500 px-2 py-1 text-[12px] text-gray-200 transition-colors hover:bg-gray-400 hover:text-gray-800 sm:text-sm"
                 >
                     #{{ tag }}
                 </span>

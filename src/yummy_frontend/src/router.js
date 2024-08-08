@@ -56,7 +56,11 @@ const router = createRouter({
                 }, 100); // Small delay to ensure the new component is mounted
             });
         } else {
-            return { top: 0, behavior: "smooth" };
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    resolve({ left: 0, top: 0, behavior: "smooth" });
+                }, 200);
+            });
         }
     },
 });

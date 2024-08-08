@@ -68,9 +68,7 @@ function handleKeydown(event) {
 
 function scrollToSelected() {
     nextTick(() => {
-        console.log("recipeListRef: ", recipeListRef.value.children);
         const selectedElement = recipeListRef.value.children[selectedIndex.value];
-        console.log(selectedElement);
         if (selectedElement) {
             selectedElement.scrollIntoView({ behavior: "smooth", block: "nearest" });
         }

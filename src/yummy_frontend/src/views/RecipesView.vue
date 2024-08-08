@@ -101,10 +101,21 @@ async function getRecipeData() {
         );
     }
 
-    // getting images for recipes
     for (const recipe of all_recipes) {
+        recipesData.value.push({
+            name: recipe.name,
+            image: "",
+            time: recipe.total_time,
+            tags: recipe.tags,
+            author: recipe.author.length > 0 ? recipe.author[0] : null,
+            yourRecipes: currentType.value === "yours" ? true : false,
+        });
+    }
+
+    // getting images for recipes
+    for (const recipe of recipesData.value) {
         let imageUrl;
-        if (recipe.author.length) {
+        if (recipe.author) {
             // recipe created by user
             const responseImage = await yummy_backend.get_image(recipe.name);
             if (!responseImage.length) {
@@ -118,15 +129,7 @@ async function getRecipeData() {
             const cleanedName = recipe.name.replace(/[ ,&']/g, "");
             imageUrl = `/images/recipes_data/${cleanedName}.jpg`;
         }
-
-        recipesData.value.push({
-            name: recipe.name,
-            image: imageUrl,
-            time: recipe.total_time,
-            tags: recipe.tags,
-            author: recipe.author.length > 0 ? recipe.author[0] : null,
-            yourRecipes: currentType.value === "yours" ? true : false,
-        });
+        recipe.image = imageUrl;
     }
 }
 
@@ -142,7 +145,6 @@ async function deleteRecipe(name) {
 }
 
 onBeforeMount(async () => {
-    console.log("recipes data: ", recipesData.value);
     setTimeout(async () => {
         await getRecipeData();
     }, 100);

@@ -51,6 +51,19 @@ async function getRecipe() {
     console.log("Recipe: ", recipeResponse.Ok);
     recipeInfo = recipeResponse.Ok[0];
 
+    // store info wihtout image
+    recipe.value = {
+        name: recipeName,
+        image: "",
+        instructions: recipeInfo.instructions,
+        ingredients: recipeInfo.ingredients,
+        tags: recipeInfo.tags,
+        prepTime: recipeInfo.total_time_in_seconds / 60,
+        cuisines: recipeInfo.cuisines,
+        author: recipeResponse.Ok[1].length ? recipeResponse.Ok[1][0] : "",
+        author_id: recipeInfo.author_id.length ? recipeInfo.author_id[0] : 0,
+    };
+
     let imageUrl;
     if (recipeInfo.author_id.length) {
         // recipe created by user
@@ -68,18 +81,8 @@ async function getRecipe() {
         imageUrl = `/images/recipes_data/${cleanedName}.jpg`;
     }
 
-    // store informations in variable
-    recipe.value = {
-        name: recipeName,
-        image: imageUrl,
-        instructions: recipeInfo.instructions,
-        ingredients: recipeInfo.ingredients,
-        tags: recipeInfo.tags,
-        prepTime: recipeInfo.total_time_in_seconds / 60,
-        cuisines: recipeInfo.cuisines,
-        author: recipeResponse.Ok[1].length ? recipeResponse.Ok[1][0] : "",
-        author_id: recipeInfo.author_id.length ? recipeInfo.author_id[0] : 0,
-    };
+    // add image  to recipe
+    recipe.value.image = imageUrl;
 
     if (recipeInfo.author_id.length) {
         checkDoesRecipeBelongsToUser(recipeInfo.author_id[0]);

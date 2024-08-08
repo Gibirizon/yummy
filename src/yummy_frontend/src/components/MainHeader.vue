@@ -2,8 +2,8 @@
 <template>
     <header class="relative w-full">
         <!-- Hero Section -->
-        <div class="relative h-[400px]">
-            <img src="/images/header_salad.png" alt="Hero Image - salad" class="h-full w-full object-cover" />
+        <div class="relative h-[250px] sm:h-[300px] md:h-[400px]">
+            <img src="/images/header_salad.jpg" alt="Hero Image - salad" class="h-full w-full object-cover" />
             <div
                 class="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-65 font-['Courgette']"
             >
