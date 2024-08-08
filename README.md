@@ -12,20 +12,20 @@ Yummy is a modern web application designed for searching and sharing recipes. It
 
 You can scroll through lots of recipes and click on them to see full description.
 
-<img src="./.screenshots/recipe_example.png" style="margin: 0 auto;" width="80%" align="center" alt="Example of a recipe"/>
+<img src="./.screenshots/recipe_example.png" width="80%" align="center" alt="Example of a recipe"/>
 <img src="./.screenshots/breakfast.png" width="100%" align="center" alt="Breakfast recipes"/>
 
 ### Adding new recipes
 
 After logging with Internet Identity you can share your recipes with other users.
 
-<img src="./.screenshots/new_recipe.png" height="400" style="margin: 0 auto;" align="center" alt="Creating new recipe"/>
+<img src="./.screenshots/new_recipe.png" width="50%" align="center" alt="Creating new recipe"/>
 
 ### Searching system
 
 The user can search through all recipes. After entering some search query you can navigate through options with arrows and choose one of the options by cicking enter.
 
-<img src="./.screenshots/searching.png" height="500" align="center" style="margin: 0 auto;" alt="Searching view"/>
+<img src="./.screenshots/searching.png" width="50%" alt="Searching view"/>
 
 ### Mobile view
 
