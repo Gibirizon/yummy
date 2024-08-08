@@ -12,27 +12,29 @@ Yummy is a modern web application designed for searching and sharing recipes. It
 
 You can scroll through lots of recipes and click on them to see full description.
 
-<img src="./.screenshots/recipe_example.png" width="100%" align="center" alt="Example of a recipe"/>
+<img src="./.screenshots/recipe_example.png" style="margin: 0 auto;" width="80%" align="center" alt="Example of a recipe"/>
 <img src="./.screenshots/breakfast.png" width="100%" align="center" alt="Breakfast recipes"/>
 
 ### Adding new recipes
 
 After logging with Internet Identity you can share your recipes with other users.
 
-<img src="./.screenshots/new_recipe.png" height="400" align="center" alt="Creating new recipe"/>
+<img src="./.screenshots/new_recipe.png" height="400" style="margin: 0 auto;" align="center" alt="Creating new recipe"/>
 
 ### Searching system
 
 The user can search through all recipes. After entering some search query you can navigate through options with arrows and choose one of the options by cicking enter.
 
-<img src="./.screenshots/searching.png" height="500" align="center" alt="Searching view"/>
+<img src="./.screenshots/searching.png" height="500" align="center" style="margin: 0 auto;" alt="Searching view"/>
 
 ### Mobile view
 
 The website is fully responsive and interactive so you can also use it on your phone.
 
-<img src="./.screenshots/mobile_home.jpg" width="49%" align="left" alt="Mobile home page"/>
-<img src="./.screenshots/mobile_dessert.jpg" width="49%" align="left" alt="Mobile dessert page"/>
+<div style="text-align: center;">
+  <img src="./.screenshots/mobile_home.jpg" width="49%" alt="Mobile home page" style="display: inline-block;">
+  <img src="./.screenshots/mobile_dessert.jpg" width="49%" alt="Mobile dessert page" style="display: inline-block;">
+</div>
 
 ## Features
 
@@ -57,7 +59,7 @@ The website is fully responsive and interactive so you can also use it on your p
 
 - **[Rust 🦀](https://github.com/rust-lang/rust)** for backend
 - **[Vue.js](https://github.com/vuejs/core)** for frontend
-- \*\*[Vue Router](https://github.com/vuejs/router) for multiple pages
+- **[Vue Router](https://github.com/vuejs/router)** for multiple pages
 - **[Pinia 🍍](https://github.com/vuejs/pinia)** for state management
 - **[TailwindCSS 🍃](https://github.com/tailwindlabs/tailwindcss)** for styling
 - **[DfinityCDK](https://github.com/dfinity/cdk-rs)** for compiling to the Internet Computer
